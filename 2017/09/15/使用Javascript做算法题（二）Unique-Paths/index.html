@@ -87,18 +87,20 @@
 
 
 
-<meta name="description" content="前言 最近开始在leetcode上接触算法题，印象中的算法题大都是用cpp或者java解的，而这个网站支持javascript解题提交。因为大学也没学过算法，数据结构也只是稍微了解，所以解题目标也是选简单经典的题。下面开始讲解这道题–53.Maximum Subarray.题目地址题目描述 给出一个由数字组成(含负数)的数组，找出它的一个每项相加之和最大的子数组，返回这个最大和数字。举例：给出一个">
+<meta name="description" content="题目描述 在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。题目地址   解题思路 看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从n-1阶，要嘛从n-2阶跨到终点。假设走到n-1阶有m">
 <meta name="keywords" content="JavaScript,算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Javascript做算法题（一）Maximum Subarray">
-<meta property="og:url" content="http://yoursite.com/2017/09/14/使用Javascript做算法题（一）Maximum-Subarray/index.html">
+<meta property="og:title" content="使用Javascript做算法题（二）Unique-Paths">
+<meta property="og:url" content="http://yoursite.com/2017/09/15/使用Javascript做算法题（二）Unique-Paths/index.html">
 <meta property="og:site_name" content="唐洋洋的个人博客">
-<meta property="og:description" content="前言 最近开始在leetcode上接触算法题，印象中的算法题大都是用cpp或者java解的，而这个网站支持javascript解题提交。因为大学也没学过算法，数据结构也只是稍微了解，所以解题目标也是选简单经典的题。下面开始讲解这道题–53.Maximum Subarray.题目地址题目描述 给出一个由数字组成(含负数)的数组，找出它的一个每项相加之和最大的子数组，返回这个最大和数字。举例：给出一个">
+<meta property="og:description" content="题目描述 在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。题目地址   解题思路 看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从n-1阶，要嘛从n-2阶跨到终点。假设走到n-1阶有m">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-14T03:37:36.000Z">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6383319-9b976ff4ae8da7eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-09-15T05:54:40.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Javascript做算法题（一）Maximum Subarray">
-<meta name="twitter:description" content="前言 最近开始在leetcode上接触算法题，印象中的算法题大都是用cpp或者java解的，而这个网站支持javascript解题提交。因为大学也没学过算法，数据结构也只是稍微了解，所以解题目标也是选简单经典的题。下面开始讲解这道题–53.Maximum Subarray.题目地址题目描述 给出一个由数字组成(含负数)的数组，找出它的一个每项相加之和最大的子数组，返回这个最大和数字。举例：给出一个">
+<meta name="twitter:title" content="使用Javascript做算法题（二）Unique-Paths">
+<meta name="twitter:description" content="题目描述 在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。题目地址   解题思路 看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从n-1阶，要嘛从n-2阶跨到终点。假设走到n-1阶有m">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/6383319-9b976ff4ae8da7eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -126,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/09/14/使用Javascript做算法题（一）Maximum-Subarray/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/15/使用Javascript做算法题（二）Unique-Paths/"/>
 
 
 
 
 
-  <title> 使用Javascript做算法题（一）Maximum Subarray | 唐洋洋的个人博客 </title>
+  <title> 使用Javascript做算法题（二）Unique-Paths | 唐洋洋的个人博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -251,7 +253,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/14/使用Javascript做算法题（一）Maximum-Subarray/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/使用Javascript做算法题（二）Unique-Paths/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TokenYangForever">
@@ -272,7 +274,7 @@
             
             
               
-                使用Javascript做算法题（一）Maximum Subarray
+                使用Javascript做算法题（二）Unique-Paths
               
             
           </h1>
@@ -287,8 +289,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T11:35:00+08:00">
-                2017-09-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
               </time>
             
 
@@ -345,11 +347,15 @@
       
 
       
-        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
-<li>最近开始在leetcode上接触算法题，印象中的算法题大都是用cpp或者java解的，而这个网站支持javascript解题提交。因为大学也没学过算法，数据结构也只是稍微了解，所以解题目标也是选简单经典的题。下面开始讲解这道题–53.Maximum Subarray.<a href="https://leetcode.com/problems/maximum-subarray/description/" target="_blank" rel="external">题目地址</a><h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4></li>
-<li>给出一个由数字组成(含负数)的数组，找出它的一个<strong>每项相加之和最大</strong>的子数组，返回这个最大和数字。举例：给出一个数组<code>[-2,1,-3,4,-1,2,1,-5,4]</code>, 每项和最大的子数组为<code>[4,-1,2,1]</code>,返回最大和数字6。<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4></li>
-<li>首先抛出一个名词<a href="https://baike.baidu.com/item/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95/15742703?fr=aladdin" target="_blank" rel="external">动态规划算法</a>，概念理解起来较为抽象，我个人的理解是求最优解的题基本都可以用动态规划作为解题思路。</li>
-<li>首先可以确定解题的复杂度，这里其实只要遍历一次数组即可，<strong>时间复杂度为O(n)</strong>，而需要<strong>维护的状态变量</strong>有两个，<strong>全局最大值和局部最大值</strong>。就是随着从第一项开始往后推进，你需要确定从第一项到第n项时已经出现的元素组成的<strong>最大和</strong>，这个状态变量就是<strong>全局最大值</strong>；而局部最大值是遍历到第n项时，<strong>包含第n项的情况下的最大值</strong>。全局最大值是由局部最大值推导出的，下面是具体代码：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number[]&#125; nums</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> */</div><div class="line">var maxSubArray = function(nums) &#123;</div><div class="line">    if(!nums.length)</div><div class="line">        return 0</div><div class="line">    let local = nums[0]</div><div class="line">    let global = nums[0]</div><div class="line">    for (let i = 1; i &lt; nums.length; i++) &#123;</div><div class="line">        local = Math.max(nums[i], local + nums[i]) // 包含第n项的情况下的最大值</div><div class="line">        global = Math.max(local, global)   // 全局最大值</div><div class="line">    &#125;</div><div class="line">    return global</div><div class="line">&#125;;</div></pre></td></tr></table></figure></li>
+        <hr>
+<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><ul>
+<li>在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。<a href="https://leetcode.com/problems/unique-paths/description/" target="_blank" rel="external">题目地址</a></li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/6383319-9b976ff4ae8da7eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="一个3*7的示例"></p>
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><ul>
+<li>看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从<strong>n-1阶</strong>，要嘛从<strong>n-2阶</strong>跨到终点。<strong>假设走到n-1阶有m种不同方案，走到n-2阶有n种不同方案，那么走到n阶就有m+n种不同方案。</strong></li>
+<li>有点扯远了，回到这个题目。首先想到的是<strong>以二维数组来表示这个地图的坐标</strong>，机器人的起点在(0,0)终点在(m,n)，机器人最后一步肯定从(m-1,n)或(m,n-1)走，那走到(m,n)的路线总数就是走到(m-1,n)的路线总数加上走到(m,n-1)的路线总数。至此，解题思路也就很明显了，<strong>首先确定机器人走到最上面的一行和最左边的一列上的任意点，路线数只能为1。</strong>然后再根据这些点的路线数，依次往里推，最后得出(m,n)点的路线数。<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number&#125; m</div><div class="line"> * @param &#123;number&#125; n</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> */</div><div class="line">var uniquePaths = function(m, n) &#123; </div><div class="line">    if (m == 1 || n == 1) &#123;</div><div class="line">        return 1</div><div class="line">    &#125;</div><div class="line">    var arr = []</div><div class="line">    arr[0] = new Array(n).fill(1)</div><div class="line">    for (var i = 1; i &lt; m; i++) &#123;</div><div class="line">        arr[i] = new Array(n)</div><div class="line">        arr[i][0] = 1</div><div class="line">        for (var j = 1; j &lt; n; j++) &#123;</div><div class="line">            arr[i][j] = arr[i][j-1] + arr[i-1][j]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return arr[m-1][n-1]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
 </ul>
 
       
@@ -389,8 +395,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/12/JavaScript中常用工具函数/" rel="next" title="javascript常用工具函数总结(不定期补充)">
-                <i class="fa fa-chevron-left"></i> javascript常用工具函数总结(不定期补充)
+              <a href="/2017/09/15/使用Javascript做算法题（三）Largest-Number/" rel="next" title="使用Javascript做算法题（三）Largest-Number">
+                <i class="fa fa-chevron-left"></i> 使用Javascript做算法题（三）Largest-Number
               </a>
             
           </div>
@@ -399,8 +405,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/09/15/使用Javascript做算法题（三）Largest-Number/" rel="prev" title="使用Javascript做算法题（三）Largest-Number">
-                使用Javascript做算法题（三）Largest-Number <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/15/为什么parseInt(0-0000008)-===-8？/" rel="prev" title="为什么parseInt(0.0000008)===8？">
+                为什么parseInt(0.0000008)===8？ <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -526,7 +532,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#题目描述"><span class="nav-number">2.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解题思路"><span class="nav-number">3.</span> <span class="nav-text">解题思路</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解题思路"><span class="nav-number">2.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体代码"><span class="nav-number">3.</span> <span class="nav-text">具体代码</span></a></li></ol></div>
             
 
           </div>

@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="mysql," />
 
 
 
@@ -87,16 +87,18 @@
 
 
 
-<meta name="description" content="放点随笔文章，与[简书](http://www.jianshu.com/u/22bd593f7254)同步">
-<meta property="og:type" content="website">
-<meta property="og:title" content="唐洋洋的个人博客">
-<meta property="og:url" content="http://yoursite.com/tags/总结/index.html">
+<meta name="description" content="使用mysql workbench建表时，可以设置字段标识：PK,NN,UQ,BIN,UN,ZF,AI。他们的分别表示的意思是：PK：primary key 主键NN：not null 非空UQ：unique 唯一索引BIN：binary 二进制数据(比text更大)UN：unsigned 无符号（非负数）ZF：zero fill 填充0 例如字段内容是1 int(4), 则内容显示为0001">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明">
+<meta property="og:url" content="http://yoursite.com/2017/09/15/mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明/index.html">
 <meta property="og:site_name" content="唐洋洋的个人博客">
-<meta property="og:description" content="放点随笔文章，与[简书](http://www.jianshu.com/u/22bd593f7254)同步">
+<meta property="og:description" content="使用mysql workbench建表时，可以设置字段标识：PK,NN,UQ,BIN,UN,ZF,AI。他们的分别表示的意思是：PK：primary key 主键NN：not null 非空UQ：unique 唯一索引BIN：binary 二进制数据(比text更大)UN：unsigned 无符号（非负数）ZF：zero fill 填充0 例如字段内容是1 int(4), 则内容显示为0001">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-15T05:49:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="唐洋洋的个人博客">
-<meta name="twitter:description" content="放点随笔文章，与[简书](http://www.jianshu.com/u/22bd593f7254)同步">
+<meta name="twitter:title" content="mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明">
+<meta name="twitter:description" content="使用mysql workbench建表时，可以设置字段标识：PK,NN,UQ,BIN,UN,ZF,AI。他们的分别表示的意思是：PK：primary key 主键NN：not null 非空UQ：unique 唯一索引BIN：binary 二进制数据(比text更大)UN：unsigned 无符号（非负数）ZF：zero fill 填充0 例如字段内容是1 int(4), 则内容显示为0001">
 
 
 
@@ -124,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/总结/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/15/mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明/"/>
 
 
 
 
 
-  <title> 标签: 总结 | 唐洋洋的个人博客 </title>
+  <title> mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明 | 唐洋洋的个人博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -155,7 +157,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -239,46 +241,179 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        总结
-        <small>标签</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后端/" itemprop="url" rel="index">
+                    <span itemprop="name">后端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <hr>
+<ul>
+<li>使用mysql workbench建表时，可以设置字段标识：PK,NN,UQ,BIN,UN,ZF,AI。他们的分别表示的意思是：<br>PK：primary key 主键<br>NN：not null 非空<br>UQ：unique 唯一索引<br>BIN：binary 二进制数据(比text更大)<br>UN：unsigned 无符号（非负数）<br>ZF：zero fill 填充0 例如字段内容是1 int(4), 则内容显示为0001<br>AI：auto increment 自增</li>
+</ul>
 
-      <h1 class="post-title">
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2017/09/12/JavaScript中常用工具函数/" itemprop="url">
-              
-                <span itemprop="name">javascript常用工具函数总结(不定期补充)</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-12T16:18:00+08:00"
-              content="2017-09-12" >
-          09-12
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/15/vue服务端渲染(SSR)初探/" rel="next" title="vue服务端渲染(SSR)初探">
+                <i class="fa fa-chevron-left"></i> vue服务端渲染(SSR)初探
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/15/原生JS实现图片懒加载(lazyload)/" rel="prev" title="原生JS实现图片懒加载(lazyload)">
+                原生JS实现图片懒加载(lazyload) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
           
           </div>
@@ -286,6 +421,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -469,6 +608,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
