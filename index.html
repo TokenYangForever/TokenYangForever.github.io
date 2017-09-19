@@ -391,274 +391,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue源码解析之--核心部分core-util(二)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/vue源码解析之--核心部分core-util(二)/" itemprop="url">
-                  vue源码解析之--核心部分core-util(二)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>　在vue源码目录中有个core文件夹，其核心功能比如组件、数据绑定、虚拟dom等等都在里面。core下面又分为了components、global-api、instance、obsever、util、vdom六个部分，这次还是先以util开头，里面也封装了一些工具型的函数并且引用了外层share里面的工具函数。 </p>
-<h4 id="debug-js-error-js"><a href="#debug-js-error-js" class="headerlink" title="debug.js error.js"></a>debug.js error.js</h4><p>　debug.js里面主要封装的是用于开发阶段的调试相关的方法，比如一些提示警告。error.js里面只封装了一个handleError方法，用于处理错误，可在config里设置专门的errorHandler函数，没有的时候就只是一个warn警告。debug.js里面有一个repeat方法，将传入字符串重复N次。<br><code>  var repeat = function (str, n) {<br>    var res = ‘’;<br>    while (n) {<br>      if (n % 2 === 1) { res += str; }<br>      if (n &gt; 1) { str += str; }<br>      n &gt;&gt;= 1;<br>    }<br>    return res<br>  };</code><br>这样写的时间复杂度大概是二分之一N，lodash里也有相似的方法，不过是用Math.round(n/2)来代替n&gt;&gt;=1，n&gt;&gt;=1就是把N转换成二进制，然后右移一位再首位补0.</p>
-<h4 id="env-js"><a href="#env-js" class="headerlink" title="env.js"></a>env.js</h4><p>　env.js主要是一些环境相关的东西，待会儿重点说的是nextTick方法。<br><code>var inBrowser = typeof window !== ‘undefined’</code><br>是否在浏览器中，只要判断window对象是否存在即可。<br><code>var UA = inBrowser &amp;&amp; window.navigator.userAgent.toLowerCase();<br></code><br>浏览器中通过userAgent，判断浏览器的版本内核。<br><code>function isNative (Ctor) {<br>  return typeof Ctor === ‘function’ &amp;&amp; /native code/.test(Ctor.toString())<br>}<br></code><br>isNative 判断某些方法功能是否原生支持的，比如浏览器支持symbol的话，symbol.tostring就会返回function Symbol() { [native code] }，再用正则表达式判断是否包含native code即可。<br>　下面讲一下nextTick方法，这个方法也比较常用，可以在确定数据改变视图改变后再执行某些动作。代码首先定义一个自执行匿名函数的作用域，然后定义了一个nextTickHandler函数用于执行完成异步后需要执行的函数。<br><code>  function nextTickHandler () {<br>    pending = false<br>    const copies = callbacks.slice(0)<br>    callbacks.length = 0<br>    for (let i = 0; i &lt; copies.length; i++) {<br>      copies<a href="">i</a><br>    }<br>  }</code><br>pending是一个标示符，用于确保timerFunc方法不会被重复调用。接下来是根据浏览器支持情况来定义timeFunc方法：<br><code>if (typeof Promise !== ‘undefined’ &amp;&amp; isNative(Promise)) {<br>    var p = Promise.resolve()<br>    var logError = err =&gt; { console.error(err) }<br>    timerFunc = () =&gt; {<br>      p.then(nextTickHandler).catch(logError)<br>      if (isIOS) setTimeout(noop)<br>    }<br>  }</code><br>如果浏览器支持promise,就用promise.then来定义timerFunc,promise的具体用法这里也不多讲了,然后我看源码上的注释是说:promise.then执行的时间可能不稳定,当他被推入一个微任务队列中时,添加一个空的setTimeout可以强制刷新微任务队列(IOS系统中).<br><code>else if (typeof MutationObserver !== ‘undefined’ &amp;&amp; (<br>    isNative(MutationObserver) ||<br>    // PhantomJS and iOS 7.x<br>    MutationObserver.toString() === ‘[object MutationObserverConstructor]’<br>  )) {<br>    // use MutationObserver where native Promise is not available,<br>    // e.g. PhantomJS IE11, iOS7, Android 4.4<br>    var counter = 1<br>    var observer = new MutationObserver(nextTickHandler)<br>    var textNode = document.createTextNode(String(counter))<br>    observer.observe(textNode, {<br>      characterData: true<br>    })<br>    timerFunc = () =&gt; {<br>      counter = (counter + 1) % 2<br>      textNode.data = String(counter)<br>    }<br>  }</code><br>当promise不被支持，但浏览器支持MutationObserver时。MutationObserver是html5的一个新特性，用于监测dom节点变化。初始化一个MutationObserver的实例observer ，传入的nextTickHandler是作为监测到发生变化后执行的回调函数，然后这里新建一个文本节点，再使用observer .observe()方法将文本节点绑定监听。最后定义的timerFunc就是改变文本节点的值，从而触发回调，这个回调是在文本节点重新渲染后执行的。当以上两个方法都不支持时，就只好用setTImeout来定义timerFunc了。<br><code>return function queueNextTick (cb?: Function, ctx?: Object) {<br>    let _resolve<br>    callbacks.push(() =&gt; {<br>      if (cb) {<br>        try {<br>          cb.call(ctx)<br>        } catch (e) {<br>          handleError(e, ctx, ‘nextTick’)<br>        }<br>      } else if (_resolve) {<br>        _resolve(ctx)<br>      }<br>    })<br>    if (!pending) {<br>      pending = true<br>      timerFunc()<br>    }<br>    if (!cb &amp;&amp; typeof Promise !== ‘undefined’) {<br>      return new Promise((resolve, reject) =&gt; {<br>        _resolve = resolve<br>      })<br>    }<br>  }</code><br>最后返回的函数其实就是nextTick自身，传入两个参数，一个是异步回调执行的函数，第二个是一个对象作为执行的环境。将传入的函数以 cb.call(ctx)的形式添加到callback中，然后再执行timerFunc。在global.api中，将这里定义的nextTick放在vue的原型上了。<br>env.js在最后定义了_Set，如果支持set那么就直接用set了，不支持的话，定义了一个_set类，并为其添加has()、add()、clear()方法。其实set的用法也比较简单，浏览器不支持的话自己重新定义一下也不复杂。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/原生JS实现图片懒加载(lazyload)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/原生JS实现图片懒加载(lazyload)/" itemprop="url">
-                  原生JS实现图片懒加载(lazyload)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p> 图片懒加载也是比较常见的一种性能优化的方法，最近在用vue做一个新闻列表的客户端时也用到了，这里就简单介绍下实现原理和部分代码。</p>
-<hr>
-<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p> 加载页面的时候，图片一直都是流量大头，针对图片的性能方法也挺多的比如base64、雪碧图等；懒加载也是其中一种，主要原理是将非首屏的图片src设为一个默认值，然后监听窗口滚动，当图片出现在视窗中时再给他赋予真实的图片地址，这样可以保证首屏的加载速度然后按需加载图片。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/6383319-ba10ad7a53809f30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例.png"></p>
-<h2 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h2><p> 首先在渲染时，图片引用默认图片，然后把真实地址放在data-*属性上面。<br><code><image src="./../assets/default.png" :data-src="item.allPics" class="lazyloadimg"></image></code><br><br> 然后是监听滚动，直接用window.onscroll就可以了，但是要注意一点的是类似于window的scroll和resize，还有mousemove这类触发很频繁的事件，最好用节流(throttle)或防抖函数(debounce)来控制一下触发频率。underscore和lodash里面都有封装这两个方法，这里先不多做介绍了。<br><br> 接着要判断图片是否出现在了视窗里面，主要是三个高度：1，当前body从顶部滚动了多少距离。2，视窗的高度。3，当前图片距离顶部的距离。offsetTop相关属性可以<a href="http://www.jianshu.com/p/135731ec13f1" target="_blank" rel="external">参考这里</a>，具体代码如下：<br><code><br>window.onscroll =_.throttle(this.watchscroll, 200);<br>watchscroll () {<br>      var bodyScrollHeight =  document.body.scrollTop;// body滚动高度<br>      var windowHeight = window.innerHeight;// 视窗高度<br>      var imgs = document.getElementsByClassName(‘lazyloadimg’);<br>      for (var i =0; i &lt; imgs.length; i++) {<br>        var imgHeight = imgs[i].offsetTop;// 图片距离顶部高度<br>        if (imgHeight  &lt; windowHeight  + bodyScrollHeight) {<br>           imgs[i].src = imgs[i].getAttribute(‘data-src’);<br>           img[i].className = img[i].className.replace(‘lazyloadimg’,’’)<br>        }<br>      }<br>    }<br></code></p>
-<hr>
-<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p> 大概内容就这么多了，下次可能会补充一下防抖节流源码的实现。最后再补充两个常见的滚动判断：<br>1.页面滚动离开首屏(这时可显示回到顶部的按钮):<code>document.body.scrollTop &gt; window.innerHeight</code><br>2.页面滚动到底部了(这时可去调接口获取更多内容)：<code>window.scrollY + window.innerHeight &gt; document.body.offsetHeight</code></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -802,7 +534,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue服务端渲染(SSR)初探/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue源码解析之--核心部分core-util(二)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TokenYangForever">
@@ -824,8 +556,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/09/15/vue服务端渲染(SSR)初探/" itemprop="url">
-                  vue服务端渲染(SSR)初探
+                <a class="post-title-link" href="/2017/09/15/vue源码解析之--核心部分core-util(二)/" itemprop="url">
+                  vue源码解析之--核心部分core-util(二)
                 </a>
               
             
@@ -880,16 +612,9 @@
         
           
             <hr>
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>首先来讲一下服务端渲染，直白的说就是在服务端拿数据进行解析渲染，<strong>直接生成html片段返回给前端</strong>。具体用法也有很多种比如： </p>
-<ul>
-<li>传统的服务端模板引擎渲染整个页面</li>
-<li>服务渲染生成htmll代码块, 前端 AJAX 获取然后js动态添加<h3 id="服务端渲染的优劣"><a href="#服务端渲染的优劣" class="headerlink" title="服务端渲染的优劣"></a>服务端渲染的优劣</h3>　首先是<strong>seo</strong>问题，前端动态渲染的内容是不能被抓取到的，而使用服务端渲染就可以解决这个问题。还有就是<strong>首屏加载</strong>过慢这种问题，比如在SPA中，打开首页需要初始加载很多资源，这时考虑在首屏使用服务端渲染，也是一种折中的优化方案。但是使用SSR时，势必会增加服务器的压力，还有可能会需要前后端同构，使用同样的模板引擎，这似乎与前后端分离的观点又是矛盾的。废话就说到这里，下面来看一下vue框架中的服务器渲染。<h3 id="vue-server-renderer"><a href="#vue-server-renderer" class="headerlink" title="vue-server-renderer"></a>vue-server-renderer</h3>　vue-server-renderer就是vue中处理服务端加载的一个模块了，官方文档：<a href="https://ssr.vuejs.org/en/" target="_blank" rel="external">https://ssr.vuejs.org/en/</a>，暂时没有中文版的，我也只是稍微看了一些，然后写了一个简单的demo。首先新建一个test.js文件，并用npm安装依赖express、vue、vue-server-renderer。引入vue-server-renderer之后，然后新建一个temp.html作为渲染的基本模板，用createRenderer方法新建一个render实例，这里我传入temp.html作为renderer的template的参数，在后面渲染时就会以这个temp.html作为基础模板。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">const renderer = require(&apos;vue-server-renderer&apos;).createRenderer(&#123;</div><div class="line">	template: require(&apos;fs&apos;).readFileSync(&apos;./temp.html&apos;, &apos;utf-8&apos;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>temp.html:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;&lt;br&gt;&lt;html lang=&quot;en&quot;&gt;&lt;br&gt;&lt;head&gt;&lt;title&gt;&#123;&#123;title&#125;&#125;&lt;/title&gt;&lt;/head&gt;</div><div class="line">  &lt;body&gt;</div><div class="line">    &lt;!--vue-ssr-outlet--&gt;</div><div class="line">  &lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
-<p>　接下来随便定义一些渲染用的数据，然后用express新建一个node服务器，再定义一个vue的实例。然后再调用renderer的renderToString方法来渲染生成html，渲染成功后返回给客户端。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">const Vue = require(&apos;vue&apos;)</div><div class="line">const server = require(&apos;express&apos;)()</div><div class="line">const context = &#123;</div><div class="line">  title: &apos;hello&apos;</div><div class="line">&#125;</div><div class="line">const mocktitle = &apos;我爱吃的水果&apos;</div><div class="line">const mockdata = [&apos;香蕉&apos;, &apos;苹果&apos;, &apos;橘子&apos;]</div><div class="line">server.get(&apos;*&apos;, (req, res) =&gt; &#123;</div><div class="line">  const app = new Vue(&#123;</div><div class="line">    data: &#123;</div><div class="line">      url: req.url,</div><div class="line">      data: mockdata,</div><div class="line">      title: mocktitle</div><div class="line">    &#125;,</div><div class="line">    template: `&lt;div&gt;The visited URL is: &#123;&#123; url &#125;&#125;</div><div class="line">    &lt;h3&gt;&#123;&#123;title&#125;&#125;&lt;/h3&gt;</div><div class="line">    &lt;p v-for=&apos;item in data&apos;&gt;&#123;&#123;item&#125;&#125;&lt;/p&gt;</div><div class="line">    &lt;/div&gt;`</div><div class="line">  &#125;)</div><div class="line">  renderer.renderToString(app, context, (err, html) =&gt; &#123;</div><div class="line">    if (err) &#123;</div><div class="line">      res.status(500).end(&apos;Internal Server Error&apos;)</div><div class="line">      return</div><div class="line">    &#125;</div><div class="line">    res.end(html)</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line">server.listen(8080)</div></pre></td></tr></table></figure></p>
-<p>　注意这里渲染的数据有两种，mockdata是作为vue实例的data来渲染在实例模板中的，而context是作为基础模板的data来渲染temp.html的。可以看到在服务端用vue进行渲染的规则和前端渲染时一样，v-for、v-if等都可以正常使用。最后命令行输入node test.js，然后在浏览器打开<a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 查看结果如下:<br><img src="http://upload-images.jianshu.io/upload_images/6383319-877ce0eda788c464.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例.png"><br>可以看到服务端直接返回了一个渲染完成的Doc，示例demo到此结束。</p>
-<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>　服务端渲染还是客户端渲染的问题，个人觉得还是要针对具体业务场景然后再做选择。</p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>　在vue源码目录中有个core文件夹，其核心功能比如组件、数据绑定、虚拟dom等等都在里面。core下面又分为了components、global-api、instance、obsever、util、vdom六个部分，这次还是先以util开头，里面也封装了一些工具型的函数并且引用了外层share里面的工具函数。 </p>
+<h4 id="debug-js-error-js"><a href="#debug-js-error-js" class="headerlink" title="debug.js error.js"></a>debug.js error.js</h4><p>　debug.js里面主要封装的是用于开发阶段的调试相关的方法，比如一些提示警告。error.js里面只封装了一个handleError方法，用于处理错误，可在config里设置专门的errorHandler函数，没有的时候就只是一个warn警告。debug.js里面有一个repeat方法，将传入字符串重复N次。<br><code>  var repeat = function (str, n) {<br>    var res = ‘’;<br>    while (n) {<br>      if (n % 2 === 1) { res += str; }<br>      if (n &gt; 1) { str += str; }<br>      n &gt;&gt;= 1;<br>    }<br>    return res<br>  };</code><br>这样写的时间复杂度大概是二分之一N，lodash里也有相似的方法，不过是用Math.round(n/2)来代替n&gt;&gt;=1，n&gt;&gt;=1就是把N转换成二进制，然后右移一位再首位补0.</p>
+<h4 id="env-js"><a href="#env-js" class="headerlink" title="env.js"></a>env.js</h4><p>　env.js主要是一些环境相关的东西，待会儿重点说的是nextTick方法。<br><code>var inBrowser = typeof window !== ‘undefined’</code><br>是否在浏览器中，只要判断window对象是否存在即可。<br><code>var UA = inBrowser &amp;&amp; window.navigator.userAgent.toLowerCase();<br></code><br>浏览器中通过userAgent，判断浏览器的版本内核。<br><code>function isNative (Ctor) {<br>  return typeof Ctor === ‘function’ &amp;&amp; /native code/.test(Ctor.toString())<br>}<br></code><br>isNative 判断某些方法功能是否原生支持的，比如浏览器支持symbol的话，symbol.tostring就会返回function Symbol() { [native code] }，再用正则表达式判断是否包含native code即可。<br>　下面讲一下nextTick方法，这个方法也比较常用，可以在确定数据改变视图改变后再执行某些动作。代码首先定义一个自执行匿名函数的作用域，然后定义了一个nextTickHandler函数用于执行完成异步后需要执行的函数。<br><code>  function nextTickHandler () {<br>    pending = false<br>    const copies = callbacks.slice(0)<br>    callbacks.length = 0<br>    for (let i = 0; i &lt; copies.length; i++) {<br>      copies<a href="">i</a><br>    }<br>  }</code><br>pending是一个标示符，用于确保timerFunc方法不会被重复调用。接下来是根据浏览器支持情况来定义timeFunc方法：<br><code>if (typeof Promise !== ‘undefined’ &amp;&amp; isNative(Promise)) {<br>    var p = Promise.resolve()<br>    var logError = err =&gt; { console.error(err) }<br>    timerFunc = () =&gt; {<br>      p.then(nextTickHandler).catch(logError)<br>      if (isIOS) setTimeout(noop)<br>    }<br>  }</code><br>如果浏览器支持promise,就用promise.then来定义timerFunc,promise的具体用法这里也不多讲了,然后我看源码上的注释是说:promise.then执行的时间可能不稳定,当他被推入一个微任务队列中时,添加一个空的setTimeout可以强制刷新微任务队列(IOS系统中).<br><code>else if (typeof MutationObserver !== ‘undefined’ &amp;&amp; (<br>    isNative(MutationObserver) ||<br>    // PhantomJS and iOS 7.x<br>    MutationObserver.toString() === ‘[object MutationObserverConstructor]’<br>  )) {<br>    // use MutationObserver where native Promise is not available,<br>    // e.g. PhantomJS IE11, iOS7, Android 4.4<br>    var counter = 1<br>    var observer = new MutationObserver(nextTickHandler)<br>    var textNode = document.createTextNode(String(counter))<br>    observer.observe(textNode, {<br>      characterData: true<br>    })<br>    timerFunc = () =&gt; {<br>      counter = (counter + 1) % 2<br>      textNode.data = String(counter)<br>    }<br>  }</code><br>当promise不被支持，但浏览器支持MutationObserver时。MutationObserver是html5的一个新特性，用于监测dom节点变化。初始化一个MutationObserver的实例observer ，传入的nextTickHandler是作为监测到发生变化后执行的回调函数，然后这里新建一个文本节点，再使用observer .observe()方法将文本节点绑定监听。最后定义的timerFunc就是改变文本节点的值，从而触发回调，这个回调是在文本节点重新渲染后执行的。当以上两个方法都不支持时，就只好用setTImeout来定义timerFunc了。<br><code>return function queueNextTick (cb?: Function, ctx?: Object) {<br>    let _resolve<br>    callbacks.push(() =&gt; {<br>      if (cb) {<br>        try {<br>          cb.call(ctx)<br>        } catch (e) {<br>          handleError(e, ctx, ‘nextTick’)<br>        }<br>      } else if (_resolve) {<br>        _resolve(ctx)<br>      }<br>    })<br>    if (!pending) {<br>      pending = true<br>      timerFunc()<br>    }<br>    if (!cb &amp;&amp; typeof Promise !== ‘undefined’) {<br>      return new Promise((resolve, reject) =&gt; {<br>        _resolve = resolve<br>      })<br>    }<br>  }</code><br>最后返回的函数其实就是nextTick自身，传入两个参数，一个是异步回调执行的函数，第二个是一个对象作为执行的环境。将传入的函数以 cb.call(ctx)的形式添加到callback中，然后再执行timerFunc。在global.api中，将这里定义的nextTick放在vue的原型上了。<br>env.js在最后定义了_Set，如果支持set那么就直接用set了，不支持的话，定义了一个_set类，并为其添加has()、add()、clear()方法。其实set的用法也比较简单，浏览器不支持的话自己重新定义一下也不复杂。</p>
 
           
         
@@ -1078,6 +803,134 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue服务端渲染(SSR)初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/09/15/vue服务端渲染(SSR)初探/" itemprop="url">
+                  vue服务端渲染(SSR)初探
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>首先来讲一下服务端渲染，直白的说就是在服务端拿数据进行解析渲染，<strong>直接生成html片段返回给前端</strong>。具体用法也有很多种比如： </p>
+<ul>
+<li>传统的服务端模板引擎渲染整个页面</li>
+<li>服务渲染生成htmll代码块, 前端 AJAX 获取然后js动态添加<h3 id="服务端渲染的优劣"><a href="#服务端渲染的优劣" class="headerlink" title="服务端渲染的优劣"></a>服务端渲染的优劣</h3>　首先是<strong>seo</strong>问题，前端动态渲染的内容是不能被抓取到的，而使用服务端渲染就可以解决这个问题。还有就是<strong>首屏加载</strong>过慢这种问题，比如在SPA中，打开首页需要初始加载很多资源，这时考虑在首屏使用服务端渲染，也是一种折中的优化方案。但是使用SSR时，势必会增加服务器的压力，还有可能会需要前后端同构，使用同样的模板引擎，这似乎与前后端分离的观点又是矛盾的。废话就说到这里，下面来看一下vue框架中的服务器渲染。<h3 id="vue-server-renderer"><a href="#vue-server-renderer" class="headerlink" title="vue-server-renderer"></a>vue-server-renderer</h3>　vue-server-renderer就是vue中处理服务端加载的一个模块了，官方文档：<a href="https://ssr.vuejs.org/en/" target="_blank" rel="external">https://ssr.vuejs.org/en/</a>，暂时没有中文版的，我也只是稍微看了一些，然后写了一个简单的demo。首先新建一个test.js文件，并用npm安装依赖express、vue、vue-server-renderer。引入vue-server-renderer之后，然后新建一个temp.html作为渲染的基本模板，用createRenderer方法新建一个render实例，这里我传入temp.html作为renderer的template的参数，在后面渲染时就会以这个temp.html作为基础模板。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">const renderer = require(&apos;vue-server-renderer&apos;).createRenderer(&#123;</div><div class="line">	template: require(&apos;fs&apos;).readFileSync(&apos;./temp.html&apos;, &apos;utf-8&apos;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>temp.html:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;&lt;br&gt;&lt;html lang=&quot;en&quot;&gt;&lt;br&gt;&lt;head&gt;&lt;title&gt;&#123;&#123;title&#125;&#125;&lt;/title&gt;&lt;/head&gt;</div><div class="line">  &lt;body&gt;</div><div class="line">    &lt;!--vue-ssr-outlet--&gt;</div><div class="line">  &lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<p>　接下来随便定义一些渲染用的数据，然后用express新建一个node服务器，再定义一个vue的实例。然后再调用renderer的renderToString方法来渲染生成html，渲染成功后返回给客户端。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">const Vue = require(&apos;vue&apos;)</div><div class="line">const server = require(&apos;express&apos;)()</div><div class="line">const context = &#123;</div><div class="line">  title: &apos;hello&apos;</div><div class="line">&#125;</div><div class="line">const mocktitle = &apos;我爱吃的水果&apos;</div><div class="line">const mockdata = [&apos;香蕉&apos;, &apos;苹果&apos;, &apos;橘子&apos;]</div><div class="line">server.get(&apos;*&apos;, (req, res) =&gt; &#123;</div><div class="line">  const app = new Vue(&#123;</div><div class="line">    data: &#123;</div><div class="line">      url: req.url,</div><div class="line">      data: mockdata,</div><div class="line">      title: mocktitle</div><div class="line">    &#125;,</div><div class="line">    template: `&lt;div&gt;The visited URL is: &#123;&#123; url &#125;&#125;</div><div class="line">    &lt;h3&gt;&#123;&#123;title&#125;&#125;&lt;/h3&gt;</div><div class="line">    &lt;p v-for=&apos;item in data&apos;&gt;&#123;&#123;item&#125;&#125;&lt;/p&gt;</div><div class="line">    &lt;/div&gt;`</div><div class="line">  &#125;)</div><div class="line">  renderer.renderToString(app, context, (err, html) =&gt; &#123;</div><div class="line">    if (err) &#123;</div><div class="line">      res.status(500).end(&apos;Internal Server Error&apos;)</div><div class="line">      return</div><div class="line">    &#125;</div><div class="line">    res.end(html)</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line">server.listen(8080)</div></pre></td></tr></table></figure></p>
+<p>　注意这里渲染的数据有两种，mockdata是作为vue实例的data来渲染在实例模板中的，而context是作为基础模板的data来渲染temp.html的。可以看到在服务端用vue进行渲染的规则和前端渲染时一样，v-for、v-if等都可以正常使用。最后命令行输入node test.js，然后在浏览器打开<a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 查看结果如下:<br><img src="http://upload-images.jianshu.io/upload_images/6383319-877ce0eda788c464.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例.png"><br>可以看到服务端直接返回了一个渲染完成的Doc，示例demo到此结束。</p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>　服务端渲染还是客户端渲染的问题，个人觉得还是要针对具体业务场景然后再做选择。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/Object属性特性详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1187,6 +1040,155 @@
 <h4 id="Object-keys"><a href="#Object-keys" class="headerlink" title="Object.keys()"></a>Object.keys()</h4><p>　<strong>Object.keys()</strong> 方法会返回一个由一个给定对象的<strong>自身可枚举属性</strong>组成的数组，数组中属性名的排列顺序和使用for…in 循环遍历该对象时返回的顺序一致 （两者的主要区别是 一个 for-in 循环还会枚举其原型链上的属性）。</p>
 <h4 id="Object-freeze-Object-seal"><a href="#Object-freeze-Object-seal" class="headerlink" title="Object.freeze() Object.seal()"></a>Object.freeze() Object.seal()</h4><p>　这两个方法是用于限制对象修改权限的，分别有对应的Object.isFrozen()和Object.isSealed()方法判断是否是冻结(密封)对象，两者唯一的区别是，密封对象仍然可以修改已有属性value的值。<br>　Object.freeze() 方法可以冻结一个对象，冻结指的是不能向这个对象添加新的属性，不能修改其已有属性的值，不能删除已有属性，以及不能修改该对象已有属性的特性。也就是说，这个对象<strong>永远是不可变的</strong>。该方法返回被冻结的对象。<br>　Object.seal() 方法可以让一个对象密封，并返回被密封后的对象。密封对象是指那些不能添加新的属性，不能删除已有属性，以及不能修改已有属性特性，但可能可以<strong>修改已有属性的值</strong>的对象。</p>
 <h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>　暂时总结就这么多，上面的内容大多是从js高程上看的，在线api<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="external">查的这里</a>，后面有遗漏或不准确的地方再进行修改。最后说一点，上述的object的方法很多都不支持ie8，这也是为什么vue不支持ie8，但如果是在现代高版本的浏览器进行开发时就不用顾虑了。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/使用Javascript做算法题（二）Unique-Paths/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/09/15/使用Javascript做算法题（二）Unique-Paths/" itemprop="url">
+                  使用Javascript做算法题（二）Unique-Paths
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><ul>
+<li>在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。<a href="https://leetcode.com/problems/unique-paths/description/" target="_blank" rel="external">题目地址</a></li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/6383319-9b976ff4ae8da7eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="一个3*7的示例"></p>
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><ul>
+<li>看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从<strong>n-1阶</strong>，要嘛从<strong>n-2阶</strong>跨到终点。<strong>假设走到n-1阶有m种不同方案，走到n-2阶有n种不同方案，那么走到n阶就有m+n种不同方案。</strong></li>
+<li>有点扯远了，回到这个题目。首先想到的是<strong>以二维数组来表示这个地图的坐标</strong>，机器人的起点在(0,0)终点在(m,n)，机器人最后一步肯定从(m-1,n)或(m,n-1)走，那走到(m,n)的路线总数就是走到(m-1,n)的路线总数加上走到(m,n-1)的路线总数。至此，解题思路也就很明显了，<strong>首先确定机器人走到最上面的一行和最左边的一列上的任意点，路线数只能为1。</strong>然后再根据这些点的路线数，依次往里推，最后得出(m,n)点的路线数。<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number&#125; m</div><div class="line"> * @param &#123;number&#125; n</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> */</div><div class="line">var uniquePaths = function(m, n) &#123; </div><div class="line">    if (m == 1 || n == 1) &#123;</div><div class="line">        return 1</div><div class="line">    &#125;</div><div class="line">    var arr = []</div><div class="line">    arr[0] = new Array(n).fill(1)</div><div class="line">    for (var i = 1; i &lt; m; i++) &#123;</div><div class="line">        arr[i] = new Array(n)</div><div class="line">        arr[i][0] = 1</div><div class="line">        for (var j = 1; j &lt; n; j++) &#123;</div><div class="line">            arr[i][j] = arr[i][j-1] + arr[i-1][j]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return arr[m-1][n-1]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+</ul>
 
           
         
@@ -1392,7 +1394,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/使用Javascript做算法题（二）Unique-Paths/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/原生JS实现图片懒加载(lazyload)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TokenYangForever">
@@ -1414,8 +1416,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/09/15/使用Javascript做算法题（二）Unique-Paths/" itemprop="url">
-                  使用Javascript做算法题（二）Unique-Paths
+                <a class="post-title-link" href="/2017/09/15/原生JS实现图片懒加载(lazyload)/" itemprop="url">
+                  原生JS实现图片懒加载(lazyload)
                 </a>
               
             
@@ -1492,15 +1494,13 @@
         
           
             <hr>
-<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><ul>
-<li>在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。<a href="https://leetcode.com/problems/unique-paths/description/" target="_blank" rel="external">题目地址</a></li>
-</ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/6383319-9b976ff4ae8da7eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="一个3*7的示例"></p>
-<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><ul>
-<li>看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从<strong>n-1阶</strong>，要嘛从<strong>n-2阶</strong>跨到终点。<strong>假设走到n-1阶有m种不同方案，走到n-2阶有n种不同方案，那么走到n阶就有m+n种不同方案。</strong></li>
-<li>有点扯远了，回到这个题目。首先想到的是<strong>以二维数组来表示这个地图的坐标</strong>，机器人的起点在(0,0)终点在(m,n)，机器人最后一步肯定从(m-1,n)或(m,n-1)走，那走到(m,n)的路线总数就是走到(m-1,n)的路线总数加上走到(m,n-1)的路线总数。至此，解题思路也就很明显了，<strong>首先确定机器人走到最上面的一行和最左边的一列上的任意点，路线数只能为1。</strong>然后再根据这些点的路线数，依次往里推，最后得出(m,n)点的路线数。<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number&#125; m</div><div class="line"> * @param &#123;number&#125; n</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> */</div><div class="line">var uniquePaths = function(m, n) &#123; </div><div class="line">    if (m == 1 || n == 1) &#123;</div><div class="line">        return 1</div><div class="line">    &#125;</div><div class="line">    var arr = []</div><div class="line">    arr[0] = new Array(n).fill(1)</div><div class="line">    for (var i = 1; i &lt; m; i++) &#123;</div><div class="line">        arr[i] = new Array(n)</div><div class="line">        arr[i][0] = 1</div><div class="line">        for (var j = 1; j &lt; n; j++) &#123;</div><div class="line">            arr[i][j] = arr[i][j-1] + arr[i-1][j]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return arr[m-1][n-1]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-</ul>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p> 图片懒加载也是比较常见的一种性能优化的方法，最近在用vue做一个新闻列表的客户端时也用到了，这里就简单介绍下实现原理和部分代码。</p>
+<hr>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p> 加载页面的时候，图片一直都是流量大头，针对图片的性能方法也挺多的比如base64、雪碧图等；懒加载也是其中一种，主要原理是将非首屏的图片src设为一个默认值，然后监听窗口滚动，当图片出现在视窗中时再给他赋予真实的图片地址，这样可以保证首屏的加载速度然后按需加载图片。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6383319-ba10ad7a53809f30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例.png"></p>
+<h2 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h2><p> 首先在渲染时，图片引用默认图片，然后把真实地址放在data-*属性上面。<br><code><image src="./../assets/default.png" :data-src="item.allPics" class="lazyloadimg"></image></code><br><br> 然后是监听滚动，直接用window.onscroll就可以了，但是要注意一点的是类似于window的scroll和resize，还有mousemove这类触发很频繁的事件，最好用节流(throttle)或防抖函数(debounce)来控制一下触发频率。underscore和lodash里面都有封装这两个方法，这里先不多做介绍了。<br><br> 接着要判断图片是否出现在了视窗里面，主要是三个高度：1，当前body从顶部滚动了多少距离。2，视窗的高度。3，当前图片距离顶部的距离。offsetTop相关属性可以<a href="http://www.jianshu.com/p/135731ec13f1" target="_blank" rel="external">参考这里</a>，具体代码如下：<br><code><br>window.onscroll =_.throttle(this.watchscroll, 200);<br>watchscroll () {<br>      var bodyScrollHeight =  document.body.scrollTop;// body滚动高度<br>      var windowHeight = window.innerHeight;// 视窗高度<br>      var imgs = document.getElementsByClassName(‘lazyloadimg’);<br>      for (var i =0; i &lt; imgs.length; i++) {<br>        var imgHeight = imgs[i].offsetTop;// 图片距离顶部高度<br>        if (imgHeight  &lt; windowHeight  + bodyScrollHeight) {<br>           imgs[i].src = imgs[i].getAttribute(‘data-src’);<br>           img[i].className = img[i].className.replace(‘lazyloadimg’,’’)<br>        }<br>      }<br>    }<br></code></p>
+<hr>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p> 大概内容就这么多了，下次可能会补充一下防抖节流源码的实现。最后再补充两个常见的滚动判断：<br>1.页面滚动离开首屏(这时可显示回到顶部的按钮):<code>document.body.scrollTop &gt; window.innerHeight</code><br>2.页面滚动到底部了(这时可去调接口获取更多内容)：<code>window.scrollY + window.innerHeight &gt; document.body.offsetHeight</code></p>
 
           
         
