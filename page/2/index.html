@@ -251,7 +251,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/使用Javascript做算法题（二）Unique-Paths/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/原生JS实现图片懒加载(lazyload)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TokenYangForever">
@@ -273,8 +273,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/09/15/使用Javascript做算法题（二）Unique-Paths/" itemprop="url">
-                  使用Javascript做算法题（二）Unique-Paths
+                <a class="post-title-link" href="/2017/09/15/原生JS实现图片懒加载(lazyload)/" itemprop="url">
+                  原生JS实现图片懒加载(lazyload)
                 </a>
               
             
@@ -351,15 +351,13 @@
         
           
             <hr>
-<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><ul>
-<li>在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。<a href="https://leetcode.com/problems/unique-paths/description/" target="_blank" rel="external">题目地址</a></li>
-</ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/6383319-9b976ff4ae8da7eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="一个3*7的示例"></p>
-<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><ul>
-<li>看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从<strong>n-1阶</strong>，要嘛从<strong>n-2阶</strong>跨到终点。<strong>假设走到n-1阶有m种不同方案，走到n-2阶有n种不同方案，那么走到n阶就有m+n种不同方案。</strong></li>
-<li>有点扯远了，回到这个题目。首先想到的是<strong>以二维数组来表示这个地图的坐标</strong>，机器人的起点在(0,0)终点在(m,n)，机器人最后一步肯定从(m-1,n)或(m,n-1)走，那走到(m,n)的路线总数就是走到(m-1,n)的路线总数加上走到(m,n-1)的路线总数。至此，解题思路也就很明显了，<strong>首先确定机器人走到最上面的一行和最左边的一列上的任意点，路线数只能为1。</strong>然后再根据这些点的路线数，依次往里推，最后得出(m,n)点的路线数。<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number&#125; m</div><div class="line"> * @param &#123;number&#125; n</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> */</div><div class="line">var uniquePaths = function(m, n) &#123; </div><div class="line">    if (m == 1 || n == 1) &#123;</div><div class="line">        return 1</div><div class="line">    &#125;</div><div class="line">    var arr = []</div><div class="line">    arr[0] = new Array(n).fill(1)</div><div class="line">    for (var i = 1; i &lt; m; i++) &#123;</div><div class="line">        arr[i] = new Array(n)</div><div class="line">        arr[i][0] = 1</div><div class="line">        for (var j = 1; j &lt; n; j++) &#123;</div><div class="line">            arr[i][j] = arr[i][j-1] + arr[i-1][j]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return arr[m-1][n-1]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-</ul>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p> 图片懒加载也是比较常见的一种性能优化的方法，最近在用vue做一个新闻列表的客户端时也用到了，这里就简单介绍下实现原理和部分代码。</p>
+<hr>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p> 加载页面的时候，图片一直都是流量大头，针对图片的性能方法也挺多的比如base64、雪碧图等；懒加载也是其中一种，主要原理是将非首屏的图片src设为一个默认值，然后监听窗口滚动，当图片出现在视窗中时再给他赋予真实的图片地址，这样可以保证首屏的加载速度然后按需加载图片。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6383319-ba10ad7a53809f30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例.png"></p>
+<h2 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h2><p> 首先在渲染时，图片引用默认图片，然后把真实地址放在data-*属性上面。<br><code><image src="./../assets/default.png" :data-src="item.allPics" class="lazyloadimg"></image></code><br><br> 然后是监听滚动，直接用window.onscroll就可以了，但是要注意一点的是类似于window的scroll和resize，还有mousemove这类触发很频繁的事件，最好用节流(throttle)或防抖函数(debounce)来控制一下触发频率。underscore和lodash里面都有封装这两个方法，这里先不多做介绍了。<br><br> 接着要判断图片是否出现在了视窗里面，主要是三个高度：1，当前body从顶部滚动了多少距离。2，视窗的高度。3，当前图片距离顶部的距离。offsetTop相关属性可以<a href="http://www.jianshu.com/p/135731ec13f1" target="_blank" rel="external">参考这里</a>，具体代码如下：<br><code><br>window.onscroll =_.throttle(this.watchscroll, 200);<br>watchscroll () {<br>      var bodyScrollHeight =  document.body.scrollTop;// body滚动高度<br>      var windowHeight = window.innerHeight;// 视窗高度<br>      var imgs = document.getElementsByClassName(‘lazyloadimg’);<br>      for (var i =0; i &lt; imgs.length; i++) {<br>        var imgHeight = imgs[i].offsetTop;// 图片距离顶部高度<br>        if (imgHeight  &lt; windowHeight  + bodyScrollHeight) {<br>           imgs[i].src = imgs[i].getAttribute(‘data-src’);<br>           img[i].className = img[i].className.replace(‘lazyloadimg’,’’)<br>        }<br>      }<br>    }<br></code></p>
+<hr>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p> 大概内容就这么多了，下次可能会补充一下防抖节流源码的实现。最后再补充两个常见的滚动判断：<br>1.页面滚动离开首屏(这时可显示回到顶部的按钮):<code>document.body.scrollTop &gt; window.innerHeight</code><br>2.页面滚动到底部了(这时可去调接口获取更多内容)：<code>window.scrollY + window.innerHeight &gt; document.body.offsetHeight</code></p>
 
           
         
@@ -781,7 +779,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
