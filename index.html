@@ -251,6 +251,155 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/14/手写JSONP-promise封装/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/10/14/手写JSONP-promise封装/" itemprop="url">
+                  手写JSONP(promise封装)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-14T15:41:00+08:00">
+                2017-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><ul>
+<li>JSONP以前研究过，最近又有点忘了，写篇本文mark一下，旨在理解记住JSONP的原理及其实现。代码实现用到es6语法，使用promise来封装JSONP方法，本地测试用的自己node搭的服务器,具体代码就不贴了。</li>
+<li>一句话阐述下JSONP原理：<strong><em>动态生成一个JavaScript标签，其src由接口url、请求参数、callback函数名拼接而成，利用js标签没有跨域限制的特性实现跨域请求。</em></strong></li>
+<li>有几点需要注意：1.callback函数要绑定在window对象上<br>2.服务端返回数据有特定格式要求：callback函数名+’(‘+JSON.stringify(返回数据) +’)’<br>3.不支持post，因为js标签本身就是一个get请求</li>
+<li>具体代码如下，最后一段是调用函数的示例，这个函数将返回一个promise对象，获取到数据时状态为resolve<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">const jsonp = function (url, data) &#123;</div><div class="line">  return new Promise((resolve, reject) =&gt; &#123;</div><div class="line">    // 初始化url</div><div class="line">    let dataString = url.indexOf(&apos;?&apos;) === -1 ? &apos;?&apos; : &apos;&amp;&apos;</div><div class="line">    let callbackName = `jsonpCB_$&#123;Date.now()&#125;`</div><div class="line">    url += `$&#123;dataString&#125;callback=$&#123;callbackName&#125;`</div><div class="line">    if (data) &#123;</div><div class="line">     // 有请求参数，依次添加到url</div><div class="line">      for (let k in data) &#123;</div><div class="line">        url += `&amp;$&#123;k&#125;=$&#123;data[k]&#125;`</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    let jsNode = document.createElement(&apos;script&apos;)</div><div class="line">    jsNode.src = url</div><div class="line">    // 触发callback，触发后删除js标签和绑定在window上的callback</div><div class="line">    window[callbackName] = result =&gt; &#123;</div><div class="line">      delete window[callbackName]</div><div class="line">      document.body.removeChild(jsNode)</div><div class="line">      if (result) &#123;</div><div class="line">        resolve(result)</div><div class="line">      &#125; else &#123;</div><div class="line">        reject(&apos;没有返回数据&apos;)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    // js加载异常的情况</div><div class="line">    jsNode.addEventListener(&apos;error&apos;, () =&gt; &#123;</div><div class="line">      delete window[callbackName]</div><div class="line">      document.body.removeChild(jsNode)</div><div class="line">      reject(&apos;JavaScript资源加载失败&apos;)</div><div class="line">    &#125;, false)</div><div class="line">    // 添加js节点到document上时，开始请求</div><div class="line">    document.body.appendChild(jsNode)</div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line">jsonp(&apos;http://192.168.0.103:8081/jsonp&apos;, &#123;a: 1, b: &apos;heiheihei&apos;&#125;)</div><div class="line">  .then(result =&gt; &#123; console.log(result) &#125;)</div><div class="line">  .catch(err =&gt; &#123; console.error(err) &#125;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>个人感觉JSONP用的情况还是比较少吧，如果已经是需要服务端配合来进行跨域的情况，为什么不直接用CORS呢</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/11/使用eslint检查JS代码/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -646,127 +795,6 @@
 <li><p>在不确定参数的情况下，如果不考虑性能，代码层面用apply来写会简洁很多。不过你能确认参数长度的时候，最好都用call方法而不用apply。</p>
 </li>
 </ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue源码解析之--核心部分core-util(二)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/vue源码解析之--核心部分core-util(二)/" itemprop="url">
-                  vue源码解析之--核心部分core-util(二)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>　在vue源码目录中有个core文件夹，其核心功能比如组件、数据绑定、虚拟dom等等都在里面。core下面又分为了components、global-api、instance、obsever、util、vdom六个部分，这次还是先以util开头，里面也封装了一些工具型的函数并且引用了外层share里面的工具函数。 </p>
-<h4 id="debug-js-error-js"><a href="#debug-js-error-js" class="headerlink" title="debug.js error.js"></a>debug.js error.js</h4><p>　debug.js里面主要封装的是用于开发阶段的调试相关的方法，比如一些提示警告。error.js里面只封装了一个handleError方法，用于处理错误，可在config里设置专门的errorHandler函数，没有的时候就只是一个warn警告。debug.js里面有一个repeat方法，将传入字符串重复N次。<br><code>  var repeat = function (str, n) {<br>    var res = ‘’;<br>    while (n) {<br>      if (n % 2 === 1) { res += str; }<br>      if (n &gt; 1) { str += str; }<br>      n &gt;&gt;= 1;<br>    }<br>    return res<br>  };</code><br>这样写的时间复杂度大概是二分之一N，lodash里也有相似的方法，不过是用Math.round(n/2)来代替n&gt;&gt;=1，n&gt;&gt;=1就是把N转换成二进制，然后右移一位再首位补0.</p>
-<h4 id="env-js"><a href="#env-js" class="headerlink" title="env.js"></a>env.js</h4><p>　env.js主要是一些环境相关的东西，待会儿重点说的是nextTick方法。<br><code>var inBrowser = typeof window !== ‘undefined’</code><br>是否在浏览器中，只要判断window对象是否存在即可。<br><code>var UA = inBrowser &amp;&amp; window.navigator.userAgent.toLowerCase();<br></code><br>浏览器中通过userAgent，判断浏览器的版本内核。<br><code>function isNative (Ctor) {<br>  return typeof Ctor === ‘function’ &amp;&amp; /native code/.test(Ctor.toString())<br>}<br></code><br>isNative 判断某些方法功能是否原生支持的，比如浏览器支持symbol的话，symbol.tostring就会返回function Symbol() { [native code] }，再用正则表达式判断是否包含native code即可。<br>　下面讲一下nextTick方法，这个方法也比较常用，可以在确定数据改变视图改变后再执行某些动作。代码首先定义一个自执行匿名函数的作用域，然后定义了一个nextTickHandler函数用于执行完成异步后需要执行的函数。<br><code>  function nextTickHandler () {<br>    pending = false<br>    const copies = callbacks.slice(0)<br>    callbacks.length = 0<br>    for (let i = 0; i &lt; copies.length; i++) {<br>      copies<a href="">i</a><br>    }<br>  }</code><br>pending是一个标示符，用于确保timerFunc方法不会被重复调用。接下来是根据浏览器支持情况来定义timeFunc方法：<br><code>if (typeof Promise !== ‘undefined’ &amp;&amp; isNative(Promise)) {<br>    var p = Promise.resolve()<br>    var logError = err =&gt; { console.error(err) }<br>    timerFunc = () =&gt; {<br>      p.then(nextTickHandler).catch(logError)<br>      if (isIOS) setTimeout(noop)<br>    }<br>  }</code><br>如果浏览器支持promise,就用promise.then来定义timerFunc,promise的具体用法这里也不多讲了,然后我看源码上的注释是说:promise.then执行的时间可能不稳定,当他被推入一个微任务队列中时,添加一个空的setTimeout可以强制刷新微任务队列(IOS系统中).<br><code>else if (typeof MutationObserver !== ‘undefined’ &amp;&amp; (<br>    isNative(MutationObserver) ||<br>    // PhantomJS and iOS 7.x<br>    MutationObserver.toString() === ‘[object MutationObserverConstructor]’<br>  )) {<br>    // use MutationObserver where native Promise is not available,<br>    // e.g. PhantomJS IE11, iOS7, Android 4.4<br>    var counter = 1<br>    var observer = new MutationObserver(nextTickHandler)<br>    var textNode = document.createTextNode(String(counter))<br>    observer.observe(textNode, {<br>      characterData: true<br>    })<br>    timerFunc = () =&gt; {<br>      counter = (counter + 1) % 2<br>      textNode.data = String(counter)<br>    }<br>  }</code><br>当promise不被支持，但浏览器支持MutationObserver时。MutationObserver是html5的一个新特性，用于监测dom节点变化。初始化一个MutationObserver的实例observer ，传入的nextTickHandler是作为监测到发生变化后执行的回调函数，然后这里新建一个文本节点，再使用observer .observe()方法将文本节点绑定监听。最后定义的timerFunc就是改变文本节点的值，从而触发回调，这个回调是在文本节点重新渲染后执行的。当以上两个方法都不支持时，就只好用setTImeout来定义timerFunc了。<br><code>return function queueNextTick (cb?: Function, ctx?: Object) {<br>    let _resolve<br>    callbacks.push(() =&gt; {<br>      if (cb) {<br>        try {<br>          cb.call(ctx)<br>        } catch (e) {<br>          handleError(e, ctx, ‘nextTick’)<br>        }<br>      } else if (_resolve) {<br>        _resolve(ctx)<br>      }<br>    })<br>    if (!pending) {<br>      pending = true<br>      timerFunc()<br>    }<br>    if (!cb &amp;&amp; typeof Promise !== ‘undefined’) {<br>      return new Promise((resolve, reject) =&gt; {<br>        _resolve = resolve<br>      })<br>    }<br>  }</code><br>最后返回的函数其实就是nextTick自身，传入两个参数，一个是异步回调执行的函数，第二个是一个对象作为执行的环境。将传入的函数以 cb.call(ctx)的形式添加到callback中，然后再执行timerFunc。在global.api中，将这里定义的nextTick放在vue的原型上了。<br>env.js在最后定义了_Set，如果支持set那么就直接用set了，不支持的话，定义了一个_set类，并为其添加has()、add()、clear()方法。其实set的用法也比较简单，浏览器不支持的话自己重新定义一下也不复杂。</p>
 
           
         
@@ -1727,7 +1755,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
