@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="JavaScript,算法," />
+  <meta name="keywords" content="JavaScript," />
 
 
 
@@ -87,20 +87,20 @@
 
 
 
-<meta name="description" content="题目描述 在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。题目地址   解题思路 看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从n-1阶，要嘛从n-2阶跨到终点。假设走到n-1阶有m">
-<meta name="keywords" content="JavaScript,算法">
+<meta name="description" content="前言 这篇讲的内容是非常基础的，关于javascript中的事件相关可能不太全面，只是围绕几个知识点。可能现在mvvm框架用多了也不用多去在意dom和event，但是原生的基础知识还是需要掌握的(万一以后面试问到了呢~~) Javascript与html之间的交互是通过事件来实现的。事件，就是文档或浏览器窗口发生的一些特定的交互瞬间，可以用侦听器(或处理程序)来预定事件，以便事件发生时执行相应的代">
+<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Javascript做算法题（二）Unique-Paths">
-<meta property="og:url" content="http://yoursite.com/2017/09/15/使用Javascript做算法题（二）Unique-Paths/index.html">
+<meta property="og:title" content="javascript事件流、事件代理、target和currentTarget">
+<meta property="og:url" content="http://yoursite.com/2017/10/31/javascript事件流、事件代理、target和currentTarget/index.html">
 <meta property="og:site_name" content="唐洋洋的个人博客">
-<meta property="og:description" content="题目描述 在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。题目地址   解题思路 看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从n-1阶，要嘛从n-2阶跨到终点。假设走到n-1阶有m">
+<meta property="og:description" content="前言 这篇讲的内容是非常基础的，关于javascript中的事件相关可能不太全面，只是围绕几个知识点。可能现在mvvm框架用多了也不用多去在意dom和event，但是原生的基础知识还是需要掌握的(万一以后面试问到了呢~~) Javascript与html之间的交互是通过事件来实现的。事件，就是文档或浏览器窗口发生的一些特定的交互瞬间，可以用侦听器(或处理程序)来预定事件，以便事件发生时执行相应的代">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6383319-9b976ff4ae8da7eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-10-16T02:17:27.000Z">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6383319-f8a239bd4cb8b4ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-10-31T01:58:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Javascript做算法题（二）Unique-Paths">
-<meta name="twitter:description" content="题目描述 在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。题目地址   解题思路 看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从n-1阶，要嘛从n-2阶跨到终点。假设走到n-1阶有m">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/6383319-9b976ff4ae8da7eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="javascript事件流、事件代理、target和currentTarget">
+<meta name="twitter:description" content="前言 这篇讲的内容是非常基础的，关于javascript中的事件相关可能不太全面，只是围绕几个知识点。可能现在mvvm框架用多了也不用多去在意dom和event，但是原生的基础知识还是需要掌握的(万一以后面试问到了呢~~) Javascript与html之间的交互是通过事件来实现的。事件，就是文档或浏览器窗口发生的一些特定的交互瞬间，可以用侦听器(或处理程序)来预定事件，以便事件发生时执行相应的代">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/6383319-f8a239bd4cb8b4ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -128,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/09/15/使用Javascript做算法题（二）Unique-Paths/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/10/31/javascript事件流、事件代理、target和currentTarget/"/>
 
 
 
 
 
-  <title> 使用Javascript做算法题（二）Unique-Paths | 唐洋洋的个人博客 </title>
+  <title> javascript事件流、事件代理、target和currentTarget | 唐洋洋的个人博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -263,7 +263,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/使用Javascript做算法题（二）Unique-Paths/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/31/javascript事件流、事件代理、target和currentTarget/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TokenYangForever">
@@ -284,7 +284,7 @@
             
             
               
-                使用Javascript做算法题（二）Unique-Paths
+                javascript事件流、事件代理、target和currentTarget
               
             
           </h1>
@@ -299,8 +299,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-31T09:54:00+08:00">
+                2017-10-31
               </time>
             
 
@@ -322,8 +322,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode算法题/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode算法题</span>
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
                   </a>
                 </span>
 
@@ -357,15 +357,23 @@
       
 
       
-        <hr>
-<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><ul>
-<li>在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。<a href="https://leetcode.com/problems/unique-paths/description/" target="_blank" rel="external">题目地址</a></li>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><ul>
+<li>这篇讲的内容是非常基础的，关于javascript中的事件相关可能不太全面，只是围绕几个知识点。可能现在mvvm框架用多了也不用多去在意dom和event，但是原生的基础知识还是需要掌握的(万一以后面试问到了呢~~)</li>
+<li>Javascript与html之间的交互是通过<strong>事件</strong>来实现的。事件，就是文档或浏览器窗口发生的一些特定的交互瞬间，可以用侦听器(或处理程序)来预定事件，以便事件发生时执行相应的代码。<h3 id="事件流"><a href="#事件流" class="headerlink" title="事件流"></a>事件流</h3></li>
+<li><strong>事件流</strong>描述的是从页面接收到事件的顺序，一些历史发展的内容这里就不提了，直接讲”DOM2级事件”，事件流包括三个阶段：<strong>事件捕获阶段、处于目标阶段和事件冒泡阶段</strong>。最先发生的是事件捕获，然后是具体的实际目标收到事件，最后才是冒泡阶段，可以在这个阶段对事件做出响应。</li>
 </ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/6383319-9b976ff4ae8da7eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="一个3*7的示例"></p>
-<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><ul>
-<li>看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从<strong>n-1阶</strong>，要嘛从<strong>n-2阶</strong>跨到终点。<strong>假设走到n-1阶有m种不同方案，走到n-2阶有n种不同方案，那么走到n阶就有m+n种不同方案。</strong></li>
-<li>有点扯远了，回到这个题目。首先想到的是<strong>以二维数组来表示这个地图的坐标</strong>，机器人的起点在(0,0)终点在(m,n)，机器人最后一步肯定从(m-1,n)或(m,n-1)走，那走到(m,n)的路线总数就是走到(m-1,n)的路线总数加上走到(m,n-1)的路线总数。至此，解题思路也就很明显了，<strong>首先确定机器人走到最上面的一行和最左边的一列上的任意点，路线数只能为1。</strong>然后再根据这些点的路线数，依次往里推，最后得出(m,n)点的路线数。<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number&#125; m</div><div class="line"> * @param &#123;number&#125; n</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> */</div><div class="line">var uniquePaths = function(m, n) &#123; </div><div class="line">    if (m == 1 || n == 1) &#123;</div><div class="line">        return 1</div><div class="line">    &#125;</div><div class="line">    var arr = []</div><div class="line">    arr[0] = new Array(n).fill(1)</div><div class="line">    for (var i = 1; i &lt; m; i++) &#123;</div><div class="line">        arr[i] = new Array(n)</div><div class="line">        arr[i][0] = 1</div><div class="line">        for (var j = 1; j &lt; n; j++) &#123;</div><div class="line">            arr[i][j] = arr[i][j-1] + arr[i-1][j]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return arr[m-1][n-1]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/6383319-f8a239bd4cb8b4ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="网上找的示意图.png"></p>
+<h3 id="添加事件监听"><a href="#添加事件监听" class="headerlink" title="添加事件监听"></a>添加事件监听</h3><ul>
+<li><p>给元素添加事件监听的方法，可以直接在html上添加或者在javascript中指定相关的<strong>事件处理程序</strong>，但是需要注意，这种以’on’开头的事件属于’DOM0’级事件，重复定义时会覆盖掉原事件，而使用addEventListener则不会覆盖之前添加的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;input id=&apos;btn&apos; value=&apos;click me&apos; onclick=&apos;alert(this.value)&apos;&gt;</div></pre></td></tr></table></figure>
 </li>
+<li><p>还可以使用<strong>addEventListener/removeEventListener</strong>方法，所有dom节点都包含这方法，传入三个参数:事件名、处理事件的函数、标示在捕获还是在冒泡阶段调用回调函数的布尔值。</p>
+</li>
+<li>addEventListener添加的事件处理函数只能用removeEventListener方法移除，传入参数与addEventListener相同，<strong>意味着addEventListener添加的匿名函数无法移除，</strong>所以在用addEventListener添加处理函数时不能使用匿名函数。环境不支持addEventListener的时候，还可以使用attachEvent/detachEvent，这里就不多做介绍了。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let btn = document.getElementById(&apos;btn&apos;)</div><div class="line">let handler = function () &#123;alert(this.id)&#125;</div><div class="line">btn.addEventListener(&apos;click&apos;, handler,false)</div><div class="line">btn.removeEventListener(&apos;click&apos;, handler,false)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="事件委托"><a href="#事件委托" class="headerlink" title="事件委托"></a>事件委托</h3><ul>
+<li>事件委托是什么呢？最简单来说：<strong>在父元素上添加可以处理子元素事件的事件处理函数</strong>。利用了事件冒泡，指定一个事件处理函数，来处理同一种类型的多个事件。这里顺便一起说下target和currenttarget的区别，<strong>target是触发事件的最具体的元素， currenttarget是绑定事件的元素(在函数中一般等于this)</strong>。下面具体代码示例：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;outter&quot;&gt;</div><div class="line">   &lt;div id=&quot;inner&quot;&gt;&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">var outter = document.querySelector(&apos;#outter&apos;)</div><div class="line">outter.addEventListener(&apos;click&apos;,function(e)&#123;</div><div class="line">    console.log(e.target.id)  //inner</div><div class="line">    console.log(e.currentTarget.id)  //outter</div><div class="line">    console.log(this === e.currentTarget)  //true</div><div class="line">&#125;,false);</div></pre></td></tr></table></figure></li>
 </ul>
 
       
@@ -392,8 +400,6 @@
           
             <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
           
-            <a href="/tags/算法/" rel="tag"># 算法</a>
-          
         </div>
       
 
@@ -405,8 +411,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/15/mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明/" rel="next" title="mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明">
-                <i class="fa fa-chevron-left"></i> mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明
+              <a href="/2017/10/23/11/" rel="next" title="使用Javascript做算法题（四）Longest Increasing Path in a Matrix">
+                <i class="fa fa-chevron-left"></i> 使用Javascript做算法题（四）Longest Increasing Path in a Matrix
               </a>
             
           </div>
@@ -414,10 +420,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/15/使用Javascript做算法题（三）Largest-Number/" rel="prev" title="使用Javascript做算法题（三）Largest-Number">
-                使用Javascript做算法题（三）Largest-Number <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -542,7 +544,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解题思路"><span class="nav-number">2.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体代码"><span class="nav-number">3.</span> <span class="nav-text">具体代码</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件流"><span class="nav-number">2.</span> <span class="nav-text">事件流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加事件监听"><span class="nav-number">3.</span> <span class="nav-text">添加事件监听</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件委托"><span class="nav-number">4.</span> <span class="nav-text">事件委托</span></a></li></ol></div>
             
 
           </div>
