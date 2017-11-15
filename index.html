@@ -261,6 +261,168 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/15/socket-io-实现在线聊天室/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/11/15/socket-io-实现在线聊天室/" itemprop="url">
+                  socket.io 实现在线聊天室
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-15T10:20:00+08:00">
+                2017-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后端/" itemprop="url" rel="index">
+                    <span itemprop="name">后端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://upload-images.jianshu.io/upload_images/6383319-ba462293ba9834bb.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="效果图.gif"></p>
+<h4 id="websocket工作机制"><a href="#websocket工作机制" class="headerlink" title="websocket工作机制"></a>websocket工作机制</h4><ul>
+<li>WebSocket协议是<strong>基于TCP</strong>的一种新的网络协议。它实现了<strong>浏览器与服务器全双工(full-duplex)通信</strong>——允许服务器主动发送信息给客户端。websocket链接建立后，服务端和客户端可通过连接通道自由通信。wx协议也有类似于https的wss协议，也是多了一层TLS协议。</li>
+<li>websocket具体详细的内容就不多做介绍了，因为我这次使用的socket.io框架，写起来的语法和原生websocket语法还是有很大差别的。<h4 id="Socket-io简介"><a href="#Socket-io简介" class="headerlink" title="Socket.io简介"></a>Socket.io简介</h4></li>
+<li>socket.io可以看做是一个对websocket进行了封装的一个框架，目的也是为了实现客户端和服务端的全双工通信。socket.io的底层是engine.io，engine.io在不支持websocket的浏览器中，会使用ajax的长轮询实现效果。</li>
+<li>具体过程，浏览器和服务端首先建立xhr链接，第一次握手后，服务端返回浏览器一个upgrades字段，告诉前端可以升级为websocket协议，socket.io客户端的框架会进行环境监测支持websocket的话，就会将xhr链接升级为websocket。建立起一个websocket连接后，服务器和浏览器之间还会定期的ping-pong来确定网络链接是否正常。<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3></li>
+<li>再来看下具体实现的代码如何写，<a href="https://socket.io/" target="_blank" rel="external">socket.io官网</a>上面的文档和教程还是挺详细的，而我们要实现这个多人聊天室也只需要其中一些比较基本的api即可。<h4 id="服务端部署"><a href="#服务端部署" class="headerlink" title="服务端部署"></a>服务端部署</h4></li>
+<li><p>服务端我用的node，直接用Npm安装socket.io，可以用socket.io直接搭建服务器，也可以在原有的express/koa上部署，我之前用的express，这里就是将socket.io添加到原有的express服务器上：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">let app = new (require(&apos;express&apos;))()</div><div class="line">const server = app.listen(8081, () =&gt; &#123;</div><div class="line">  let peopleCounts = 0</div><div class="line">  let io = require(&apos;socket.io&apos;)(server)</div><div class="line">  io.on(&apos;connection&apos;, function (client) &#123;</div><div class="line">    // 这里的作用域是局部的，针对一个窗口发起的ws链接</div><div class="line">    ++peopleCounts</div><div class="line">    let uname = &apos;&apos;</div><div class="line">    let uColor = require(&apos;./methods/util&apos;).getColor()</div><div class="line"></div><div class="line">    client.on(&apos;disconnect&apos;, function (e) &#123;</div><div class="line">      --peopleCounts</div><div class="line">      io.emit(&apos;sys message&apos;, &#123;</div><div class="line">        data: `系统消息: &quot;$&#123;uname&#125;&quot;离开聊天室`,</div><div class="line">        counts: peopleCounts</div><div class="line">      &#125;)</div><div class="line">    &#125;)</div><div class="line"></div><div class="line">    require(&apos;./methods/getNickName&apos;)()</div><div class="line">      .then(name =&gt; &#123;</div><div class="line">        uname = name</div><div class="line">        io.emit(&apos;initUser&apos;, &#123;</div><div class="line">          name,</div><div class="line">          color: uColor</div><div class="line">        &#125;)</div><div class="line">        io.emit(&apos;sys message&apos;, &#123;</div><div class="line">          data: `系统消息: &quot;$&#123;name&#125;&quot;进入聊天室`,</div><div class="line">          counts: peopleCounts</div><div class="line">        &#125;)</div><div class="line">      &#125;)</div><div class="line">      .catch(e =&gt; &#123; console.log(e) &#125;)</div><div class="line"></div><div class="line">    client.on(&apos;chat message&apos;, function (data) &#123;</div><div class="line">      io.emit(&apos;message from server&apos;, data)</div><div class="line">    &#125;)</div><div class="line">  &#125;)</div><div class="line">  console.log(&apos;Example app listening on port 8081!&apos;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>在express服务器搭建成功的回调函数里绑定socket.io，这里的io变量就是表示socket.io的服务端。</p>
+</li>
+<li>.on方法监听事件，这些事件来自建立websocket连接时或者浏览器端主动触发。</li>
+<li><p>.emit触发事件，前端可以监听这些事件。比如一个客户端连接到服务端时，服务端会生成一个随机昵称(getNickName方法非必要)，然后返回给客户端。</p>
+<h4 id="客户端部署"><a href="#客户端部署" class="headerlink" title="客户端部署"></a>客户端部署</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">import io from &apos;socket.io-client&apos;</div><div class="line">export default &#123;</div><div class="line">  name: &apos;cheatRoom&apos;,</div><div class="line">  data () &#123;</div><div class="line">    return &#123;</div><div class="line">      description: &apos;&apos;,</div><div class="line">      nickName: &apos;&apos;,</div><div class="line">      counts: 1,</div><div class="line">      msg: [],</div><div class="line">      color: &apos;&apos;</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  created () &#123;</div><div class="line">    window.vm = this</div><div class="line">    this.initSocket()</div><div class="line">  &#125;,</div><div class="line">  methods: &#123;</div><div class="line">    initSocket () &#123;</div><div class="line">      const socket = io(this._config().preurl)</div><div class="line">      socket.on(&apos;connect&apos;, () =&gt; &#123;</div><div class="line">        this.socket = socket</div><div class="line">      &#125;)</div><div class="line">      // 这里api语法类似于jQuery,支持once监听一次,off取消监听</div><div class="line">      // [https://socket.io/docs/client-api/#socket-on-eventname-callback](https://socket.io/docs/client-api/#socket-on-eventname-callback)</div><div class="line">      socket.once(&apos;initUser&apos;, (&#123;name, color&#125;) =&gt; &#123;</div><div class="line">        this.nickName = name</div><div class="line">        this.color = color</div><div class="line">      &#125;)</div><div class="line">      socket.on(&apos;sys message&apos;, (&#123; data, counts &#125;) =&gt; &#123;</div><div class="line">        this.counts = counts</div><div class="line">        this.msg.push(&#123;</div><div class="line">          description: data,</div><div class="line">          sys: true</div><div class="line">        &#125;)</div><div class="line">      &#125;)</div><div class="line">      socket.on(&apos;message from server&apos;, (item) =&gt; &#123;</div><div class="line">        item.sys = false</div><div class="line">        this.msg.push(item)</div><div class="line">      &#125;)</div><div class="line">      socket.on(&apos;disconnect&apos;, () =&gt; &#123;</div><div class="line">        this.showAlert(&#123;</div><div class="line">          msg: &apos;服务端断开连接，请联系管理员Token&apos;,</div><div class="line">          autoClose: false,</div><div class="line">          type: &apos;error&apos;</div><div class="line">        &#125;)</div><div class="line">      &#125;)</div><div class="line">    &#125;,</div><div class="line">    loadAction () &#123;</div><div class="line">      let &#123; description, nickName, color &#125; = this</div><div class="line">      if (this.description.length === 0) &#123;</div><div class="line">        return</div><div class="line">      &#125;</div><div class="line">      this.socket.emit(&apos;chat message&apos;, &#123;</div><div class="line">        description,</div><div class="line">        nickName,</div><div class="line">        color</div><div class="line">      &#125;)</div><div class="line">      this.description = &apos;&apos;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>前端需要用npm安装socket.io-client，不能直接使用原生的websocket语法建立连接。</p>
+</li>
+<li>初始化时this._config().preurl是写在配置里的一个url地址，同其他接口地址前缀一样，但是这里的url地址是http协议，也就是说一开始是把一个http协议地址传给的socket.io，然后socket.io在建立http链接之后才升级成的websocket链接。</li>
+<li>on方法，用来监听来自服务端的事件，once表示监听一次，还可以取消监听</li>
+<li>emit触发事件，让服务端响应。这里的loadAction就表示发送信息。<h4 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h4></li>
+<li>整体写法有点像观察者模式，服务端和客户端都是以监听/触发事件的形式完成通信，完全不同于传统的ajax交互方式，十分有趣。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/10/微信小程序-scroll-view实现锚点滑动/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1355,319 +1517,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue源码解析之--工具函数(一)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/vue源码解析之--工具函数(一)/" itemprop="url">
-                  vue源码解析之--工具函数(一)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/vue/" itemprop="url" rel="index">
-                    <span itemprop="name">vue</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<p>　工具函数是每个框架类库的基本的组成部分，本篇分析的是/shared/util.js文件，从中挑选的部分方法函数，比较常见基础的方法我就跳过了。值得一说的是，编译合成前的源码都用到了<strong>flow.js</strong>，可以理解为一个javascript的静态类型检查器，有点像typescript，可以对js的变量进行类型定义、检查错误等，然后再通过编译生成正常的js代码，文件开头有/<em> @flow </em>/注释的都是用到了flow的。</p>
-<h4 id="1-makeMap"><a href="#1-makeMap" class="headerlink" title="1.makeMap()"></a>1.makeMap()</h4><p>　先来看这个makemap，传入一个字符串和是否区分大小写的标示符，然后在函数内部生成一个map对象，传入字符串分割 ‘,’ 生成的数组的值作为map的属性名，值为true，然后<strong>返回一个函数用来判断一个变量是否包含在传入字符串里</strong>。<br><code><br>function makeMap (<br>  str,<br>  expectsLowerCase<br>) {<br>  var map = Object.create(null);<br>  var list = str.split(‘,’);<br>  for (var i = 0; i &lt; list.length; i++) {<br>    map[list[i]] = true;<br>  }<br>  return expectsLowerCase<br>    ? function (val) { return map[val.toLowerCase()]; }<br>    : function (val) { return map[val]; }<br>}</code><br> 　这里也是个典型的闭包的应用，返回的函数调用了内部的map数组，所以map的作用域会一直存在不会被回收掉。这个方法主要用在检查变量命名是否合法之类的。</p>
-<h4 id="2-cached"><a href="#2-cached" class="headerlink" title="2.cached()"></a>2.cached()</h4><p><code>function cached (fn) {<br>  var cache = Object.create(null);<br>  return (function cachedFn (str) {<br>    var hit = cache[str];<br>    return hit || (cache[str] = fn(str))<br>  })<br>}<br></code><br>　新建一个cache对象，这个方法传入参数是一个<strong>处理字符串的函数</strong>，返回这个<strong>传入函数的缓存版本</strong>。就是每次调用这个处理字符串函数时，会把被传入的字符串存到cache中，下次再传入相同字符串时就直接用cache缓存了(又是巧用闭包…)。</p>
-<h4 id="3-camelize、capitalize、hyphenateRE"><a href="#3-camelize、capitalize、hyphenateRE" class="headerlink" title="3.camelize、capitalize、hyphenateRE"></a>3.camelize、capitalize、hyphenateRE</h4><p><code>var camelizeRE = /-(\w)/g;<br>var camelize = cached(function (str) {<br>  return str.replace(camelizeRE, function (_, c) { return c ? c.toUpperCase() : ‘’; })<br>});<br>var capitalize = cached(function (str) {<br>  return str.charAt(0).toUpperCase() + str.slice(1)<br>});<br>var hyphenateRE = /([^-])([A-Z])/g;<br>var hyphenate = cached(function (str) {<br>  return str<br>    .replace(hyphenateRE, ‘$1-$2’)<br>    .replace(hyphenateRE, ‘$1-$2’)<br>    .toLowerCase()<br>});</code><br>　这三个函数都是<strong>处理字符串</strong>的，主要是对<strong>正则表达式的应用</strong>，结合上面提到的cache生成的缓存版函数camelize()用于将中划线命名的变成驼峰法命名，camelize(‘abc-def’) = abcDef；capitalize()用于将首字母大写，hyphenateRE()作用与camelize()相反，用于将驼峰法命名转换成中划线。(这里没看懂为什么要用两次replace方法？)</p>
-<h3 id="4-bind"><a href="#4-bind" class="headerlink" title="4.bind()"></a>4.bind()</h3><p><code><br>function bind (fn, ctx) {<br>  function boundFn (a) {<br>    var l = arguments.length;<br>    return l<br>      ? l &gt; 1<br>        ? fn.apply(ctx, arguments)<br>        : fn.call(ctx, a)<br>      : fn.call(ctx)<br>  }<br>  boundFn._length = fn.length;<br>  return boundFn<br>}</code><br>　封装了一个简单的bind方法，根据传入的对象(作用域)和函数，返回一个绑定函数，即在传入的对象调用传入的函数。源码解释说比原生绑定更快，这里我也不太明白为什么。。。</p>
-<h3 id="5-genStaticKeys"><a href="#5-genStaticKeys" class="headerlink" title="5.genStaticKeys()"></a>5.genStaticKeys()</h3><p><code><br>function genStaticKeys (modules) {<br>  return modules.reduce(function (keys, m) {<br>    return keys.concat(m.staticKeys || [])<br>  }, []).join(‘,’)<br>}<br></code><br>　这个函数主要是把传入的<strong>编译模块，生成为静态键值组成的字符串</strong>。主要用到了<strong>reduce</strong>这个方法，即把数组每一项重叠生成一个总和，第二个参数[]表示初始值，生成的总数组用逗号分隔转换为字符串。我看了下似乎这个方法只是在定义baseOptions的staticKeys属性时用到了。</p>
-<h3 id="6-looseEqual-looseIndexOf"><a href="#6-looseEqual-looseIndexOf" class="headerlink" title="6.looseEqual() looseIndexOf()"></a>6.looseEqual() looseIndexOf()</h3><p><code><br>function looseEqual (a, b) {<br>  var isObjectA = isObject(a);<br>  var isObjectB = isObject(b);<br>  if (isObjectA &amp;&amp; isObjectB) {<br>    try {<br>      return JSON.stringify(a) === JSON.stringify(b)<br>    } catch (e) {<br>      // possible circular reference<br>      return a === b<br>    }<br>  } else if (!isObjectA &amp;&amp; !isObjectB) {<br>    return String(a) === String(b)<br>  } else {<br>    return false<br>  }<br>}<br>function looseIndexOf (arr, val) {<br>  for (var i = 0; i &lt; arr.length; i++) {<br>    if (looseEqual(arr[i], val)) { return i }<br>  }<br>  return -1<br>}</code><br>　looseEqual()用于判断两个传入参数是否相等，同是对象的情况下先用<strong>JSON.stringfiy()</strong>转换，报错的时候直接用全等判断，这里顺便提一下什么时候JSON.stringfiy()会报错呢？<strong>circular structure</strong>的时候，举一个例子<code>var obj = {a:1}; obj.b=obj;</code> 这个时候JSON.stringfiy(obj)就会报错啦~都不是对象的时候转化为string比较，其他情况都是false。<br>　looseIndexOf()传入一个数组和一个值，如果传入值在数组里则返回对应的index，不在返回-1，这里也是依次用looseEqual来进行比较.ES6里面数组的扩展方法有一个indexOf也是类似的方法，判断数组是否包含某个值。</p>
-<h3 id="7-once"><a href="#7-once" class="headerlink" title="7.once()"></a>7.once()</h3><p><code>function once (fn) {<br>  var called = false;<br>  return function () {<br>    if (!called) {<br>      called = true;<br>      fn.apply(this, arguments);<br>    }<br>  }<br>}</code><br>　让一个函数只调用一次，也是典型的闭包调用，返回一个由called标示控制的函数，调用此函数时，called标示符改变，下次调用就无效了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue源码解析之--核心部分core-util(二)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/vue源码解析之--核心部分core-util(二)/" itemprop="url">
-                  vue源码解析之--核心部分core-util(二)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/vue/" itemprop="url" rel="index">
-                    <span itemprop="name">vue</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>　在vue源码目录中有个core文件夹，其核心功能比如组件、数据绑定、虚拟dom等等都在里面。core下面又分为了components、global-api、instance、obsever、util、vdom六个部分，这次还是先以util开头，里面也封装了一些工具型的函数并且引用了外层share里面的工具函数。 </p>
-<h4 id="debug-js-error-js"><a href="#debug-js-error-js" class="headerlink" title="debug.js error.js"></a>debug.js error.js</h4><p>　debug.js里面主要封装的是用于开发阶段的调试相关的方法，比如一些提示警告。error.js里面只封装了一个handleError方法，用于处理错误，可在config里设置专门的errorHandler函数，没有的时候就只是一个warn警告。debug.js里面有一个repeat方法，将传入字符串重复N次。<br><code>  var repeat = function (str, n) {<br>    var res = ‘’;<br>    while (n) {<br>      if (n % 2 === 1) { res += str; }<br>      if (n &gt; 1) { str += str; }<br>      n &gt;&gt;= 1;<br>    }<br>    return res<br>  };</code><br>这样写的时间复杂度大概是二分之一N，lodash里也有相似的方法，不过是用Math.round(n/2)来代替n&gt;&gt;=1，n&gt;&gt;=1就是把N转换成二进制，然后右移一位再首位补0.</p>
-<h4 id="env-js"><a href="#env-js" class="headerlink" title="env.js"></a>env.js</h4><p>　env.js主要是一些环境相关的东西，待会儿重点说的是nextTick方法。<br><code>var inBrowser = typeof window !== ‘undefined’</code><br>是否在浏览器中，只要判断window对象是否存在即可。<br><code>var UA = inBrowser &amp;&amp; window.navigator.userAgent.toLowerCase();<br></code><br>浏览器中通过userAgent，判断浏览器的版本内核。<br><code>function isNative (Ctor) {<br>  return typeof Ctor === ‘function’ &amp;&amp; /native code/.test(Ctor.toString())<br>}<br></code><br>isNative 判断某些方法功能是否原生支持的，比如浏览器支持symbol的话，symbol.tostring就会返回function Symbol() { [native code] }，再用正则表达式判断是否包含native code即可。<br>　下面讲一下nextTick方法，这个方法也比较常用，可以在确定数据改变视图改变后再执行某些动作。代码首先定义一个自执行匿名函数的作用域，然后定义了一个nextTickHandler函数用于执行完成异步后需要执行的函数。<br><code>  function nextTickHandler () {<br>    pending = false<br>    const copies = callbacks.slice(0)<br>    callbacks.length = 0<br>    for (let i = 0; i &lt; copies.length; i++) {<br>      copies<a href="">i</a><br>    }<br>  }</code><br>pending是一个标示符，用于确保timerFunc方法不会被重复调用。接下来是根据浏览器支持情况来定义timeFunc方法：<br><code>if (typeof Promise !== ‘undefined’ &amp;&amp; isNative(Promise)) {<br>    var p = Promise.resolve()<br>    var logError = err =&gt; { console.error(err) }<br>    timerFunc = () =&gt; {<br>      p.then(nextTickHandler).catch(logError)<br>      if (isIOS) setTimeout(noop)<br>    }<br>  }</code><br>如果浏览器支持promise,就用promise.then来定义timerFunc,promise的具体用法这里也不多讲了,然后我看源码上的注释是说:promise.then执行的时间可能不稳定,当他被推入一个微任务队列中时,添加一个空的setTimeout可以强制刷新微任务队列(IOS系统中).<br><code>else if (typeof MutationObserver !== ‘undefined’ &amp;&amp; (<br>    isNative(MutationObserver) ||<br>    // PhantomJS and iOS 7.x<br>    MutationObserver.toString() === ‘[object MutationObserverConstructor]’<br>  )) {<br>    // use MutationObserver where native Promise is not available,<br>    // e.g. PhantomJS IE11, iOS7, Android 4.4<br>    var counter = 1<br>    var observer = new MutationObserver(nextTickHandler)<br>    var textNode = document.createTextNode(String(counter))<br>    observer.observe(textNode, {<br>      characterData: true<br>    })<br>    timerFunc = () =&gt; {<br>      counter = (counter + 1) % 2<br>      textNode.data = String(counter)<br>    }<br>  }</code><br>当promise不被支持，但浏览器支持MutationObserver时。MutationObserver是html5的一个新特性，用于监测dom节点变化。初始化一个MutationObserver的实例observer ，传入的nextTickHandler是作为监测到发生变化后执行的回调函数，然后这里新建一个文本节点，再使用observer .observe()方法将文本节点绑定监听。最后定义的timerFunc就是改变文本节点的值，从而触发回调，这个回调是在文本节点重新渲染后执行的。当以上两个方法都不支持时，就只好用setTImeout来定义timerFunc了。<br><code>return function queueNextTick (cb?: Function, ctx?: Object) {<br>    let _resolve<br>    callbacks.push(() =&gt; {<br>      if (cb) {<br>        try {<br>          cb.call(ctx)<br>        } catch (e) {<br>          handleError(e, ctx, ‘nextTick’)<br>        }<br>      } else if (_resolve) {<br>        _resolve(ctx)<br>      }<br>    })<br>    if (!pending) {<br>      pending = true<br>      timerFunc()<br>    }<br>    if (!cb &amp;&amp; typeof Promise !== ‘undefined’) {<br>      return new Promise((resolve, reject) =&gt; {<br>        _resolve = resolve<br>      })<br>    }<br>  }</code><br>最后返回的函数其实就是nextTick自身，传入两个参数，一个是异步回调执行的函数，第二个是一个对象作为执行的环境。将传入的函数以 cb.call(ctx)的形式添加到callback中，然后再执行timerFunc。在global.api中，将这里定义的nextTick放在vue的原型上了。<br>env.js在最后定义了_Set，如果支持set那么就直接用set了，不支持的话，定义了一个_set类，并为其添加has()、add()、clear()方法。其实set的用法也比较简单，浏览器不支持的话自己重新定义一下也不复杂。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/Object属性特性详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1808,6 +1657,171 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/为什么parseInt(0-0000008)-===-8？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/09/15/为什么parseInt(0-0000008)-===-8？/" itemprop="url">
+                  为什么parseInt(0.0000008)===8？
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/冷门/" itemprop="url" rel="index">
+                    <span itemprop="name">冷门</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
+<li>最近看到一篇博客： <a href="https://github.com/jawil/blog/issues/24" target="_blank" rel="external">这些JavaScript编程黑科技，装逼指南，高逼格代码，让你惊叹不已。</a>上面介绍了挺多让人大开眼界，逼格满满的代码。其中有一句就是parseInt(0.0000008) === 8，结果返回的是true，这里我就详细解释下为什么parseInt(0.0000008)的结果等于8。<h4 id="从函数本身出发"><a href="#从函数本身出发" class="headerlink" title="从函数本身出发"></a>从函数本身出发</h4></li>
+<li><p>这个出乎意料的结果似乎和<a href="https://baike.baidu.com/item/IEEE%20754/3869922?fr=aladdin" target="_blank" rel="external">IEEE 754</a>浮点数标准并没有关系，而是parseInt函数本身的原因，先来看几个用parseInt方法将字符串转换为数字的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">parseInt(&apos;   1   2323&apos;) // 1</div><div class="line">parseInt(&apos;  abc1abc2323&apos;) // NaN</div><div class="line">parseInt(&apos;  **1abc2323&apos;) // NaN</div><div class="line">parseInt(&apos;    1abc2323&apos;) // 1</div><div class="line">parseInt(&apos; 12.9999&apos;) // 12</div><div class="line">parseInt(&quot;  0x11&quot;)  // 17</div></pre></td></tr></table></figure>
+</li>
+<li><p>从中可以看出几条规则：<br>1.字符串<strong>左边的空格</strong>会被忽略掉<br>2.从左到右依次取数字字符串，如果最左边<strong>以非数字开头则返回NaN</strong><br>3.取到第一个数字字符后继续，<strong>直到取到一个非数字的字符截止（包括小数点），</strong>将这个时候得到的数字字符串转换为数字<br>4.以’0x’开头的字符串会做特殊处理表示将后续的数字转换为16进制的整数</p>
+</li>
+<li><p>到这里可能有人问，代码上传入的是数字类型0.0000008，为什么要分析如何转换字符串类型的参数。那是因为调用parseInt方法时，会隐式地将传入的数字类型用<strong>toString方法</strong>转换为字符串！而将0.0000008调用toString的<strong>结果会是”8e-7”</strong>，在javascript中，<strong>小于0.000001的浮点数会以科学计数法来表示</strong>，而这样的字符串参照上面的规则，自然得到的结果就是8了。</p>
+<h4 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h4></li>
+<li><p>综上所述用parseInt转换数字的时候坑还是有的，使用时要多加注意。而如果用Math的floor或者round方法则可以得到正常的结果0。</p>
+</li>
+<li><p>参考资料:<br><a href="http://www.2ality.com/2013/01/parseint.html" target="_blank" rel="external">parseInt() doesn’t always correctly convert to integer</a></p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -1857,7 +1871,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1875,7 +1889,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
