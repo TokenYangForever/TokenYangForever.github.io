@@ -87,19 +87,19 @@
 
 
 
-<meta name="description" content="websocket工作机制 WebSocket协议是基于TCP的一种新的网络协议。它实现了浏览器与服务器全双工(full-duplex)通信——允许服务器主动发送信息给客户端。websocket链接建立后，服务端和客户端可通过连接通道自由通信。wx协议也有类似于https的wss协议，也是多了一层TLS协议。 websocket具体详细的内容就不多做介绍了，因为我这次使用的socket.io框架">
+<meta name="description" content="websocket WebSocket协议是基于TCP的一种新的网络协议。它实现了浏览器与服务器全双工(full-duplex)通信——允许服务器主动发送信息给客户端。websocket链接建立后，服务端和客户端可通过连接通道自由通信。wx协议也有类似于https的wss协议，也是多了一层TLS协议。 websocket具体详细的内容就不多做介绍了，因为我这次使用的socket.io框架，写起">
 <meta name="keywords" content="node,websocket">
 <meta property="og:type" content="article">
 <meta property="og:title" content="socket.io 实现在线聊天室">
 <meta property="og:url" content="http://yoursite.com/2017/11/15/socket-io-实现在线聊天室/index.html">
 <meta property="og:site_name" content="唐洋洋的个人博客">
-<meta property="og:description" content="websocket工作机制 WebSocket协议是基于TCP的一种新的网络协议。它实现了浏览器与服务器全双工(full-duplex)通信——允许服务器主动发送信息给客户端。websocket链接建立后，服务端和客户端可通过连接通道自由通信。wx协议也有类似于https的wss协议，也是多了一层TLS协议。 websocket具体详细的内容就不多做介绍了，因为我这次使用的socket.io框架">
+<meta property="og:description" content="websocket WebSocket协议是基于TCP的一种新的网络协议。它实现了浏览器与服务器全双工(full-duplex)通信——允许服务器主动发送信息给客户端。websocket链接建立后，服务端和客户端可通过连接通道自由通信。wx协议也有类似于https的wss协议，也是多了一层TLS协议。 websocket具体详细的内容就不多做介绍了，因为我这次使用的socket.io框架，写起">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6383319-ba462293ba9834bb.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-11-15T02:22:06.000Z">
+<meta property="og:updated_time" content="2017-11-15T02:25:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="socket.io 实现在线聊天室">
-<meta name="twitter:description" content="websocket工作机制 WebSocket协议是基于TCP的一种新的网络协议。它实现了浏览器与服务器全双工(full-duplex)通信——允许服务器主动发送信息给客户端。websocket链接建立后，服务端和客户端可通过连接通道自由通信。wx协议也有类似于https的wss协议，也是多了一层TLS协议。 websocket具体详细的内容就不多做介绍了，因为我这次使用的socket.io框架">
+<meta name="twitter:description" content="websocket WebSocket协议是基于TCP的一种新的网络协议。它实现了浏览器与服务器全双工(full-duplex)通信——允许服务器主动发送信息给客户端。websocket链接建立后，服务端和客户端可通过连接通道自由通信。wx协议也有类似于https的wss协议，也是多了一层TLS协议。 websocket具体详细的内容就不多做介绍了，因为我这次使用的socket.io框架，写起">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/6383319-ba462293ba9834bb.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -358,7 +358,8 @@
 
       
         <p><img src="http://upload-images.jianshu.io/upload_images/6383319-ba462293ba9834bb.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="效果图.gif"></p>
-<h4 id="websocket工作机制"><a href="#websocket工作机制" class="headerlink" title="websocket工作机制"></a>websocket工作机制</h4><ul>
+<ul>
+<li><h4 id="websocket"><a href="#websocket" class="headerlink" title="websocket"></a>websocket</h4></li>
 <li>WebSocket协议是<strong>基于TCP</strong>的一种新的网络协议。它实现了<strong>浏览器与服务器全双工(full-duplex)通信</strong>——允许服务器主动发送信息给客户端。websocket链接建立后，服务端和客户端可通过连接通道自由通信。wx协议也有类似于https的wss协议，也是多了一层TLS协议。</li>
 <li>websocket具体详细的内容就不多做介绍了，因为我这次使用的socket.io框架，写起来的语法和原生websocket语法还是有很大差别的。<h4 id="Socket-io简介"><a href="#Socket-io简介" class="headerlink" title="Socket.io简介"></a>Socket.io简介</h4></li>
 <li>socket.io可以看做是一个对websocket进行了封装的一个框架，目的也是为了实现客户端和服务端的全双工通信。socket.io的底层是engine.io，engine.io在不支持websocket的浏览器中，会使用ajax的长轮询实现效果。</li>
@@ -551,7 +552,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#websocket工作机制"><span class="nav-number">1.</span> <span class="nav-text">websocket工作机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socket-io简介"><span class="nav-number">2.</span> <span class="nav-text">Socket.io简介</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体实现"><span class="nav-number"></span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端部署"><span class="nav-number">1.</span> <span class="nav-text">服务端部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端部署"><span class="nav-number">2.</span> <span class="nav-text">客户端部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结语"><span class="nav-number">3.</span> <span class="nav-text">结语</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#websocket"><span class="nav-number">1.</span> <span class="nav-text">websocket</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socket-io简介"><span class="nav-number">2.</span> <span class="nav-text">Socket.io简介</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体实现"><span class="nav-number"></span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端部署"><span class="nav-number">1.</span> <span class="nav-text">服务端部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端部署"><span class="nav-number">2.</span> <span class="nav-text">客户端部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结语"><span class="nav-number">3.</span> <span class="nav-text">结语</span></a></li></ol></div>
             
 
           </div>
