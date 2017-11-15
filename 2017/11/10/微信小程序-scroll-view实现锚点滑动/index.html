@@ -87,19 +87,19 @@
 
 
 
-<meta name="description" content="前言 最近开始做小程序，通读一遍文档再上手并不算难，但不得不说小程序里还是有一些坑。这里说一下如何实现页面锚点跳转，一个城市列表的效果示意图如下： 因为在微信小程序的环境中不能想在浏览器里设置标签，或者操作dom滚动，传统做法就行不通了，一切都得按小程序的文档来。 一开始我们的做法是使用boundingClientRect()方法获取每个锚点的坐标，然后再用wx.pageScrollTo()方法滑">
+<meta name="description" content="前言 最近开始做小程序，通读一遍文档再上手并不算难，但不得不说小程序里还是有一些坑。这里说一下如何实现页面锚点跳转，一个城市列表的效果示意图如下： 因为在微信小程序的环境中不能像在浏览器里设置标签，或者操作dom滚动，传统做法就行不通了，一切都得按小程序的文档来。 一开始我们的做法是使用boundingClientRect()方法获取每个锚点的坐标，然后再用wx.pageScrollTo()方法滑">
 <meta name="keywords" content="JavaScript,微信小程序">
 <meta property="og:type" content="article">
 <meta property="og:title" content="微信小程序   scroll-view实现锚点滑动">
 <meta property="og:url" content="http://yoursite.com/2017/11/10/微信小程序-scroll-view实现锚点滑动/index.html">
 <meta property="og:site_name" content="唐洋洋的个人博客">
-<meta property="og:description" content="前言 最近开始做小程序，通读一遍文档再上手并不算难，但不得不说小程序里还是有一些坑。这里说一下如何实现页面锚点跳转，一个城市列表的效果示意图如下： 因为在微信小程序的环境中不能想在浏览器里设置标签，或者操作dom滚动，传统做法就行不通了，一切都得按小程序的文档来。 一开始我们的做法是使用boundingClientRect()方法获取每个锚点的坐标，然后再用wx.pageScrollTo()方法滑">
+<meta property="og:description" content="前言 最近开始做小程序，通读一遍文档再上手并不算难，但不得不说小程序里还是有一些坑。这里说一下如何实现页面锚点跳转，一个城市列表的效果示意图如下： 因为在微信小程序的环境中不能像在浏览器里设置标签，或者操作dom滚动，传统做法就行不通了，一切都得按小程序的文档来。 一开始我们的做法是使用boundingClientRect()方法获取每个锚点的坐标，然后再用wx.pageScrollTo()方法滑">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6383319-104bb55559f4a26b.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-11-10T07:42:32.000Z">
+<meta property="og:updated_time" content="2017-11-15T02:40:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信小程序   scroll-view实现锚点滑动">
-<meta name="twitter:description" content="前言 最近开始做小程序，通读一遍文档再上手并不算难，但不得不说小程序里还是有一些坑。这里说一下如何实现页面锚点跳转，一个城市列表的效果示意图如下： 因为在微信小程序的环境中不能想在浏览器里设置标签，或者操作dom滚动，传统做法就行不通了，一切都得按小程序的文档来。 一开始我们的做法是使用boundingClientRect()方法获取每个锚点的坐标，然后再用wx.pageScrollTo()方法滑">
+<meta name="twitter:description" content="前言 最近开始做小程序，通读一遍文档再上手并不算难，但不得不说小程序里还是有一些坑。这里说一下如何实现页面锚点跳转，一个城市列表的效果示意图如下： 因为在微信小程序的环境中不能像在浏览器里设置标签，或者操作dom滚动，传统做法就行不通了，一切都得按小程序的文档来。 一开始我们的做法是使用boundingClientRect()方法获取每个锚点的坐标，然后再用wx.pageScrollTo()方法滑">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/6383319-104bb55559f4a26b.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -359,7 +359,7 @@
       
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><ul>
 <li>最近开始做小程序，通读一遍文档再上手并不算难，但不得不说小程序里还是有一些坑。这里说一下如何实现页面锚点跳转，一个城市列表的效果示意图如下：<br><img src="http://upload-images.jianshu.io/upload_images/6383319-104bb55559f4a26b.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="city.gif"></li>
-<li>因为在微信小程序的环境中不能想在浏览器里设置标签，或者操作dom滚动，传统做法就行不通了，一切都得按小程序的文档来。</li>
+<li>因为在微信小程序的环境中不能像在浏览器里设置标签，或者操作dom滚动，传统做法就行不通了，一切都得按小程序的文档来。</li>
 <li>一开始我们的做法是使用<strong>boundingClientRect()方法获取每个锚点的坐标</strong>，然后再用wx.pageScrollTo()方法滑动过去。结果发现行不通，因为boundingClientRect方法返回的每个点的坐标会随着屏幕滑动而变化，<strong>最后还是选择<a href="https://mp.weixin.qq.com/debug/wxadoc/dev/component/scroll-view.html" target="_blank" rel="external">scroll-view(可滚动视图区域)</a><br>组件来实现锚点效果。</strong><h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3></li>
 <li><p>具体API就不赘述了，可以去看官方文档，这里讲几个需要注意的地方，下面是一个示意的scroll-view组件代码，上面的几个属性是必须的：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;scroll-view scroll-y style=&quot;height: 200px;&quot; bindscroll=&quot;scroll&quot; scroll-into-view=&quot;&#123;&#123;toView&#125;&#125;&quot; &gt;</div></pre></td></tr></table></figure>

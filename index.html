@@ -525,7 +525,7 @@
           
             <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><ul>
 <li>最近开始做小程序，通读一遍文档再上手并不算难，但不得不说小程序里还是有一些坑。这里说一下如何实现页面锚点跳转，一个城市列表的效果示意图如下：<br><img src="http://upload-images.jianshu.io/upload_images/6383319-104bb55559f4a26b.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="city.gif"></li>
-<li>因为在微信小程序的环境中不能想在浏览器里设置标签，或者操作dom滚动，传统做法就行不通了，一切都得按小程序的文档来。</li>
+<li>因为在微信小程序的环境中不能像在浏览器里设置标签，或者操作dom滚动，传统做法就行不通了，一切都得按小程序的文档来。</li>
 <li>一开始我们的做法是使用<strong>boundingClientRect()方法获取每个锚点的坐标</strong>，然后再用wx.pageScrollTo()方法滑动过去。结果发现行不通，因为boundingClientRect方法返回的每个点的坐标会随着屏幕滑动而变化，<strong>最后还是选择<a href="https://mp.weixin.qq.com/debug/wxadoc/dev/component/scroll-view.html" target="_blank" rel="external">scroll-view(可滚动视图区域)</a><br>组件来实现锚点效果。</strong><h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3></li>
 <li><p>具体API就不赘述了，可以去看官方文档，这里讲几个需要注意的地方，下面是一个示意的scroll-view组件代码，上面的几个属性是必须的：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;scroll-view scroll-y style=&quot;height: 200px;&quot; bindscroll=&quot;scroll&quot; scroll-into-view=&quot;&#123;&#123;toView&#125;&#125;&quot; &gt;</div></pre></td></tr></table></figure>
@@ -1672,7 +1672,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/Object属性特性详解/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue源码解析之--核心部分core-util(二)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TokenYangForever">
@@ -1694,8 +1694,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/09/15/Object属性特性详解/" itemprop="url">
-                  Object属性特性详解
+                <a class="post-title-link" href="/2017/09/15/vue源码解析之--核心部分core-util(二)/" itemprop="url">
+                  vue源码解析之--核心部分core-util(二)
                 </a>
               
             
@@ -1741,6 +1741,17 @@
 
                 
                 
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/vue/" itemprop="url" rel="index">
+                    <span itemprop="name">vue</span>
+                  </a>
+                </span>
+
+                
+                
               
             </span>
           
@@ -1772,15 +1783,9 @@
         
           
             <hr>
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>　Object是javascript中最原始的对象，也是理解面向对象十分重要的一环。最近看vue源码时，发现object这方面的东西非常多，就在这里深入了解一下相关知识。本篇主要介绍object对象的一些方法，以及属性的特性相关概念。首先介绍对象的属性，属性类型其实分为两种：<strong>数据属性</strong>和<strong>访问器属性</strong>，我们平时接触到的一般都是数据属性，下面依次介绍一下。</p>
-<h3 id="数据属性"><a href="#数据属性" class="headerlink" title="数据属性"></a>数据属性</h3><p>　数据属性包含一个数据值的位置，可以进行数据的读写。然后数据属性有四个描述其行为的<strong>特性</strong>，这个特性可以理解为属性的属性。<br>1.[[configurable]]：表示是否能够修改属性的特性，是否能够使用delete删除属性进而重新定义。<br>2.[[Enumberable]]：表示是否可以被枚举，此特性为true时，对应的属性在for-in循环中才返回。<br>3.[[Writable]]：是否可写，此特性为true时，才可以定义修改对应属性的数据值<br>4.[[Value]]：即属性的数据值。<br>上面几个特性，前三个默认值都是true，Value默认值undefined。随便定义一个变量及其属性，然后调用Object.getOwnPropertyDescriptors()即可显示其属性，以及属性的特性。<br><img src="http://upload-images.jianshu.io/upload_images/6383319-efd2d41b73e40ba6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例.jpg"></p>
-<h3 id="访问器属性"><a href="#访问器属性" class="headerlink" title="访问器属性"></a>访问器属性</h3><p>　首先要明白的是访问器属性不包含数据值，包含一对getter和setter函数。读取访问器时调用getter，写入访问器时调用setter。这两个函数默认值都是undefined，只有使用Object.defineProperty()方法对其进行定义。接着介绍一下object的一些方法。</p>
-<h4 id="Object-create"><a href="#Object-create" class="headerlink" title="Object.create()"></a>Object.create()</h4><p>　参数传入一个原型对象，使用指定的原型对象和其属性创建了一个新的对象。</p>
-<h4 id="Object-assign"><a href="#Object-assign" class="headerlink" title="Object.assign()"></a>Object.assign()</h4><p>　将所有<strong>可枚举</strong>的属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。第一个参数是目标对象，如果有相同键值的属性，源对象的属性会覆盖掉木雕对象属性， 方法只会拷贝源对象<strong>自身的</strong>并且<strong>可枚举</strong>的属性到目标对象身上。</p>
-<h4 id="Object-defineProperty-Object-defineProperties"><a href="#Object-defineProperty-Object-defineProperties" class="headerlink" title="Object.defineProperty() Object.defineProperties()"></a>Object.defineProperty() Object.defineProperties()</h4><p>　Object.defineProperty() 方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性， 并返回这个对象。Object.defineProperty(obj, prop, descriptor)，第一个参数是目标对象，第二个参数是指定属性，第三个参数是描述符对象指定特性。在指定描述符时，只能选择<strong>数据描述符</strong>和<strong>存取描述符</strong>的其中一种。Object.defineProperties(obj, props)也是用于为一个对象定义属性，但是可以同时指定多个属性。</p>
-<h4 id="Object-keys"><a href="#Object-keys" class="headerlink" title="Object.keys()"></a>Object.keys()</h4><p>　<strong>Object.keys()</strong> 方法会返回一个由一个给定对象的<strong>自身可枚举属性</strong>组成的数组，数组中属性名的排列顺序和使用for…in 循环遍历该对象时返回的顺序一致 （两者的主要区别是 一个 for-in 循环还会枚举其原型链上的属性）。</p>
-<h4 id="Object-freeze-Object-seal"><a href="#Object-freeze-Object-seal" class="headerlink" title="Object.freeze() Object.seal()"></a>Object.freeze() Object.seal()</h4><p>　这两个方法是用于限制对象修改权限的，分别有对应的Object.isFrozen()和Object.isSealed()方法判断是否是冻结(密封)对象，两者唯一的区别是，密封对象仍然可以修改已有属性value的值。<br>　Object.freeze() 方法可以冻结一个对象，冻结指的是不能向这个对象添加新的属性，不能修改其已有属性的值，不能删除已有属性，以及不能修改该对象已有属性的特性。也就是说，这个对象<strong>永远是不可变的</strong>。该方法返回被冻结的对象。<br>　Object.seal() 方法可以让一个对象密封，并返回被密封后的对象。密封对象是指那些不能添加新的属性，不能删除已有属性，以及不能修改已有属性特性，但可能可以<strong>修改已有属性的值</strong>的对象。</p>
-<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>　暂时总结就这么多，上面的内容大多是从js高程上看的，在线api<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="external">查的这里</a>，后面有遗漏或不准确的地方再进行修改。最后说一点，上述的object的方法很多都不支持ie8，这也是为什么vue不支持ie8，但如果是在现代高版本的浏览器进行开发时就不用顾虑了。</p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>　在vue源码目录中有个core文件夹，其核心功能比如组件、数据绑定、虚拟dom等等都在里面。core下面又分为了components、global-api、instance、obsever、util、vdom六个部分，这次还是先以util开头，里面也封装了一些工具型的函数并且引用了外层share里面的工具函数。 </p>
+<h4 id="debug-js-error-js"><a href="#debug-js-error-js" class="headerlink" title="debug.js error.js"></a>debug.js error.js</h4><p>　debug.js里面主要封装的是用于开发阶段的调试相关的方法，比如一些提示警告。error.js里面只封装了一个handleError方法，用于处理错误，可在config里设置专门的errorHandler函数，没有的时候就只是一个warn警告。debug.js里面有一个repeat方法，将传入字符串重复N次。<br><code>  var repeat = function (str, n) {<br>    var res = ‘’;<br>    while (n) {<br>      if (n % 2 === 1) { res += str; }<br>      if (n &gt; 1) { str += str; }<br>      n &gt;&gt;= 1;<br>    }<br>    return res<br>  };</code><br>这样写的时间复杂度大概是二分之一N，lodash里也有相似的方法，不过是用Math.round(n/2)来代替n&gt;&gt;=1，n&gt;&gt;=1就是把N转换成二进制，然后右移一位再首位补0.</p>
+<h4 id="env-js"><a href="#env-js" class="headerlink" title="env.js"></a>env.js</h4><p>　env.js主要是一些环境相关的东西，待会儿重点说的是nextTick方法。<br><code>var inBrowser = typeof window !== ‘undefined’</code><br>是否在浏览器中，只要判断window对象是否存在即可。<br><code>var UA = inBrowser &amp;&amp; window.navigator.userAgent.toLowerCase();<br></code><br>浏览器中通过userAgent，判断浏览器的版本内核。<br><code>function isNative (Ctor) {<br>  return typeof Ctor === ‘function’ &amp;&amp; /native code/.test(Ctor.toString())<br>}<br></code><br>isNative 判断某些方法功能是否原生支持的，比如浏览器支持symbol的话，symbol.tostring就会返回function Symbol() { [native code] }，再用正则表达式判断是否包含native code即可。<br>　下面讲一下nextTick方法，这个方法也比较常用，可以在确定数据改变视图改变后再执行某些动作。代码首先定义一个自执行匿名函数的作用域，然后定义了一个nextTickHandler函数用于执行完成异步后需要执行的函数。<br><code>  function nextTickHandler () {<br>    pending = false<br>    const copies = callbacks.slice(0)<br>    callbacks.length = 0<br>    for (let i = 0; i &lt; copies.length; i++) {<br>      copies<a href="">i</a><br>    }<br>  }</code><br>pending是一个标示符，用于确保timerFunc方法不会被重复调用。接下来是根据浏览器支持情况来定义timeFunc方法：<br><code>if (typeof Promise !== ‘undefined’ &amp;&amp; isNative(Promise)) {<br>    var p = Promise.resolve()<br>    var logError = err =&gt; { console.error(err) }<br>    timerFunc = () =&gt; {<br>      p.then(nextTickHandler).catch(logError)<br>      if (isIOS) setTimeout(noop)<br>    }<br>  }</code><br>如果浏览器支持promise,就用promise.then来定义timerFunc,promise的具体用法这里也不多讲了,然后我看源码上的注释是说:promise.then执行的时间可能不稳定,当他被推入一个微任务队列中时,添加一个空的setTimeout可以强制刷新微任务队列(IOS系统中).<br><code>else if (typeof MutationObserver !== ‘undefined’ &amp;&amp; (<br>    isNative(MutationObserver) ||<br>    // PhantomJS and iOS 7.x<br>    MutationObserver.toString() === ‘[object MutationObserverConstructor]’<br>  )) {<br>    // use MutationObserver where native Promise is not available,<br>    // e.g. PhantomJS IE11, iOS7, Android 4.4<br>    var counter = 1<br>    var observer = new MutationObserver(nextTickHandler)<br>    var textNode = document.createTextNode(String(counter))<br>    observer.observe(textNode, {<br>      characterData: true<br>    })<br>    timerFunc = () =&gt; {<br>      counter = (counter + 1) % 2<br>      textNode.data = String(counter)<br>    }<br>  }</code><br>当promise不被支持，但浏览器支持MutationObserver时。MutationObserver是html5的一个新特性，用于监测dom节点变化。初始化一个MutationObserver的实例observer ，传入的nextTickHandler是作为监测到发生变化后执行的回调函数，然后这里新建一个文本节点，再使用observer .observe()方法将文本节点绑定监听。最后定义的timerFunc就是改变文本节点的值，从而触发回调，这个回调是在文本节点重新渲染后执行的。当以上两个方法都不支持时，就只好用setTImeout来定义timerFunc了。<br><code>return function queueNextTick (cb?: Function, ctx?: Object) {<br>    let _resolve<br>    callbacks.push(() =&gt; {<br>      if (cb) {<br>        try {<br>          cb.call(ctx)<br>        } catch (e) {<br>          handleError(e, ctx, ‘nextTick’)<br>        }<br>      } else if (_resolve) {<br>        _resolve(ctx)<br>      }<br>    })<br>    if (!pending) {<br>      pending = true<br>      timerFunc()<br>    }<br>    if (!cb &amp;&amp; typeof Promise !== ‘undefined’) {<br>      return new Promise((resolve, reject) =&gt; {<br>        _resolve = resolve<br>      })<br>    }<br>  }</code><br>最后返回的函数其实就是nextTick自身，传入两个参数，一个是异步回调执行的函数，第二个是一个对象作为执行的环境。将传入的函数以 cb.call(ctx)的形式添加到callback中，然后再执行timerFunc。在global.api中，将这里定义的nextTick放在vue的原型上了。<br>env.js在最后定义了_Set，如果支持set那么就直接用set了，不支持的话，定义了一个_set类，并为其添加has()、add()、clear()方法。其实set的用法也比较简单，浏览器不支持的话自己重新定义一下也不复杂。</p>
 
           
         
