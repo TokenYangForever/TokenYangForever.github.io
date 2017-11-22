@@ -261,6 +261,309 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/使用Javascript做算法题（二）Unique-Paths/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/09/15/使用Javascript做算法题（二）Unique-Paths/" itemprop="url">
+                  使用Javascript做算法题（二）Unique-Paths
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/leetcode算法题/" itemprop="url" rel="index">
+                    <span itemprop="name">leetcode算法题</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><ul>
+<li>在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。<a href="https://leetcode.com/problems/unique-paths/description/" target="_blank" rel="external">题目地址</a></li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/6383319-9b976ff4ae8da7eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="一个3*7的示例"></p>
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><ul>
+<li>看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从<strong>n-1阶</strong>，要嘛从<strong>n-2阶</strong>跨到终点。<strong>假设走到n-1阶有m种不同方案，走到n-2阶有n种不同方案，那么走到n阶就有m+n种不同方案。</strong></li>
+<li>有点扯远了，回到这个题目。首先想到的是<strong>以二维数组来表示这个地图的坐标</strong>，机器人的起点在(0,0)终点在(m,n)，机器人最后一步肯定从(m-1,n)或(m,n-1)走，那走到(m,n)的路线总数就是走到(m-1,n)的路线总数加上走到(m,n-1)的路线总数。至此，解题思路也就很明显了，<strong>首先确定机器人走到最上面的一行和最左边的一列上的任意点，路线数只能为1。</strong>然后再根据这些点的路线数，依次往里推，最后得出(m,n)点的路线数。<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number&#125; m</div><div class="line"> * @param &#123;number&#125; n</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> */</div><div class="line">var uniquePaths = function(m, n) &#123; </div><div class="line">    if (m == 1 || n == 1) &#123;</div><div class="line">        return 1</div><div class="line">    &#125;</div><div class="line">    var arr = []</div><div class="line">    arr[0] = new Array(n).fill(1)</div><div class="line">    for (var i = 1; i &lt; m; i++) &#123;</div><div class="line">        arr[i] = new Array(n)</div><div class="line">        arr[i][0] = 1</div><div class="line">        for (var j = 1; j &lt; n; j++) &#123;</div><div class="line">            arr[i][j] = arr[i][j-1] + arr[i-1][j]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return arr[m-1][n-1]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/09/15/mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明/" itemprop="url">
+                  mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后端/" itemprop="url" rel="index">
+                    <span itemprop="name">后端</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后端/备忘录/" itemprop="url" rel="index">
+                    <span itemprop="name">备忘录</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<ul>
+<li>使用mysql workbench建表时，可以设置字段标识：PK,NN,UQ,BIN,UN,ZF,AI。他们的分别表示的意思是：<br>PK：primary key 主键<br>NN：not null 非空<br>UQ：unique 唯一索引<br>BIN：binary 二进制数据(比text更大)<br>UN：unsigned 无符号（非负数）<br>ZF：zero fill 填充0 例如字段内容是1 int(4), 则内容显示为0001<br>AI：auto increment 自增</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/Object属性特性详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -370,6 +673,761 @@
 <h4 id="Object-keys"><a href="#Object-keys" class="headerlink" title="Object.keys()"></a>Object.keys()</h4><p>　<strong>Object.keys()</strong> 方法会返回一个由一个给定对象的<strong>自身可枚举属性</strong>组成的数组，数组中属性名的排列顺序和使用for…in 循环遍历该对象时返回的顺序一致 （两者的主要区别是 一个 for-in 循环还会枚举其原型链上的属性）。</p>
 <h4 id="Object-freeze-Object-seal"><a href="#Object-freeze-Object-seal" class="headerlink" title="Object.freeze() Object.seal()"></a>Object.freeze() Object.seal()</h4><p>　这两个方法是用于限制对象修改权限的，分别有对应的Object.isFrozen()和Object.isSealed()方法判断是否是冻结(密封)对象，两者唯一的区别是，密封对象仍然可以修改已有属性value的值。<br>　Object.freeze() 方法可以冻结一个对象，冻结指的是不能向这个对象添加新的属性，不能修改其已有属性的值，不能删除已有属性，以及不能修改该对象已有属性的特性。也就是说，这个对象<strong>永远是不可变的</strong>。该方法返回被冻结的对象。<br>　Object.seal() 方法可以让一个对象密封，并返回被密封后的对象。密封对象是指那些不能添加新的属性，不能删除已有属性，以及不能修改已有属性特性，但可能可以<strong>修改已有属性的值</strong>的对象。</p>
 <h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>　暂时总结就这么多，上面的内容大多是从js高程上看的，在线api<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="external">查的这里</a>，后面有遗漏或不准确的地方再进行修改。最后说一点，上述的object的方法很多都不支持ie8，这也是为什么vue不支持ie8，但如果是在现代高版本的浏览器进行开发时就不用顾虑了。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue源码解析之--核心部分core-util(二)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/09/15/vue源码解析之--核心部分core-util(二)/" itemprop="url">
+                  vue源码解析之--核心部分core-util(二)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/vue/" itemprop="url" rel="index">
+                    <span itemprop="name">vue</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>　在vue源码目录中有个core文件夹，其核心功能比如组件、数据绑定、虚拟dom等等都在里面。core下面又分为了components、global-api、instance、obsever、util、vdom六个部分，这次还是先以util开头，里面也封装了一些工具型的函数并且引用了外层share里面的工具函数。 </p>
+<h4 id="debug-js-error-js"><a href="#debug-js-error-js" class="headerlink" title="debug.js error.js"></a>debug.js error.js</h4><p>　debug.js里面主要封装的是用于开发阶段的调试相关的方法，比如一些提示警告。error.js里面只封装了一个handleError方法，用于处理错误，可在config里设置专门的errorHandler函数，没有的时候就只是一个warn警告。debug.js里面有一个repeat方法，将传入字符串重复N次。<br><code>  var repeat = function (str, n) {<br>    var res = ‘’;<br>    while (n) {<br>      if (n % 2 === 1) { res += str; }<br>      if (n &gt; 1) { str += str; }<br>      n &gt;&gt;= 1;<br>    }<br>    return res<br>  };</code><br>这样写的时间复杂度大概是二分之一N，lodash里也有相似的方法，不过是用Math.round(n/2)来代替n&gt;&gt;=1，n&gt;&gt;=1就是把N转换成二进制，然后右移一位再首位补0.</p>
+<h4 id="env-js"><a href="#env-js" class="headerlink" title="env.js"></a>env.js</h4><p>　env.js主要是一些环境相关的东西，待会儿重点说的是nextTick方法。<br><code>var inBrowser = typeof window !== ‘undefined’</code><br>是否在浏览器中，只要判断window对象是否存在即可。<br><code>var UA = inBrowser &amp;&amp; window.navigator.userAgent.toLowerCase();<br></code><br>浏览器中通过userAgent，判断浏览器的版本内核。<br><code>function isNative (Ctor) {<br>  return typeof Ctor === ‘function’ &amp;&amp; /native code/.test(Ctor.toString())<br>}<br></code><br>isNative 判断某些方法功能是否原生支持的，比如浏览器支持symbol的话，symbol.tostring就会返回function Symbol() { [native code] }，再用正则表达式判断是否包含native code即可。<br>　下面讲一下nextTick方法，这个方法也比较常用，可以在确定数据改变视图改变后再执行某些动作。代码首先定义一个自执行匿名函数的作用域，然后定义了一个nextTickHandler函数用于执行完成异步后需要执行的函数。<br><code>  function nextTickHandler () {<br>    pending = false<br>    const copies = callbacks.slice(0)<br>    callbacks.length = 0<br>    for (let i = 0; i &lt; copies.length; i++) {<br>      copies<a href="">i</a><br>    }<br>  }</code><br>pending是一个标示符，用于确保timerFunc方法不会被重复调用。接下来是根据浏览器支持情况来定义timeFunc方法：<br><code>if (typeof Promise !== ‘undefined’ &amp;&amp; isNative(Promise)) {<br>    var p = Promise.resolve()<br>    var logError = err =&gt; { console.error(err) }<br>    timerFunc = () =&gt; {<br>      p.then(nextTickHandler).catch(logError)<br>      if (isIOS) setTimeout(noop)<br>    }<br>  }</code><br>如果浏览器支持promise,就用promise.then来定义timerFunc,promise的具体用法这里也不多讲了,然后我看源码上的注释是说:promise.then执行的时间可能不稳定,当他被推入一个微任务队列中时,添加一个空的setTimeout可以强制刷新微任务队列(IOS系统中).<br><code>else if (typeof MutationObserver !== ‘undefined’ &amp;&amp; (<br>    isNative(MutationObserver) ||<br>    // PhantomJS and iOS 7.x<br>    MutationObserver.toString() === ‘[object MutationObserverConstructor]’<br>  )) {<br>    // use MutationObserver where native Promise is not available,<br>    // e.g. PhantomJS IE11, iOS7, Android 4.4<br>    var counter = 1<br>    var observer = new MutationObserver(nextTickHandler)<br>    var textNode = document.createTextNode(String(counter))<br>    observer.observe(textNode, {<br>      characterData: true<br>    })<br>    timerFunc = () =&gt; {<br>      counter = (counter + 1) % 2<br>      textNode.data = String(counter)<br>    }<br>  }</code><br>当promise不被支持，但浏览器支持MutationObserver时。MutationObserver是html5的一个新特性，用于监测dom节点变化。初始化一个MutationObserver的实例observer ，传入的nextTickHandler是作为监测到发生变化后执行的回调函数，然后这里新建一个文本节点，再使用observer .observe()方法将文本节点绑定监听。最后定义的timerFunc就是改变文本节点的值，从而触发回调，这个回调是在文本节点重新渲染后执行的。当以上两个方法都不支持时，就只好用setTImeout来定义timerFunc了。<br><code>return function queueNextTick (cb?: Function, ctx?: Object) {<br>    let _resolve<br>    callbacks.push(() =&gt; {<br>      if (cb) {<br>        try {<br>          cb.call(ctx)<br>        } catch (e) {<br>          handleError(e, ctx, ‘nextTick’)<br>        }<br>      } else if (_resolve) {<br>        _resolve(ctx)<br>      }<br>    })<br>    if (!pending) {<br>      pending = true<br>      timerFunc()<br>    }<br>    if (!cb &amp;&amp; typeof Promise !== ‘undefined’) {<br>      return new Promise((resolve, reject) =&gt; {<br>        _resolve = resolve<br>      })<br>    }<br>  }</code><br>最后返回的函数其实就是nextTick自身，传入两个参数，一个是异步回调执行的函数，第二个是一个对象作为执行的环境。将传入的函数以 cb.call(ctx)的形式添加到callback中，然后再执行timerFunc。在global.api中，将这里定义的nextTick放在vue的原型上了。<br>env.js在最后定义了_Set，如果支持set那么就直接用set了，不支持的话，定义了一个_set类，并为其添加has()、add()、clear()方法。其实set的用法也比较简单，浏览器不支持的话自己重新定义一下也不复杂。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/使用Javascript做算法题（三）Largest-Number/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/09/15/使用Javascript做算法题（三）Largest-Number/" itemprop="url">
+                  使用Javascript做算法题（三）Largest-Number
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/leetcode算法题/" itemprop="url" rel="index">
+                    <span itemprop="name">leetcode算法题</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><ul>
+<li>给出一串非负整数组成的数组，求用这些数字组成的一个最大数字。举个例子：给出数组[3, 30, 34, 5, 9]，那么组成的最大数字就是9534330。注：返回结果数字一定相当大，所以用字符串表示返回的结果。<a href="https://leetcode.com/problems/largest-number/description/" target="_blank" rel="external">题目地址</a><h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4></li>
+<li>这道题解法的关键在于<strong>排序数组</strong>，需要将数组以生成最大数的顺序排列。我刚开始想到的是，首位数字大的数字就往前放，但是要考虑多位数他可能后面几位比较小的情况。最后发现解题思路很简单：<strong>设计一个排序函数：比如两个数字为m和n，就比较mn和nm哪个数字更大，然后在数组调用sort()的时候传入它。</strong><h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number[]&#125; nums</div><div class="line"> * @return &#123;string&#125;</div><div class="line"> */</div><div class="line">var largestNumber = function(nums) &#123;</div><div class="line">    let len = nums.length</div><div class="line">    if (len === 0) &#123;</div><div class="line">        return &quot;&quot;</div><div class="line">    &#125;</div><div class="line">    if (len === 1) &#123;</div><div class="line">        return nums[0].toString()</div><div class="line">    &#125;</div><div class="line">    let result = &apos;&apos;</div><div class="line">    let sortBy = function (a, b) &#123;</div><div class="line">        let ab = a.toString() + b </div><div class="line">        let ba = b.toString() + a</div><div class="line">        return Number(ba) - Number(ab)</div><div class="line">    &#125;</div><div class="line">    nums.sort(sortBy)</div><div class="line">    for (let i =0;i&lt;len;i++)&#123;</div><div class="line">        result += nums[i]</div><div class="line">    &#125;</div><div class="line">    while (result.startsWith (&apos;0&apos;) &amp;&amp; result.length &gt; 1) &#123;</div><div class="line">        result = result.substring(1)</div><div class="line">    &#125;</div><div class="line">    return result</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/原生JS实现图片懒加载(lazyload)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/09/15/原生JS实现图片懒加载(lazyload)/" itemprop="url">
+                  原生JS实现图片懒加载(lazyload)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p> 图片懒加载也是比较常见的一种性能优化的方法，最近在用vue做一个新闻列表的客户端时也用到了，这里就简单介绍下实现原理和部分代码。</p>
+<hr>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p> 加载页面的时候，图片一直都是流量大头，针对图片的性能方法也挺多的比如base64、雪碧图等；懒加载也是其中一种，主要原理是将非首屏的图片src设为一个默认值，然后监听窗口滚动，当图片出现在视窗中时再给他赋予真实的图片地址，这样可以保证首屏的加载速度然后按需加载图片。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6383319-ba10ad7a53809f30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例.png"></p>
+<h2 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h2><p> 首先在渲染时，图片引用默认图片，然后把真实地址放在data-*属性上面。<br><code><image src="./../assets/default.png" :data-src="item.allPics" class="lazyloadimg"></image></code><br><br> 然后是监听滚动，直接用window.onscroll就可以了，但是要注意一点的是类似于window的scroll和resize，还有mousemove这类触发很频繁的事件，最好用节流(throttle)或防抖函数(debounce)来控制一下触发频率。underscore和lodash里面都有封装这两个方法，这里先不多做介绍了。<br><br> 接着要判断图片是否出现在了视窗里面，主要是三个高度：1，当前body从顶部滚动了多少距离。2，视窗的高度。3，当前图片距离顶部的距离。offsetTop相关属性可以<a href="http://www.jianshu.com/p/135731ec13f1" target="_blank" rel="external">参考这里</a>，具体代码如下：<br><code><br>window.onscroll =_.throttle(this.watchscroll, 200);<br>watchscroll () {<br>      var bodyScrollHeight =  document.body.scrollTop;// body滚动高度<br>      var windowHeight = window.innerHeight;// 视窗高度<br>      var imgs = document.getElementsByClassName(‘lazyloadimg’);<br>      for (var i =0; i &lt; imgs.length; i++) {<br>        var imgHeight = imgs[i].offsetTop;// 图片距离顶部高度<br>        if (imgHeight  &lt; windowHeight  + bodyScrollHeight) {<br>           imgs[i].src = imgs[i].getAttribute(‘data-src’);<br>           img[i].className = img[i].className.replace(‘lazyloadimg’,’’)<br>        }<br>      }<br>    }<br></code></p>
+<hr>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p> 大概内容就这么多了，下次可能会补充一下防抖节流源码的实现。最后再补充两个常见的滚动判断：<br>1.页面滚动离开首屏(这时可显示回到顶部的按钮):<code>document.body.scrollTop &gt; window.innerHeight</code><br>2.页面滚动到底部了(这时可去调接口获取更多内容)：<code>window.scrollY + window.innerHeight &gt; document.body.offsetHeight</code></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue服务端渲染(SSR)初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/09/15/vue服务端渲染(SSR)初探/" itemprop="url">
+                  vue服务端渲染(SSR)初探
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/服务端渲染/" itemprop="url" rel="index">
+                    <span itemprop="name">服务端渲染</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>首先来讲一下服务端渲染，直白的说就是在服务端拿数据进行解析渲染，<strong>直接生成html片段返回给前端</strong>。具体用法也有很多种比如： </p>
+<ul>
+<li>传统的服务端模板引擎渲染整个页面</li>
+<li>服务渲染生成htmll代码块, 前端 AJAX 获取然后js动态添加<h3 id="服务端渲染的优劣"><a href="#服务端渲染的优劣" class="headerlink" title="服务端渲染的优劣"></a>服务端渲染的优劣</h3>　首先是<strong>seo</strong>问题，前端动态渲染的内容是不能被抓取到的，而使用服务端渲染就可以解决这个问题。还有就是<strong>首屏加载</strong>过慢这种问题，比如在SPA中，打开首页需要初始加载很多资源，这时考虑在首屏使用服务端渲染，也是一种折中的优化方案。但是使用SSR时，势必会增加服务器的压力，还有可能会需要前后端同构，使用同样的模板引擎，这似乎与前后端分离的观点又是矛盾的。废话就说到这里，下面来看一下vue框架中的服务器渲染。<h3 id="vue-server-renderer"><a href="#vue-server-renderer" class="headerlink" title="vue-server-renderer"></a>vue-server-renderer</h3>　vue-server-renderer就是vue中处理服务端加载的一个模块了，官方文档：<a href="https://ssr.vuejs.org/en/" target="_blank" rel="external">https://ssr.vuejs.org/en/</a>，暂时没有中文版的，我也只是稍微看了一些，然后写了一个简单的demo。首先新建一个test.js文件，并用npm安装依赖express、vue、vue-server-renderer。引入vue-server-renderer之后，然后新建一个temp.html作为渲染的基本模板，用createRenderer方法新建一个render实例，这里我传入temp.html作为renderer的template的参数，在后面渲染时就会以这个temp.html作为基础模板。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">const renderer = require(&apos;vue-server-renderer&apos;).createRenderer(&#123;</div><div class="line">	template: require(&apos;fs&apos;).readFileSync(&apos;./temp.html&apos;, &apos;utf-8&apos;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>temp.html:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;&lt;br&gt;&lt;html lang=&quot;en&quot;&gt;&lt;br&gt;&lt;head&gt;&lt;title&gt;&#123;&#123;title&#125;&#125;&lt;/title&gt;&lt;/head&gt;</div><div class="line">  &lt;body&gt;</div><div class="line">    &lt;!--vue-ssr-outlet--&gt;</div><div class="line">  &lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<p>　接下来随便定义一些渲染用的数据，然后用express新建一个node服务器，再定义一个vue的实例。然后再调用renderer的renderToString方法来渲染生成html，渲染成功后返回给客户端。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">const Vue = require(&apos;vue&apos;)</div><div class="line">const server = require(&apos;express&apos;)()</div><div class="line">const context = &#123;</div><div class="line">  title: &apos;hello&apos;</div><div class="line">&#125;</div><div class="line">const mocktitle = &apos;我爱吃的水果&apos;</div><div class="line">const mockdata = [&apos;香蕉&apos;, &apos;苹果&apos;, &apos;橘子&apos;]</div><div class="line">server.get(&apos;*&apos;, (req, res) =&gt; &#123;</div><div class="line">  const app = new Vue(&#123;</div><div class="line">    data: &#123;</div><div class="line">      url: req.url,</div><div class="line">      data: mockdata,</div><div class="line">      title: mocktitle</div><div class="line">    &#125;,</div><div class="line">    template: `&lt;div&gt;The visited URL is: &#123;&#123; url &#125;&#125;</div><div class="line">    &lt;h3&gt;&#123;&#123;title&#125;&#125;&lt;/h3&gt;</div><div class="line">    &lt;p v-for=&apos;item in data&apos;&gt;&#123;&#123;item&#125;&#125;&lt;/p&gt;</div><div class="line">    &lt;/div&gt;`</div><div class="line">  &#125;)</div><div class="line">  renderer.renderToString(app, context, (err, html) =&gt; &#123;</div><div class="line">    if (err) &#123;</div><div class="line">      res.status(500).end(&apos;Internal Server Error&apos;)</div><div class="line">      return</div><div class="line">    &#125;</div><div class="line">    res.end(html)</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line">server.listen(8080)</div></pre></td></tr></table></figure></p>
+<p>　注意这里渲染的数据有两种，mockdata是作为vue实例的data来渲染在实例模板中的，而context是作为基础模板的data来渲染temp.html的。可以看到在服务端用vue进行渲染的规则和前端渲染时一样，v-for、v-if等都可以正常使用。最后命令行输入node test.js，然后在浏览器打开<a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 查看结果如下:<br><img src="http://upload-images.jianshu.io/upload_images/6383319-877ce0eda788c464.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例.png"><br>可以看到服务端直接返回了一个渲染完成的Doc，示例demo到此结束。</p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>　服务端渲染还是客户端渲染的问题，个人觉得还是要针对具体业务场景然后再做选择。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue源码解析之--工具函数(一)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/09/15/vue源码解析之--工具函数(一)/" itemprop="url">
+                  vue源码解析之--工具函数(一)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/vue/" itemprop="url" rel="index">
+                    <span itemprop="name">vue</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<p>　工具函数是每个框架类库的基本的组成部分，本篇分析的是/shared/util.js文件，从中挑选的部分方法函数，比较常见基础的方法我就跳过了。值得一说的是，编译合成前的源码都用到了<strong>flow.js</strong>，可以理解为一个javascript的静态类型检查器，有点像typescript，可以对js的变量进行类型定义、检查错误等，然后再通过编译生成正常的js代码，文件开头有/<em> @flow </em>/注释的都是用到了flow的。</p>
+<h4 id="1-makeMap"><a href="#1-makeMap" class="headerlink" title="1.makeMap()"></a>1.makeMap()</h4><p>　先来看这个makemap，传入一个字符串和是否区分大小写的标示符，然后在函数内部生成一个map对象，传入字符串分割 ‘,’ 生成的数组的值作为map的属性名，值为true，然后<strong>返回一个函数用来判断一个变量是否包含在传入字符串里</strong>。<br><code><br>function makeMap (<br>  str,<br>  expectsLowerCase<br>) {<br>  var map = Object.create(null);<br>  var list = str.split(‘,’);<br>  for (var i = 0; i &lt; list.length; i++) {<br>    map[list[i]] = true;<br>  }<br>  return expectsLowerCase<br>    ? function (val) { return map[val.toLowerCase()]; }<br>    : function (val) { return map[val]; }<br>}</code><br> 　这里也是个典型的闭包的应用，返回的函数调用了内部的map数组，所以map的作用域会一直存在不会被回收掉。这个方法主要用在检查变量命名是否合法之类的。</p>
+<h4 id="2-cached"><a href="#2-cached" class="headerlink" title="2.cached()"></a>2.cached()</h4><p><code>function cached (fn) {<br>  var cache = Object.create(null);<br>  return (function cachedFn (str) {<br>    var hit = cache[str];<br>    return hit || (cache[str] = fn(str))<br>  })<br>}<br></code><br>　新建一个cache对象，这个方法传入参数是一个<strong>处理字符串的函数</strong>，返回这个<strong>传入函数的缓存版本</strong>。就是每次调用这个处理字符串函数时，会把被传入的字符串存到cache中，下次再传入相同字符串时就直接用cache缓存了(又是巧用闭包…)。</p>
+<h4 id="3-camelize、capitalize、hyphenateRE"><a href="#3-camelize、capitalize、hyphenateRE" class="headerlink" title="3.camelize、capitalize、hyphenateRE"></a>3.camelize、capitalize、hyphenateRE</h4><p><code>var camelizeRE = /-(\w)/g;<br>var camelize = cached(function (str) {<br>  return str.replace(camelizeRE, function (_, c) { return c ? c.toUpperCase() : ‘’; })<br>});<br>var capitalize = cached(function (str) {<br>  return str.charAt(0).toUpperCase() + str.slice(1)<br>});<br>var hyphenateRE = /([^-])([A-Z])/g;<br>var hyphenate = cached(function (str) {<br>  return str<br>    .replace(hyphenateRE, ‘$1-$2’)<br>    .replace(hyphenateRE, ‘$1-$2’)<br>    .toLowerCase()<br>});</code><br>　这三个函数都是<strong>处理字符串</strong>的，主要是对<strong>正则表达式的应用</strong>，结合上面提到的cache生成的缓存版函数camelize()用于将中划线命名的变成驼峰法命名，camelize(‘abc-def’) = abcDef；capitalize()用于将首字母大写，hyphenateRE()作用与camelize()相反，用于将驼峰法命名转换成中划线。(这里没看懂为什么要用两次replace方法？)</p>
+<h3 id="4-bind"><a href="#4-bind" class="headerlink" title="4.bind()"></a>4.bind()</h3><p><code><br>function bind (fn, ctx) {<br>  function boundFn (a) {<br>    var l = arguments.length;<br>    return l<br>      ? l &gt; 1<br>        ? fn.apply(ctx, arguments)<br>        : fn.call(ctx, a)<br>      : fn.call(ctx)<br>  }<br>  boundFn._length = fn.length;<br>  return boundFn<br>}</code><br>　封装了一个简单的bind方法，根据传入的对象(作用域)和函数，返回一个绑定函数，即在传入的对象调用传入的函数。源码解释说比原生绑定更快，这里我也不太明白为什么。。。</p>
+<h3 id="5-genStaticKeys"><a href="#5-genStaticKeys" class="headerlink" title="5.genStaticKeys()"></a>5.genStaticKeys()</h3><p><code><br>function genStaticKeys (modules) {<br>  return modules.reduce(function (keys, m) {<br>    return keys.concat(m.staticKeys || [])<br>  }, []).join(‘,’)<br>}<br></code><br>　这个函数主要是把传入的<strong>编译模块，生成为静态键值组成的字符串</strong>。主要用到了<strong>reduce</strong>这个方法，即把数组每一项重叠生成一个总和，第二个参数[]表示初始值，生成的总数组用逗号分隔转换为字符串。我看了下似乎这个方法只是在定义baseOptions的staticKeys属性时用到了。</p>
+<h3 id="6-looseEqual-looseIndexOf"><a href="#6-looseEqual-looseIndexOf" class="headerlink" title="6.looseEqual() looseIndexOf()"></a>6.looseEqual() looseIndexOf()</h3><p><code><br>function looseEqual (a, b) {<br>  var isObjectA = isObject(a);<br>  var isObjectB = isObject(b);<br>  if (isObjectA &amp;&amp; isObjectB) {<br>    try {<br>      return JSON.stringify(a) === JSON.stringify(b)<br>    } catch (e) {<br>      // possible circular reference<br>      return a === b<br>    }<br>  } else if (!isObjectA &amp;&amp; !isObjectB) {<br>    return String(a) === String(b)<br>  } else {<br>    return false<br>  }<br>}<br>function looseIndexOf (arr, val) {<br>  for (var i = 0; i &lt; arr.length; i++) {<br>    if (looseEqual(arr[i], val)) { return i }<br>  }<br>  return -1<br>}</code><br>　looseEqual()用于判断两个传入参数是否相等，同是对象的情况下先用<strong>JSON.stringfiy()</strong>转换，报错的时候直接用全等判断，这里顺便提一下什么时候JSON.stringfiy()会报错呢？<strong>circular structure</strong>的时候，举一个例子<code>var obj = {a:1}; obj.b=obj;</code> 这个时候JSON.stringfiy(obj)就会报错啦~都不是对象的时候转化为string比较，其他情况都是false。<br>　looseIndexOf()传入一个数组和一个值，如果传入值在数组里则返回对应的index，不在返回-1，这里也是依次用looseEqual来进行比较.ES6里面数组的扩展方法有一个indexOf也是类似的方法，判断数组是否包含某个值。</p>
+<h3 id="7-once"><a href="#7-once" class="headerlink" title="7.once()"></a>7.once()</h3><p><code>function once (fn) {<br>  var called = false;<br>  return function () {<br>    if (!called) {<br>      called = true;<br>      fn.apply(this, arguments);<br>    }<br>  }<br>}</code><br>　让一个函数只调用一次，也是典型的闭包调用，返回一个由called标示控制的函数，调用此函数时，called标示符改变，下次调用就无效了。</p>
 
           
         
@@ -575,910 +1633,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue源码解析之--核心部分core-util(二)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/vue源码解析之--核心部分core-util(二)/" itemprop="url">
-                  vue源码解析之--核心部分core-util(二)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/vue/" itemprop="url" rel="index">
-                    <span itemprop="name">vue</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>　在vue源码目录中有个core文件夹，其核心功能比如组件、数据绑定、虚拟dom等等都在里面。core下面又分为了components、global-api、instance、obsever、util、vdom六个部分，这次还是先以util开头，里面也封装了一些工具型的函数并且引用了外层share里面的工具函数。 </p>
-<h4 id="debug-js-error-js"><a href="#debug-js-error-js" class="headerlink" title="debug.js error.js"></a>debug.js error.js</h4><p>　debug.js里面主要封装的是用于开发阶段的调试相关的方法，比如一些提示警告。error.js里面只封装了一个handleError方法，用于处理错误，可在config里设置专门的errorHandler函数，没有的时候就只是一个warn警告。debug.js里面有一个repeat方法，将传入字符串重复N次。<br><code>  var repeat = function (str, n) {<br>    var res = ‘’;<br>    while (n) {<br>      if (n % 2 === 1) { res += str; }<br>      if (n &gt; 1) { str += str; }<br>      n &gt;&gt;= 1;<br>    }<br>    return res<br>  };</code><br>这样写的时间复杂度大概是二分之一N，lodash里也有相似的方法，不过是用Math.round(n/2)来代替n&gt;&gt;=1，n&gt;&gt;=1就是把N转换成二进制，然后右移一位再首位补0.</p>
-<h4 id="env-js"><a href="#env-js" class="headerlink" title="env.js"></a>env.js</h4><p>　env.js主要是一些环境相关的东西，待会儿重点说的是nextTick方法。<br><code>var inBrowser = typeof window !== ‘undefined’</code><br>是否在浏览器中，只要判断window对象是否存在即可。<br><code>var UA = inBrowser &amp;&amp; window.navigator.userAgent.toLowerCase();<br></code><br>浏览器中通过userAgent，判断浏览器的版本内核。<br><code>function isNative (Ctor) {<br>  return typeof Ctor === ‘function’ &amp;&amp; /native code/.test(Ctor.toString())<br>}<br></code><br>isNative 判断某些方法功能是否原生支持的，比如浏览器支持symbol的话，symbol.tostring就会返回function Symbol() { [native code] }，再用正则表达式判断是否包含native code即可。<br>　下面讲一下nextTick方法，这个方法也比较常用，可以在确定数据改变视图改变后再执行某些动作。代码首先定义一个自执行匿名函数的作用域，然后定义了一个nextTickHandler函数用于执行完成异步后需要执行的函数。<br><code>  function nextTickHandler () {<br>    pending = false<br>    const copies = callbacks.slice(0)<br>    callbacks.length = 0<br>    for (let i = 0; i &lt; copies.length; i++) {<br>      copies<a href="">i</a><br>    }<br>  }</code><br>pending是一个标示符，用于确保timerFunc方法不会被重复调用。接下来是根据浏览器支持情况来定义timeFunc方法：<br><code>if (typeof Promise !== ‘undefined’ &amp;&amp; isNative(Promise)) {<br>    var p = Promise.resolve()<br>    var logError = err =&gt; { console.error(err) }<br>    timerFunc = () =&gt; {<br>      p.then(nextTickHandler).catch(logError)<br>      if (isIOS) setTimeout(noop)<br>    }<br>  }</code><br>如果浏览器支持promise,就用promise.then来定义timerFunc,promise的具体用法这里也不多讲了,然后我看源码上的注释是说:promise.then执行的时间可能不稳定,当他被推入一个微任务队列中时,添加一个空的setTimeout可以强制刷新微任务队列(IOS系统中).<br><code>else if (typeof MutationObserver !== ‘undefined’ &amp;&amp; (<br>    isNative(MutationObserver) ||<br>    // PhantomJS and iOS 7.x<br>    MutationObserver.toString() === ‘[object MutationObserverConstructor]’<br>  )) {<br>    // use MutationObserver where native Promise is not available,<br>    // e.g. PhantomJS IE11, iOS7, Android 4.4<br>    var counter = 1<br>    var observer = new MutationObserver(nextTickHandler)<br>    var textNode = document.createTextNode(String(counter))<br>    observer.observe(textNode, {<br>      characterData: true<br>    })<br>    timerFunc = () =&gt; {<br>      counter = (counter + 1) % 2<br>      textNode.data = String(counter)<br>    }<br>  }</code><br>当promise不被支持，但浏览器支持MutationObserver时。MutationObserver是html5的一个新特性，用于监测dom节点变化。初始化一个MutationObserver的实例observer ，传入的nextTickHandler是作为监测到发生变化后执行的回调函数，然后这里新建一个文本节点，再使用observer .observe()方法将文本节点绑定监听。最后定义的timerFunc就是改变文本节点的值，从而触发回调，这个回调是在文本节点重新渲染后执行的。当以上两个方法都不支持时，就只好用setTImeout来定义timerFunc了。<br><code>return function queueNextTick (cb?: Function, ctx?: Object) {<br>    let _resolve<br>    callbacks.push(() =&gt; {<br>      if (cb) {<br>        try {<br>          cb.call(ctx)<br>        } catch (e) {<br>          handleError(e, ctx, ‘nextTick’)<br>        }<br>      } else if (_resolve) {<br>        _resolve(ctx)<br>      }<br>    })<br>    if (!pending) {<br>      pending = true<br>      timerFunc()<br>    }<br>    if (!cb &amp;&amp; typeof Promise !== ‘undefined’) {<br>      return new Promise((resolve, reject) =&gt; {<br>        _resolve = resolve<br>      })<br>    }<br>  }</code><br>最后返回的函数其实就是nextTick自身，传入两个参数，一个是异步回调执行的函数，第二个是一个对象作为执行的环境。将传入的函数以 cb.call(ctx)的形式添加到callback中，然后再执行timerFunc。在global.api中，将这里定义的nextTick放在vue的原型上了。<br>env.js在最后定义了_Set，如果支持set那么就直接用set了，不支持的话，定义了一个_set类，并为其添加has()、add()、clear()方法。其实set的用法也比较简单，浏览器不支持的话自己重新定义一下也不复杂。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue源码解析之--工具函数(一)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/vue源码解析之--工具函数(一)/" itemprop="url">
-                  vue源码解析之--工具函数(一)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/vue/" itemprop="url" rel="index">
-                    <span itemprop="name">vue</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<p>　工具函数是每个框架类库的基本的组成部分，本篇分析的是/shared/util.js文件，从中挑选的部分方法函数，比较常见基础的方法我就跳过了。值得一说的是，编译合成前的源码都用到了<strong>flow.js</strong>，可以理解为一个javascript的静态类型检查器，有点像typescript，可以对js的变量进行类型定义、检查错误等，然后再通过编译生成正常的js代码，文件开头有/<em> @flow </em>/注释的都是用到了flow的。</p>
-<h4 id="1-makeMap"><a href="#1-makeMap" class="headerlink" title="1.makeMap()"></a>1.makeMap()</h4><p>　先来看这个makemap，传入一个字符串和是否区分大小写的标示符，然后在函数内部生成一个map对象，传入字符串分割 ‘,’ 生成的数组的值作为map的属性名，值为true，然后<strong>返回一个函数用来判断一个变量是否包含在传入字符串里</strong>。<br><code><br>function makeMap (<br>  str,<br>  expectsLowerCase<br>) {<br>  var map = Object.create(null);<br>  var list = str.split(‘,’);<br>  for (var i = 0; i &lt; list.length; i++) {<br>    map[list[i]] = true;<br>  }<br>  return expectsLowerCase<br>    ? function (val) { return map[val.toLowerCase()]; }<br>    : function (val) { return map[val]; }<br>}</code><br> 　这里也是个典型的闭包的应用，返回的函数调用了内部的map数组，所以map的作用域会一直存在不会被回收掉。这个方法主要用在检查变量命名是否合法之类的。</p>
-<h4 id="2-cached"><a href="#2-cached" class="headerlink" title="2.cached()"></a>2.cached()</h4><p><code>function cached (fn) {<br>  var cache = Object.create(null);<br>  return (function cachedFn (str) {<br>    var hit = cache[str];<br>    return hit || (cache[str] = fn(str))<br>  })<br>}<br></code><br>　新建一个cache对象，这个方法传入参数是一个<strong>处理字符串的函数</strong>，返回这个<strong>传入函数的缓存版本</strong>。就是每次调用这个处理字符串函数时，会把被传入的字符串存到cache中，下次再传入相同字符串时就直接用cache缓存了(又是巧用闭包…)。</p>
-<h4 id="3-camelize、capitalize、hyphenateRE"><a href="#3-camelize、capitalize、hyphenateRE" class="headerlink" title="3.camelize、capitalize、hyphenateRE"></a>3.camelize、capitalize、hyphenateRE</h4><p><code>var camelizeRE = /-(\w)/g;<br>var camelize = cached(function (str) {<br>  return str.replace(camelizeRE, function (_, c) { return c ? c.toUpperCase() : ‘’; })<br>});<br>var capitalize = cached(function (str) {<br>  return str.charAt(0).toUpperCase() + str.slice(1)<br>});<br>var hyphenateRE = /([^-])([A-Z])/g;<br>var hyphenate = cached(function (str) {<br>  return str<br>    .replace(hyphenateRE, ‘$1-$2’)<br>    .replace(hyphenateRE, ‘$1-$2’)<br>    .toLowerCase()<br>});</code><br>　这三个函数都是<strong>处理字符串</strong>的，主要是对<strong>正则表达式的应用</strong>，结合上面提到的cache生成的缓存版函数camelize()用于将中划线命名的变成驼峰法命名，camelize(‘abc-def’) = abcDef；capitalize()用于将首字母大写，hyphenateRE()作用与camelize()相反，用于将驼峰法命名转换成中划线。(这里没看懂为什么要用两次replace方法？)</p>
-<h3 id="4-bind"><a href="#4-bind" class="headerlink" title="4.bind()"></a>4.bind()</h3><p><code><br>function bind (fn, ctx) {<br>  function boundFn (a) {<br>    var l = arguments.length;<br>    return l<br>      ? l &gt; 1<br>        ? fn.apply(ctx, arguments)<br>        : fn.call(ctx, a)<br>      : fn.call(ctx)<br>  }<br>  boundFn._length = fn.length;<br>  return boundFn<br>}</code><br>　封装了一个简单的bind方法，根据传入的对象(作用域)和函数，返回一个绑定函数，即在传入的对象调用传入的函数。源码解释说比原生绑定更快，这里我也不太明白为什么。。。</p>
-<h3 id="5-genStaticKeys"><a href="#5-genStaticKeys" class="headerlink" title="5.genStaticKeys()"></a>5.genStaticKeys()</h3><p><code><br>function genStaticKeys (modules) {<br>  return modules.reduce(function (keys, m) {<br>    return keys.concat(m.staticKeys || [])<br>  }, []).join(‘,’)<br>}<br></code><br>　这个函数主要是把传入的<strong>编译模块，生成为静态键值组成的字符串</strong>。主要用到了<strong>reduce</strong>这个方法，即把数组每一项重叠生成一个总和，第二个参数[]表示初始值，生成的总数组用逗号分隔转换为字符串。我看了下似乎这个方法只是在定义baseOptions的staticKeys属性时用到了。</p>
-<h3 id="6-looseEqual-looseIndexOf"><a href="#6-looseEqual-looseIndexOf" class="headerlink" title="6.looseEqual() looseIndexOf()"></a>6.looseEqual() looseIndexOf()</h3><p><code><br>function looseEqual (a, b) {<br>  var isObjectA = isObject(a);<br>  var isObjectB = isObject(b);<br>  if (isObjectA &amp;&amp; isObjectB) {<br>    try {<br>      return JSON.stringify(a) === JSON.stringify(b)<br>    } catch (e) {<br>      // possible circular reference<br>      return a === b<br>    }<br>  } else if (!isObjectA &amp;&amp; !isObjectB) {<br>    return String(a) === String(b)<br>  } else {<br>    return false<br>  }<br>}<br>function looseIndexOf (arr, val) {<br>  for (var i = 0; i &lt; arr.length; i++) {<br>    if (looseEqual(arr[i], val)) { return i }<br>  }<br>  return -1<br>}</code><br>　looseEqual()用于判断两个传入参数是否相等，同是对象的情况下先用<strong>JSON.stringfiy()</strong>转换，报错的时候直接用全等判断，这里顺便提一下什么时候JSON.stringfiy()会报错呢？<strong>circular structure</strong>的时候，举一个例子<code>var obj = {a:1}; obj.b=obj;</code> 这个时候JSON.stringfiy(obj)就会报错啦~都不是对象的时候转化为string比较，其他情况都是false。<br>　looseIndexOf()传入一个数组和一个值，如果传入值在数组里则返回对应的index，不在返回-1，这里也是依次用looseEqual来进行比较.ES6里面数组的扩展方法有一个indexOf也是类似的方法，判断数组是否包含某个值。</p>
-<h3 id="7-once"><a href="#7-once" class="headerlink" title="7.once()"></a>7.once()</h3><p><code>function once (fn) {<br>  var called = false;<br>  return function () {<br>    if (!called) {<br>      called = true;<br>      fn.apply(this, arguments);<br>    }<br>  }<br>}</code><br>　让一个函数只调用一次，也是典型的闭包调用，返回一个由called标示控制的函数，调用此函数时，called标示符改变，下次调用就无效了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/使用Javascript做算法题（三）Largest-Number/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/使用Javascript做算法题（三）Largest-Number/" itemprop="url">
-                  使用Javascript做算法题（三）Largest-Number
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode算法题/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode算法题</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><ul>
-<li>给出一串非负整数组成的数组，求用这些数字组成的一个最大数字。举个例子：给出数组[3, 30, 34, 5, 9]，那么组成的最大数字就是9534330。注：返回结果数字一定相当大，所以用字符串表示返回的结果。<a href="https://leetcode.com/problems/largest-number/description/" target="_blank" rel="external">题目地址</a><h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4></li>
-<li>这道题解法的关键在于<strong>排序数组</strong>，需要将数组以生成最大数的顺序排列。我刚开始想到的是，首位数字大的数字就往前放，但是要考虑多位数他可能后面几位比较小的情况。最后发现解题思路很简单：<strong>设计一个排序函数：比如两个数字为m和n，就比较mn和nm哪个数字更大，然后在数组调用sort()的时候传入它。</strong><h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number[]&#125; nums</div><div class="line"> * @return &#123;string&#125;</div><div class="line"> */</div><div class="line">var largestNumber = function(nums) &#123;</div><div class="line">    let len = nums.length</div><div class="line">    if (len === 0) &#123;</div><div class="line">        return &quot;&quot;</div><div class="line">    &#125;</div><div class="line">    if (len === 1) &#123;</div><div class="line">        return nums[0].toString()</div><div class="line">    &#125;</div><div class="line">    let result = &apos;&apos;</div><div class="line">    let sortBy = function (a, b) &#123;</div><div class="line">        let ab = a.toString() + b </div><div class="line">        let ba = b.toString() + a</div><div class="line">        return Number(ba) - Number(ab)</div><div class="line">    &#125;</div><div class="line">    nums.sort(sortBy)</div><div class="line">    for (let i =0;i&lt;len;i++)&#123;</div><div class="line">        result += nums[i]</div><div class="line">    &#125;</div><div class="line">    while (result.startsWith (&apos;0&apos;) &amp;&amp; result.length &gt; 1) &#123;</div><div class="line">        result = result.substring(1)</div><div class="line">    &#125;</div><div class="line">    return result</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/使用Javascript做算法题（二）Unique-Paths/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/使用Javascript做算法题（二）Unique-Paths/" itemprop="url">
-                  使用Javascript做算法题（二）Unique-Paths
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode算法题/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode算法题</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><ul>
-<li>在一个 m*n 个格子大小的地图上，一个机器人位于左上角，它的终点在右下角，机器人的前进路线只能向右或向下走，求一共有多少种不同的路线走到终点。注：m和n不会超过100。<a href="https://leetcode.com/problems/unique-paths/description/" target="_blank" rel="external">题目地址</a></li>
-</ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/6383319-9b976ff4ae8da7eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="一个3*7的示例"></p>
-<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><ul>
-<li>看完这个题目，我首先联想到了另一个类似的题，就是上n阶台阶，可以跨一步可以跨两步，求一共有多少种方法。解题方法就是去考虑最后一步，最后要嘛从<strong>n-1阶</strong>，要嘛从<strong>n-2阶</strong>跨到终点。<strong>假设走到n-1阶有m种不同方案，走到n-2阶有n种不同方案，那么走到n阶就有m+n种不同方案。</strong></li>
-<li>有点扯远了，回到这个题目。首先想到的是<strong>以二维数组来表示这个地图的坐标</strong>，机器人的起点在(0,0)终点在(m,n)，机器人最后一步肯定从(m-1,n)或(m,n-1)走，那走到(m,n)的路线总数就是走到(m-1,n)的路线总数加上走到(m,n-1)的路线总数。至此，解题思路也就很明显了，<strong>首先确定机器人走到最上面的一行和最左边的一列上的任意点，路线数只能为1。</strong>然后再根据这些点的路线数，依次往里推，最后得出(m,n)点的路线数。<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number&#125; m</div><div class="line"> * @param &#123;number&#125; n</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> */</div><div class="line">var uniquePaths = function(m, n) &#123; </div><div class="line">    if (m == 1 || n == 1) &#123;</div><div class="line">        return 1</div><div class="line">    &#125;</div><div class="line">    var arr = []</div><div class="line">    arr[0] = new Array(n).fill(1)</div><div class="line">    for (var i = 1; i &lt; m; i++) &#123;</div><div class="line">        arr[i] = new Array(n)</div><div class="line">        arr[i][0] = 1</div><div class="line">        for (var j = 1; j &lt; n; j++) &#123;</div><div class="line">            arr[i][j] = arr[i][j-1] + arr[i-1][j]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return arr[m-1][n-1]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/vue服务端渲染(SSR)初探/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/vue服务端渲染(SSR)初探/" itemprop="url">
-                  vue服务端渲染(SSR)初探
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/服务端渲染/" itemprop="url" rel="index">
-                    <span itemprop="name">服务端渲染</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>首先来讲一下服务端渲染，直白的说就是在服务端拿数据进行解析渲染，<strong>直接生成html片段返回给前端</strong>。具体用法也有很多种比如： </p>
-<ul>
-<li>传统的服务端模板引擎渲染整个页面</li>
-<li>服务渲染生成htmll代码块, 前端 AJAX 获取然后js动态添加<h3 id="服务端渲染的优劣"><a href="#服务端渲染的优劣" class="headerlink" title="服务端渲染的优劣"></a>服务端渲染的优劣</h3>　首先是<strong>seo</strong>问题，前端动态渲染的内容是不能被抓取到的，而使用服务端渲染就可以解决这个问题。还有就是<strong>首屏加载</strong>过慢这种问题，比如在SPA中，打开首页需要初始加载很多资源，这时考虑在首屏使用服务端渲染，也是一种折中的优化方案。但是使用SSR时，势必会增加服务器的压力，还有可能会需要前后端同构，使用同样的模板引擎，这似乎与前后端分离的观点又是矛盾的。废话就说到这里，下面来看一下vue框架中的服务器渲染。<h3 id="vue-server-renderer"><a href="#vue-server-renderer" class="headerlink" title="vue-server-renderer"></a>vue-server-renderer</h3>　vue-server-renderer就是vue中处理服务端加载的一个模块了，官方文档：<a href="https://ssr.vuejs.org/en/" target="_blank" rel="external">https://ssr.vuejs.org/en/</a>，暂时没有中文版的，我也只是稍微看了一些，然后写了一个简单的demo。首先新建一个test.js文件，并用npm安装依赖express、vue、vue-server-renderer。引入vue-server-renderer之后，然后新建一个temp.html作为渲染的基本模板，用createRenderer方法新建一个render实例，这里我传入temp.html作为renderer的template的参数，在后面渲染时就会以这个temp.html作为基础模板。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">const renderer = require(&apos;vue-server-renderer&apos;).createRenderer(&#123;</div><div class="line">	template: require(&apos;fs&apos;).readFileSync(&apos;./temp.html&apos;, &apos;utf-8&apos;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>temp.html:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;&lt;br&gt;&lt;html lang=&quot;en&quot;&gt;&lt;br&gt;&lt;head&gt;&lt;title&gt;&#123;&#123;title&#125;&#125;&lt;/title&gt;&lt;/head&gt;</div><div class="line">  &lt;body&gt;</div><div class="line">    &lt;!--vue-ssr-outlet--&gt;</div><div class="line">  &lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
-<p>　接下来随便定义一些渲染用的数据，然后用express新建一个node服务器，再定义一个vue的实例。然后再调用renderer的renderToString方法来渲染生成html，渲染成功后返回给客户端。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">const Vue = require(&apos;vue&apos;)</div><div class="line">const server = require(&apos;express&apos;)()</div><div class="line">const context = &#123;</div><div class="line">  title: &apos;hello&apos;</div><div class="line">&#125;</div><div class="line">const mocktitle = &apos;我爱吃的水果&apos;</div><div class="line">const mockdata = [&apos;香蕉&apos;, &apos;苹果&apos;, &apos;橘子&apos;]</div><div class="line">server.get(&apos;*&apos;, (req, res) =&gt; &#123;</div><div class="line">  const app = new Vue(&#123;</div><div class="line">    data: &#123;</div><div class="line">      url: req.url,</div><div class="line">      data: mockdata,</div><div class="line">      title: mocktitle</div><div class="line">    &#125;,</div><div class="line">    template: `&lt;div&gt;The visited URL is: &#123;&#123; url &#125;&#125;</div><div class="line">    &lt;h3&gt;&#123;&#123;title&#125;&#125;&lt;/h3&gt;</div><div class="line">    &lt;p v-for=&apos;item in data&apos;&gt;&#123;&#123;item&#125;&#125;&lt;/p&gt;</div><div class="line">    &lt;/div&gt;`</div><div class="line">  &#125;)</div><div class="line">  renderer.renderToString(app, context, (err, html) =&gt; &#123;</div><div class="line">    if (err) &#123;</div><div class="line">      res.status(500).end(&apos;Internal Server Error&apos;)</div><div class="line">      return</div><div class="line">    &#125;</div><div class="line">    res.end(html)</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line">server.listen(8080)</div></pre></td></tr></table></figure></p>
-<p>　注意这里渲染的数据有两种，mockdata是作为vue实例的data来渲染在实例模板中的，而context是作为基础模板的data来渲染temp.html的。可以看到在服务端用vue进行渲染的规则和前端渲染时一样，v-for、v-if等都可以正常使用。最后命令行输入node test.js，然后在浏览器打开<a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 查看结果如下:<br><img src="http://upload-images.jianshu.io/upload_images/6383319-877ce0eda788c464.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例.png"><br>可以看到服务端直接返回了一个渲染完成的Doc，示例demo到此结束。</p>
-<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>　服务端渲染还是客户端渲染的问题，个人觉得还是要针对具体业务场景然后再做选择。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/原生JS实现图片懒加载(lazyload)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/原生JS实现图片懒加载(lazyload)/" itemprop="url">
-                  原生JS实现图片懒加载(lazyload)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p> 图片懒加载也是比较常见的一种性能优化的方法，最近在用vue做一个新闻列表的客户端时也用到了，这里就简单介绍下实现原理和部分代码。</p>
-<hr>
-<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p> 加载页面的时候，图片一直都是流量大头，针对图片的性能方法也挺多的比如base64、雪碧图等；懒加载也是其中一种，主要原理是将非首屏的图片src设为一个默认值，然后监听窗口滚动，当图片出现在视窗中时再给他赋予真实的图片地址，这样可以保证首屏的加载速度然后按需加载图片。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/6383319-ba10ad7a53809f30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例.png"></p>
-<h2 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h2><p> 首先在渲染时，图片引用默认图片，然后把真实地址放在data-*属性上面。<br><code><image src="./../assets/default.png" :data-src="item.allPics" class="lazyloadimg"></image></code><br><br> 然后是监听滚动，直接用window.onscroll就可以了，但是要注意一点的是类似于window的scroll和resize，还有mousemove这类触发很频繁的事件，最好用节流(throttle)或防抖函数(debounce)来控制一下触发频率。underscore和lodash里面都有封装这两个方法，这里先不多做介绍了。<br><br> 接着要判断图片是否出现在了视窗里面，主要是三个高度：1，当前body从顶部滚动了多少距离。2，视窗的高度。3，当前图片距离顶部的距离。offsetTop相关属性可以<a href="http://www.jianshu.com/p/135731ec13f1" target="_blank" rel="external">参考这里</a>，具体代码如下：<br><code><br>window.onscroll =_.throttle(this.watchscroll, 200);<br>watchscroll () {<br>      var bodyScrollHeight =  document.body.scrollTop;// body滚动高度<br>      var windowHeight = window.innerHeight;// 视窗高度<br>      var imgs = document.getElementsByClassName(‘lazyloadimg’);<br>      for (var i =0; i &lt; imgs.length; i++) {<br>        var imgHeight = imgs[i].offsetTop;// 图片距离顶部高度<br>        if (imgHeight  &lt; windowHeight  + bodyScrollHeight) {<br>           imgs[i].src = imgs[i].getAttribute(‘data-src’);<br>           img[i].className = img[i].className.replace(‘lazyloadimg’,’’)<br>        }<br>      }<br>    }<br></code></p>
-<hr>
-<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p> 大概内容就这么多了，下次可能会补充一下防抖节流源码的实现。最后再补充两个常见的滚动判断：<br>1.页面滚动离开首屏(这时可显示回到顶部的按钮):<code>document.body.scrollTop &gt; window.innerHeight</code><br>2.页面滚动到底部了(这时可去调接口获取更多内容)：<code>window.scrollY + window.innerHeight &gt; document.body.offsetHeight</code></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/14/使用Javascript做算法题（一）Maximum-Subarray/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1615,222 +1769,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/12/JavaScript中常用工具函数/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/12/JavaScript中常用工具函数/" itemprop="url">
-                  javascript常用工具函数总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-12T16:18:00+08:00">
-                2017-09-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/总结/" itemprop="url" rel="index">
-                    <span itemprop="name">总结</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
-<li>以下代码来自：自己写的、工作项目框架上用到的、其他框架源码上的、网上看到的。</li>
-<li>主要是作为工具函数，服务于框架业务，自身不依赖于其他框架类库，部分使用到es6/es7的语法使用时要注意转码</li>
-<li><p>虽然尽量在函数中做了错误情况的处理，仍有可能出现报错的情况(不定期完善)</p>
-<h5 id="1-获取url上的参数"><a href="#1-获取url上的参数" class="headerlink" title="1. 获取url上的参数"></a>1. 获取url上的参数</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">  /**</div><div class="line">   *获取url上的参数</div><div class="line">   * @return &#123;object&#125;</div><div class="line">   * @example</div><div class="line">   * getRequest()  getRequest().paramA</div><div class="line">   */</div><div class="line">function getRequest() &#123;</div><div class="line">    var searchString = window.location.search.substring(1),</div><div class="line">        params = searchString.split(&quot;&amp;&quot;),</div><div class="line">        hash = &#123;&#125;;</div><div class="line">    if (searchString == &quot;&quot;) return &#123;&#125;;</div><div class="line">    for (var i = 0; i &lt; params.length; i++) &#123;</div><div class="line">        var pos = params[i].indexOf(&apos;=&apos;);</div><div class="line">        if (pos == -1) &#123; continue; &#125;</div><div class="line">        var paraName = params[i].substring(0, pos),</div><div class="line">            paraValue = params[i].substring(pos + 1);</div><div class="line">        hash[paraName] = paraValue;</div><div class="line">    &#125;</div><div class="line">    return hash;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>返回一个对象，将url上的参数以键值对的形式存储在返回结果中，如果url上没参数，则返回空对象</p>
-<h5 id="2-追加url参数"><a href="#2-追加url参数" class="headerlink" title="2. 追加url参数"></a>2. 追加url参数</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 追加url参数</div><div class="line"> * @param &#123;string&#125; url url参数</div><div class="line"> * @param &#123;string|object&#125; key 名字或者对象</div><div class="line"> * @param &#123;string&#125; value 值</div><div class="line"> * @return &#123;string&#125; 返回新的url</div><div class="line"> * @example</div><div class="line"> * appendQuery(&apos;lechebang.com&apos;, &apos;id&apos;, 3);</div><div class="line"> * appendQuery(&apos;lechebang.com?key=value&apos;, &#123; cityId: 2, cityName: &apos;北京&apos;&#125;);</div><div class="line"> */</div><div class="line">function appendQuery (url, key, value) &#123;</div><div class="line">  var options = key;</div><div class="line">  if (typeof options == &apos;string&apos;) &#123;</div><div class="line">    options = &#123;&#125;;</div><div class="line">    options[key] = value;</div><div class="line">  &#125;</div><div class="line">  options = $.param(options);</div><div class="line">  if (url.includes(&apos;?&apos;)) &#123;</div><div class="line">    url += &apos;&amp;&apos; + options</div><div class="line">  &#125; else &#123;</div><div class="line">    url += &apos;?&apos; + options</div><div class="line">  &#125;</div><div class="line">  return url;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>传入一个url和需要添加的参数键值对，需添加的参数可以直接传对象格式。会判断原url上是否有参数，没有的话就加’?’，返回添加参数后的url。</p>
-<h5 id="3-计算两个日期的时间差"><a href="#3-计算两个日期的时间差" class="headerlink" title="3. 计算两个日期的时间差"></a>3. 计算两个日期的时间差</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">  /**</div><div class="line">   * 计算两个日期时间的时间差</div><div class="line">   * @param &#123;Date, Date&#125;  date1 date2</div><div class="line">   * @return &#123;object | null&#125; </div><div class="line">   * @example</div><div class="line">   * getDiff(new Date(&apos;2017-09-08&apos;), new Date())</div><div class="line">   */</div><div class="line">function getDiff(date1, date2) &#123;</div><div class="line">     if (!date1.getTime || !date2.getTime) return null</div><div class="line">     var ms = (date1.getTime() - date2.getTime());</div><div class="line">     var day1 = Math.round(ms / 24 / 3600 / 1000),</div><div class="line">         hh1 = Math.round((ms / 3600 / 1000) % 24),</div><div class="line">         mm1 = Math.round((ms / 1000 / 60) % 60),</div><div class="line">         ss1 = Math.round((ms / 1000) % 60);</div><div class="line">     return &#123;</div><div class="line">         day: day1,</div><div class="line">         hour: hh1,</div><div class="line">         minute: mm1,</div><div class="line">         second: ss1</div><div class="line">      &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>传入两个Date日期对象，返回一个对象，其属性值day、hour、minute、second分别表示相差天数、小时、分钟、秒。结果以Math.round()取整，如果结果为负，则表示第一个日期在第二个日期前面</p>
-<h5 id="4-将canvas转化为image图片格式"><a href="#4-将canvas转化为image图片格式" class="headerlink" title="4. 将canvas转化为image图片格式"></a>4. 将canvas转化为image图片格式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">  /**</div><div class="line">   * 将canvas转化为image格式</div><div class="line">   * @param &#123;string&#125;  cId</div><div class="line">   * @return &#123;object HTMLImageElement&#125; </div><div class="line">   * @example</div><div class="line">   * canvasToImg(&apos;canvas&apos;)  canvasToImg(&apos;#canvarsId&apos;)</div><div class="line">   */</div><div class="line">function canvasToImg(cId)&#123;</div><div class="line">    let canvas = document.querySelector(cId)</div><div class="line">    if (!canvas || !canvas.toDataURL) return new Image()</div><div class="line">    let imgData = canvas.toDataURL(&apos;image/png&apos;),</div><div class="line">        imgs= new Image();</div><div class="line">        imgs.src=imgData;</div><div class="line">    return imgs</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>传入一个css选择器，函数根据选择器查询canvas节点，然后返回该canvas的image格式节点，如果查找不到则返回一个空的image。原理是将canvas转化为base64编码，toDataURL方法貌似是canvas节点独有的，然后新建一个src是这个base64编码的图片。</p>
-</li>
-<li><p>ps:什么情况下需要做这种转换呢？目前我知道的一个就是canvas在移动端无法长按保存到手机。</p>
-<h5 id="5-生成随机guid"><a href="#5-生成随机guid" class="headerlink" title="5. 生成随机guid"></a>5. 生成随机guid</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 生成一个唯一的guid</div><div class="line"> * @return &#123;string&#125;</div><div class="line"> * @example</div><div class="line"> * // 7f603b20-17ff-4f47-aeb9-e7996de04939</div><div class="line"> * util.guid();</div><div class="line"> * @see http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript</div><div class="line"> */</div><div class="line">function guid () &#123;</div><div class="line">  return &apos;xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx&apos;.replace(/[xy]/g, function(c) &#123;</div><div class="line">    var r = Math.random()*16|0, v = c == &apos;x&apos; ? r : (r&amp;0x3|0x8);</div><div class="line">    return v.toString(16);</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>这个方法用于生成一个随机<a href="https://baike.baidu.com/item/GUID/3352285?fr=aladdin" target="_blank" rel="external">guid</a>，可以将生成的guid视为全局唯一的(生成两个相同id的情况很少)。guid似乎在前端用的比较少，目前项目用到就是在每次请求后端接口时调用此方法，生成一个guid传过去。</p>
-<h5 id="6-获取一个月份的天数"><a href="#6-获取一个月份的天数" class="headerlink" title="6. 获取一个月份的天数"></a>6. 获取一个月份的天数</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function isLeapYear (year) &#123;</div><div class="line">  if (year % 100 === 0) &#123;</div><div class="line">    if (year % 400 === 0) &#123;</div><div class="line">      return true;</div><div class="line">    &#125;</div><div class="line">  &#125; else if (year % 4 === 0) &#123;</div><div class="line">    return true;</div><div class="line">  &#125;</div><div class="line">  return false;</div><div class="line">&#125;</div><div class="line">/**</div><div class="line"> * 获取某个月份有多少天</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> * @param &#123;string | number&#125;  year month</div><div class="line"> * @example</div><div class="line"> * getDaysInMonth(2017, 9)</div><div class="line"> */</div><div class="line">function getDaysInMonth (year, month) &#123;</div><div class="line">  return [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>传入一个年份和月份，返回该月有多少天，其中也包含了一个isLeapYear方法来判断是否是闰年，应该在实现日历或者日期选择组件时用的到</p>
-<h5 id="7-过滤对象属性"><a href="#7-过滤对象属性" class="headerlink" title="7. 过滤对象属性"></a>7. 过滤对象属性</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 过滤选出一个对象的某些属性</div><div class="line"> * @param&#123;object, array&#125; obj key</div><div class="line"> * @return&#123;object&#125;</div><div class="line"> * @example</div><div class="line"> * pick(obj, [key1, key2])</div><div class="line"> */</div><div class="line">function pick (obj, keys) &#123;</div><div class="line">  let result = &#123;&#125;</div><div class="line">  if (!obj || !keys.forEach) &#123;</div><div class="line">    return result</div><div class="line">  &#125;</div><div class="line">  keys.forEach((item) =&gt; &#123;</div><div class="line">    if (obj.hasOwnProperty(item)) &#123;</div><div class="line">      result[item] = obj[item]</div><div class="line">    &#125;</div><div class="line">  &#125;)</div><div class="line">  return result</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>传入一个对象和一个数组，遍历数组，如果传入对象有数组中包含的属性，则提取出来，返回一个过滤提取出来的属性组成的对象。</p>
-</li>
-<li><p>这个方法用处挺多的，比如从一个接口拿到了结果对象，可能上面很多属性你暂时用不到的，就可以用这个方法进行过滤。比如以前我用vue写项目的时候，就经常把接口返回的一个对象作为vue的data属性去渲染页面，这个时候这个对象是动态绑定在vue实例上面的，但是其中有些属性页面渲染根本用不到，还得去监听这些属性，白白浪费性能，这种时候将接口返回的对象筛选一下再赋给vue的data就显得合理多了。</p>
-<h5 id="8-判断是否是一个对象"><a href="#8-判断是否是一个对象" class="headerlink" title="8. 判断是否是一个对象"></a>8. 判断是否是一个对象</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">  /**</div><div class="line">   * 判断传入参数是否是一个合法对象</div><div class="line">   * @param&#123;object&#125; obj </div><div class="line">   * @return&#123;object&#125;</div><div class="line">   * @example</div><div class="line">   * isObject (null) isObject (() =&gt; &#123;&#125; )</div><div class="line">   */</div><div class="line">function isObject (obj) &#123;</div><div class="line">    var type = typeof obj;</div><div class="line">    return type === &apos;function&apos; || type === &apos;object&apos; &amp;&amp; !!obj;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>判断传入参数是否是一个合法对象，function类型均返回true，null返回false(typeof null 返回 object)</p>
-<h5 id="9-判断一个函数是否是native-code"><a href="#9-判断一个函数是否是native-code" class="headerlink" title="9. 判断一个函数是否是native code"></a>9. 判断一个函数是否是native code</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">  /**</div><div class="line">   * 判断传入函数是否在当前环境下得到支持</div><div class="line">   * @param&#123;function&#125; Ctor </div><div class="line">   * @return&#123;boolean&#125;</div><div class="line">   * @example</div><div class="line">   * isNative (window.Symbol)  isNative (window.Promise)</div><div class="line">   */</div><div class="line">function isNative (Ctor) &#123;</div><div class="line">  return typeof Ctor === &apos;function&apos; &amp;&amp; /native code/.test(Ctor.toString())</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>javascript原生自带的方法使用toString转成字符串时会包含‘native code’字段，比如Math.max.toString()就返回”function max() { [native code] }”。</p>
-</li>
-<li><p>这个方法可以判断某些原生特性是否被当前浏览器支持。比如isNative (window.Promise)在chrome中返回true，因为chrome支持原生es6语法，放到ie里面就只能返回false了~</p>
-<h5 id="10-深度克隆对象"><a href="#10-深度克隆对象" class="headerlink" title="10. 深度克隆对象"></a>10. 深度克隆对象</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 返回传入对象的一个深度克隆的副本对象</div><div class="line"> * @param&#123;object&#125; obj </div><div class="line"> * @return&#123;object&#125;</div><div class="line"> * @example</div><div class="line"> * cloneDeep(obj)</div><div class="line"> */</div><div class="line">function cloneDeep (obj) &#123;</div><div class="line">  if (!isObject(obj)) return obj;</div><div class="line">  let result</div><div class="line">  if (Array.isArray(obj)) &#123;</div><div class="line">    result = []</div><div class="line">    obj.forEach((item) =&gt; &#123;</div><div class="line">      result.push(cloneDeep(item))</div><div class="line">    &#125;)</div><div class="line">    return result</div><div class="line">  &#125;</div><div class="line">  result = &#123;&#125;</div><div class="line">  for (let key in obj) &#123;</div><div class="line">    let item = obj[key]</div><div class="line">    if (_.isObject(item)) &#123;</div><div class="line">      result[key] = cloneDeep(item)</div><div class="line">    &#125; else &#123;</div><div class="line">      result[key] = item</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  return result</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>首先对传入参数进行判断，不是合法对象则直接返回其本身。然后再遍历其属性，属性中包含对象的会再次递归调用cloneDeep方法，浅克隆的话可以直接用Object.assign()方法。</p>
-<h5 id="11-获取两个地点的实际距离"><a href="#11-获取两个地点的实际距离" class="headerlink" title="11. 获取两个地点的实际距离"></a>11. 获取两个地点的实际距离</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">   * 获取两个高德坐标的距离, 后一个点，不传，默认为用户坐标</div><div class="line">   * @return &#123;null|number&#125; 距离多少米，没有定位信息，返回null</div><div class="line">   * @example</div><div class="line">   * getDistance(31.282055633974, 121.379623888259)</div><div class="line">   */</div><div class="line">  function getDistance (endLat, endLon, startLat, startLon) &#123;</div><div class="line">    if (!startLat) &#123;</div><div class="line">      let address = Lizard.state.address</div><div class="line"></div><div class="line">      if (address &amp;&amp; address.lat) &#123;</div><div class="line">        startLat = address.lat</div><div class="line">        startLon = address.lon</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 没有定位</div><div class="line">    if (!startLat) &#123;</div><div class="line">      return null</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    const PI = Math.PI</div><div class="line">    let lon1 = (PI / 180) * startLon</div><div class="line">    let lon2 = (PI / 180) * endLon </div><div class="line">    let lat1 = (PI / 180) * startLat  </div><div class="line">    let lat2 = (PI / 180) * endLat </div><div class="line">    // 地球半径  </div><div class="line">    let R = 6378.137;  </div><div class="line"></div><div class="line">    // 两点间距离 km，如果想要米的话，结果*1000就可以了  </div><div class="line">    let d = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)) * R;  </div><div class="line"></div><div class="line">    return parseInt(d * 1000, 10)</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>依次传入两个点的经纬度，然后计算得出两个点的距离，单位为km。这个方法可能实际应用的比较少，我这里还是写出来，作为一种前端计算距离的方法(在能拿得到定位的情况下)。</p>
-<h5 id="12-加载图片-promise封装"><a href="#12-加载图片-promise封装" class="headerlink" title="12. 加载图片(promise封装)"></a>12. 加载图片(promise封装)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">   * 传入图片url，返回一个promise对象，加载成功时resolve</div><div class="line">   * @return &#123;Promise&#125; </div><div class="line">   * @example</div><div class="line">   * loadImg(url).then(console.log(&apos;加载完成&apos;)).catch(err =&gt; &#123;console.log(err)&#125;)</div><div class="line">   */</div><div class="line">  function loadImg (url) &#123;</div><div class="line">    return new Promise((resolve, reject) =&gt; &#123;</div><div class="line">      let img = new Image()</div><div class="line"></div><div class="line">      img.addEventListener(&apos;load&apos;, function() &#123;</div><div class="line">        resolve([img.width, img.height])</div><div class="line">      &#125;, false)</div><div class="line"></div><div class="line">      img.addEventListener(&apos;error&apos;, reject, false)</div><div class="line"></div><div class="line">      img.src = url</div><div class="line">    &#125;)</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>这个函数参考自ECMAScript 6 入门，算是promise的一个很经典的应用实例，加载完成后promise对象resolve，同时返回图片的宽高，以便后面调整样式等等。加载失败则返回reject，所以再调用这个方法后需要用catch方法来捕捉异常。</p>
-<h5 id="13-重复字符串n次"><a href="#13-重复字符串n次" class="headerlink" title="13. 重复字符串n次"></a>13. 重复字符串n次</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">   * 传入字符串，和重复次数，返回结果字符串</div><div class="line">   * @return &#123;string&#125; </div><div class="line">   * @param&#123;string, number&#125; str n </div><div class="line">   * @example</div><div class="line">   * loadImg(url).then(console.log(&apos;加载完成&apos;)).catch(err =&gt; &#123;console.log(err)&#125;)</div><div class="line">   */</div><div class="line">  const repeat = (str, n) =&gt; &#123;</div><div class="line">    let res = &apos;&apos;</div><div class="line">    while (n) &#123;</div><div class="line">      if (n % 2 === 1) res += str</div><div class="line">      if (n &gt; 1) str += str</div><div class="line">      n &gt;&gt;= 1</div><div class="line">    &#125;</div><div class="line">    return res</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>这个函数在vue源码里看到的，用到了位运算符，如果让我来实现的话可能就马上想到重复n次，而上面这个函数执行时的时间复杂度差不多只是n/2。</p>
-<h5 id="14-变量是否以’-’或者’-’开头"><a href="#14-变量是否以’-’或者’-’开头" class="headerlink" title="14. 变量是否以’$’或者’_’开头"></a>14. 变量是否以’$’或者’_’开头</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">   * 传入字符串，判断是否以&apos;$&apos;或者&apos;_&apos;开头</div><div class="line">   * @return &#123;Boolean&#125; </div><div class="line">   * @param&#123;string&#125; str</div><div class="line">   * @example</div><div class="line">   * isReserved (‘$’)  isReserved (‘param’)</div><div class="line">   */</div><div class="line">function isReserved (str) &#123;</div><div class="line">  var c = (str + &apos;&apos;).charCodeAt(0);</div><div class="line">  return c === 0x24 || c === 0x5F</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>同样是vue源码里的方法，判断变量是否以’$’或者’_’开头，charCodeAt(index)方法会返回字符串对应index位置的字符的Unicode编码，’$’对应的Unicode编码就是36，这里用的是十六进制表示方法就是0x24。要判断变量名以什么字符开头或结尾，将上面方法略微修改即可实现。</p>
-</li>
-<li><p>ps：vue中哪里用到这个方法了呢，我去看了下就是在初始化vue实例的data对象时会判断，如果你的vue实例data里面命名了以’$’或者’_’的对象，是不会把这个属性重新定义其get/set的。简单点说，如果你在vue的data里定义一个命名为$data的属性，再在模板里渲染，就会报错的。</p>
-<h5 id="15-promise扩展-finally"><a href="#15-promise扩展-finally" class="headerlink" title="15. promise扩展-finally"></a>15. promise扩展-finally</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">   * 在一个promise链调用结尾调用finally，传入一个函数，无论最后promise的状态是什么总会执行该函数</div><div class="line">   * @param&#123;function&#125; callback</div><div class="line">   * @example</div><div class="line">   *  server.listen(0).then(function () &#123; // run test &#125;).finally(server.stop);</div><div class="line">   */</div><div class="line">Promise.prototype.finally = function (callback) &#123;</div><div class="line">  let P = this.constructor;</div><div class="line">  return this.then(</div><div class="line">    value  =&gt; P.resolve(callback()).then(() =&gt; value).catch(e =&gt; &#123;console.error(e)&#125;),</div><div class="line">    reason =&gt; P.resolve(callback()).then(() =&gt; &#123; throw reason &#125;).catch(e =&gt; &#123;console.error(e)&#125;)</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-<li><p>参考自<a href="http://es6.ruanyifeng.com/?search=find&amp;x=0&amp;y=0" target="_blank" rel="external">ECMAScript 6 入门</a>，对于promise对象的一个扩展方法，不论前面的promise状态是什么总会调用callback函数。</p>
-</li>
-<li>我在原代码的基础上添加了新的catch，用于兼容callback执行时返回了一个状态为reject的promise的情况。<h4 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h4></li>
-<li>再次补充，已搬运到<a href="https://tokenyangforever.github.io/2017/09/12/JavaScript%E4%B8%AD%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E5%87%BD%E6%95%B0/" target="_blank" rel="external">github博客</a>，上面自带导航~~~</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1875,7 +1818,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1884,7 +1827,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1893,7 +1836,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -261,6 +261,170 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/22/Fetch初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/11/22/Fetch初探/" itemprop="url">
+                  Fetch初探
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-22T13:34:00+08:00">
+                2017-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Html/" itemprop="url" rel="index">
+                    <span itemprop="name">Html</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
+<li>fetch这个东西，之前也看到过有人介绍，但毕竟还是实验性阶段的东西，最近在看react-native的文档，讲到网络的地方，文档上是推荐地使用fetch，想必框架本身也对其有所封装。这里就先自己学习一下fetch相关的基础知识。<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API" target="_blank" rel="external">Fetch</a> 是一个现代的概念, 等同于<a href="https://developer.mozilla.org/enUS/docs/Web/API/XMLHttpRequest" target="_blank" rel="external">XMLHttpRequest</a>。它提供了许多与XMLHttpRequest相同的功能，但被设计成更具可扩展性和高效性。下图显示了fetch在浏览器中的支持情况，可以看到在主流浏览器的支持性还是不错的，实在不支持fetch的浏览器(比如IE)上面也可以使用相应的polyfill库。<br><img src="http://upload-images.jianshu.io/upload_images/6383319-9575a5a9c01ac1fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="fetch在浏览器中的支持情况.png"><h4 id="具体用法"><a href="#具体用法" class="headerlink" title="具体用法"></a>具体用法</h4></li>
+<li><p>使用fetch首先需要具备promise的相关知识，还涉及到一个<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Response" target="_blank" rel="external">Response</a>对象，直接来看下代码，这是一段调用json格式数据接口的示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">fetch(&apos;http://101.200.35.148:8081/todo/getTodo&apos;)</div><div class="line">  .then(response =&gt; &#123;</div><div class="line">    response.json().then(</div><div class="line">        // 这里的result就是最终的接口数据了</div><div class="line">        result =&gt; &#123;</div><div class="line">          console.log(result)</div><div class="line">        &#125;</div><div class="line">    )</div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>在支持fetch的浏览器中，fetch方法是global的可以直接调用。上述代码是一个get请求(默认方法是get)，fetch执行后会返回一个promise对象，这个promise对象resolve之后得到一个response对象(<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Response" target="_blank" rel="external">Response</a>的实例)。</p>
+</li>
+<li><strong>response对象</strong>相当于整个流程中的一个中间状态，它自带一个json方法用于解析从接口得到的数据，还有一个属性bodyUsed标识是否已经被解析，response.json()执行后也是返回一个promise对象，正确执行后then()这里得到的result对象就是最终的接口数据了。执行完json方法后，response对象的bodyUsed会变成true，表示这个response对象是已经被读取过了的，这时候如果再次调用response的json方法就会报错。<h4 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h4></li>
+<li><p>接着来看下fetch如何处理post请求，fetch方法可以接收第二个参数来设置发送请求的方法、header、请求参数等，下面是一个post请求的示例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fetch(&quot;/post/api/&quot;, &#123;</div><div class="line">    method: &quot;POST&quot;,</div><div class="line">    body: &quot;A=参数A&amp;B=参数B&quot;,</div><div class="line">    headers: new Headers()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>其中body就表示请求参数，可根据具体情况自行调整数据结构;method设定请求方法，默认为get大小写皆可，headers用于设置发送请求的header。fetch在请求post的时候如果没有成功，则会尝试重新以get方法发送请求。</p>
+<h4 id="使用async-await"><a href="#使用async-await" class="headerlink" title="使用async/await"></a>使用async/await</h4></li>
+<li>因为多了一层response，这里的promise回调代码结构就略显复杂，所以用fetch时使用async/await代码就会精简许多，可读性也会大大提高，比如下面这样：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">async componentDidMount () &#123;</div><div class="line">  try &#123;</div><div class="line">    let res = await fetch(&apos;http://101.200.35.148:8081/todo/getTodo&apos;)</div><div class="line">    let &#123;result&#125; = await res.json()</div><div class="line">    this.setState(&#123;</div><div class="line">      result</div><div class="line">    &#125;)</div><div class="line">  &#125; catch(e) &#123;</div><div class="line">    console.log(e)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="额外内容"><a href="#额外内容" class="headerlink" title="额外内容"></a>额外内容</h4><ul>
+<li><p>fetch除了用于post/get调取接口以外还可以请求图片，下面是一段请求图片，然后将图片显示在dom上的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var myImage = document.querySelector(&apos;img&apos;);</div><div class="line"></div><div class="line">fetch(&apos;flowers.jpg&apos;)</div><div class="line">.then(function(response) &#123;</div><div class="line">  return response.blob();</div><div class="line">&#125;)</div><div class="line">.then(function(myBlob) &#123;</div><div class="line">  var objectURL = URL.createObjectURL(myBlob);</div><div class="line">  myImage.src = objectURL;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+</li>
+<li><p>可以看到代码第一步还是获取response对象，之后调用了response.blob()来得到一个blob对象，这里又涉及到了另一个新特性<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Blob" target="_blank" rel="external">Blob</a>，继续调用URL.createObjectURL可将blob对象转换为一个临时链接供img标签使用。Blob相关暂不多做介绍，这里只是为了说明一下fetch还有这一种用法。</p>
+</li>
+<li>参考： <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/17/JavaScript中的-抽象语法树-AST/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1655,165 +1819,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/15/mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明/" itemprop="url">
-                  mysql-workbench中PK,NN,UQ,BIN,UN,ZF,AI标识简写说明
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:36:00+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端/" itemprop="url" rel="index">
-                    <span itemprop="name">后端</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端/备忘录/" itemprop="url" rel="index">
-                    <span itemprop="name">备忘录</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<ul>
-<li>使用mysql workbench建表时，可以设置字段标识：PK,NN,UQ,BIN,UN,ZF,AI。他们的分别表示的意思是：<br>PK：primary key 主键<br>NN：not null 非空<br>UQ：unique 唯一索引<br>BIN：binary 二进制数据(比text更大)<br>UN：unsigned 无符号（非负数）<br>ZF：zero fill 填充0 例如字段内容是1 int(4), 则内容显示为0001<br>AI：auto increment 自增</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1858,7 +1868,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1867,7 +1877,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1876,7 +1886,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
