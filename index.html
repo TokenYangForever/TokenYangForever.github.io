@@ -261,6 +261,174 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/13/用react-native实现一个数独游戏-总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/12/13/用react-native实现一个数独游戏-总结/" itemprop="url">
+                  用react-native实现一个数独游戏(总结)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-13T15:41:00+08:00">
+                2017-12-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/react/" itemprop="url" rel="index">
+                    <span itemprop="name">react</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/react/react-native/" itemprop="url" rel="index">
+                    <span itemprop="name">react-native</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
+<li>最近用react-native做了一个数独游戏的app，到今天基本功能已经全都完成并打包在真机上测试了，这里总结一下开发过程中的一些问题和实现的思路。<br><img src="http://upload-images.jianshu.io/upload_images/6383319-c4e4dbb2eaf0a4ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></li>
+</ul>
+<h4 id="环境和平台选择"><a href="#环境和平台选择" class="headerlink" title="环境和平台选择"></a>环境和平台选择</h4><ul>
+<li>项目上读取的接口是我自己服务器上部署的，用node实现的接口，链接mysql数据库，数独题目就是从这里读取得到。因为服务器上只有http接口，所以app开发时也就选择的android版本。<h4 id="功能及实现"><a href="#功能及实现" class="headerlink" title="功能及实现"></a>功能及实现</h4></li>
+<li>因为只是一个简单的demo，做的功能也比较简单：新游戏/继续游戏/选择难度。页面有三个：首页/棋盘页面/关于。</li>
+<li><p>页面导航使用的react-navigation，从首页进入棋盘页面时，会传参数过去表示是否是新游戏和游戏难度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">this.props.navigation.navigate(&apos;Main&apos;, &#123;difficulty: text, newgame: true&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>数独棋盘的生成，是从数据库得到数据，然后再渲染出来。一开始我是打算随机生成棋盘的，但是发现生成的棋盘可能会出现多解的情况，最后想想还是算了，在网上找了几个数独题目存在数据库里。</p>
+</li>
+<li><p>触发提交按钮后，会对棋盘进行验证，有空白没有填完则返回，然后再依次判断各个点是否满足数独条件，判断方法可参考LeetCode上的一道题：<a href="https://leetcode.com/problems/valid-sudoku/description/" target="_blank" rel="external">Valid Sudoku</a>，下面还是贴下判断结果的代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">let arr = this.state.arr</div><div class="line">let dp = &#123;&#125;</div><div class="line">let index = 0</div><div class="line">for (let a = 0; a &lt; 3; a++) &#123;</div><div class="line">  for (let b = 0; b &lt; 3; b++) &#123;</div><div class="line">    dp[`area$&#123;a&#125;$&#123;b&#125;`] = new Map()</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">for (let i = 0; i &lt; 9; i++) &#123;</div><div class="line">  dp[`x$&#123;i&#125;`] = new Map()</div><div class="line">  dp[`y$&#123;i&#125;`] = new Map()</div><div class="line">&#125;</div><div class="line">for (let i = 0; i &lt; 9; i++) &#123;</div><div class="line">  for (let j = 0; j &lt; 9; j++) &#123;</div><div class="line">    let temp = arr[index]</div><div class="line">    if (temp !== &apos;&apos;) &#123;</div><div class="line">      let xIndex = &apos;x&apos; + j</div><div class="line">      let yIndex = &apos;y&apos; + i</div><div class="line">      let areaIndex = &apos;area&apos; + Math.floor(j/3) + Math.floor(i/3)</div><div class="line">      if (dp[xIndex].has(temp) || dp[yIndex].has(temp) || dp[areaIndex].has(temp)) &#123;</div><div class="line">        return [false, &apos;有空格填错了哦~&apos;, index]</div><div class="line">      &#125; else &#123;</div><div class="line">        dp[xIndex].set(temp, true)</div><div class="line">        dp[yIndex].set(temp, true)</div><div class="line">        dp[areaIndex].set(temp, true)</div><div class="line">      &#125;</div><div class="line">    &#125; else &#123;</div><div class="line">      return [false, &apos;还有空格没填完哦~&apos;]</div><div class="line">    &#125;</div><div class="line">    index++</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">return [true]</div></pre></td></tr></table></figure>
+</li>
+<li><p>数据存储还是使用的react-native提供的AsyncStorage，并对其进行一层包装。未完成的棋局缓存起来，继续游戏的时候再调用。</p>
+</li>
+<li>基本上就是这些了，以后有机会再补充。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/06/react-native-react-开发中遇到的问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -323,8 +491,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/react-native/" itemprop="url" rel="index">
-                    <span itemprop="name">react-native</span>
+                  <a href="/categories/react/" itemprop="url" rel="index">
+                    <span itemprop="name">react</span>
                   </a>
                 </span>
 
@@ -334,8 +502,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/react-native/react/" itemprop="url" rel="index">
-                    <span itemprop="name">react</span>
+                  <a href="/categories/react/react-native/" itemprop="url" rel="index">
+                    <span itemprop="name">react-native</span>
                   </a>
                 </span>
 
@@ -1246,157 +1414,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/23/11/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/10/23/11/" itemprop="url">
-                  使用Javascript做算法题（四）Longest Increasing Path in a Matrix
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-23T18:25:00+08:00">
-                2017-10-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode算法题/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode算法题</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
-<li>最近在LeetCode上做出了第一道难度为hard的题：) 觉得这题中规中矩挺不错的，mark一下：<a href="https://leetcode.com/problems/longest-increasing-path-in-a-matrix/description/" target="_blank" rel="external">题目地址</a><h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4></li>
-<li>给出一个正整数矩阵，找出其中<strong>最长的递增路径的长度</strong>。只能上下左右移动，不能走对角线，不能环绕重复路线，不能超越边距。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">举例：</div><div class="line">输入:</div><div class="line">nums = [</div><div class="line">  [9,9,4],</div><div class="line">  [6,6,8],</div><div class="line">  [2,1,1]</div><div class="line">]</div><div class="line">返回 最长路径为4 路径为：1-&gt;2-&gt;6-&gt;9</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><ul>
-<li>基本思路分以下几个点：</li>
-<li>0.依次遍历输入的矩阵(二维数组)，找出每个点作为起点时的最长递归路径长度，然后返回其中的最大值</li>
-<li>1.使用dfs递归方法去遍历查找各个方向，建立一个表示移动方向的数组，每次dfs查找一个新的节点是遍历这个数组，得出最大值作为这个点为起点的最长路径，保存到dp中</li>
-<li>2.新建一个二维数组作为dp数组，每次得到一个坐标点为起点的最大长度时存入dp数组相应位置，以后再查找到这个坐标点时直接返回之前保存的值避免重复运算</li>
-<li>上面可能说的有点乱，大概就是dfs遍历和dp数组结合，难度其实并不算大，但是可以优化的细节还是挺多的，下面代码附有具体注释<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number[][]&#125; matrix</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> */</div><div class="line">var longestIncreasingPath = function(matrix) &#123;</div><div class="line">    if (!matrix || matrix.length === 0) &#123;</div><div class="line">        return 0</div><div class="line">    &#125;</div><div class="line">          </div><div class="line">    var direct = [[0, -1], [0, 1], [-1, 0], [1, 0]] // 方向数组</div><div class="line">    var max = 1 // 全局最大值</div><div class="line">    var dp = new Array() // dp二维数组，保存每个点作为起点的最大路径长度</div><div class="line">    var width = matrix[0].length</div><div class="line">    var deep = matrix.length</div><div class="line">    while (deep) &#123; </div><div class="line">        dp.push(new Array(width).fill(0)) // 每个点初始长度为0，dfs遍历到不为0的情况直接返回她的值(因为是之前已经得到了)</div><div class="line">        deep--</div><div class="line">    &#125;</div><div class="line">    deep = matrix.length</div><div class="line">    </div><div class="line">    var dfs = function (i, j) &#123;</div><div class="line">        if (dp[i][j] &gt; 0) return dp[i][j];</div><div class="line">        var mx = 1</div><div class="line">        for (var k = 0; k &lt; direct.length; k++) &#123;</div><div class="line">            var x = i + direct[k][0]</div><div class="line">            var y = j + direct[k][1]</div><div class="line">            if (x &lt; 0 || x &gt;= deep || y &lt; 0 || y &gt;=width) &#123; // 超过范围跳过</div><div class="line">                continue</div><div class="line">            &#125;</div><div class="line">            if (matrix[x][y] &lt;= matrix[i][j]) &#123;// 不是递增跳过</div><div class="line">                continue</div><div class="line">            &#125;</div><div class="line">            var len = dfs(x, y) + 1</div><div class="line">            mx = Math.max(mx, len)</div><div class="line">        &#125;</div><div class="line">        dp[i][j] = mx</div><div class="line">        return mx</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    for (var i = 0; i &lt; deep; i++) &#123;</div><div class="line">        for (var j = 0; j &lt; width; j++) &#123;</div><div class="line">            max = Math.max(max, dfs(i, j))</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return max</div><div class="line">&#125;;</div></pre></td></tr></table></figure></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/14/手写JSONP-promise封装/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1912,7 +1929,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
