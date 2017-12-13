@@ -386,9 +386,21 @@
 <li>RN中的样式相当于css的缩减版，命名方式要用驼峰法，然后大部分属性都能和css中对应。布局：也有相对定位和绝对定位，也支持flex。<strong>官方推荐flex</strong>，可以解决大多数的布局情况。</li>
 <li>建议使用StyleSheet.create()生成样式的类名，也可以直接在组件上写”内联”样式。</li>
 <li>RN中元素的<strong>宽高是没有单位的</strong>，直接用数字表示即可，也可以用flex来实现弹性宽高。</li>
-<li>另外就是要注意，不同的组件可以设置的样式是不同的，比如遇到无法设置宽高的组件就只能在它外层包个view，然后设置这个view的宽高。<h4 id="RN中的网络通信"><a href="#RN中的网络通信" class="headerlink" title="RN中的网络通信"></a>RN中的网络通信</h4></li>
-<li>文档上介绍的是使用fetch，我也专门去了解了一下下，算是ajax的进化版，html5的新特性。RN中也支持websocket。</li>
+<li>另外就是要注意，不同的组件可以设置的样式是不同的，比如遇到无法设置宽高的组件就只能在它外层包个view，然后设置这个view的宽高。<h4 id="RN中调试"><a href="#RN中调试" class="headerlink" title="RN中调试"></a>RN中调试</h4></li>
+<li>打开调试菜单：iOS模拟器中：Command⌘ + D 快捷键；Android模拟器对应的则是Command⌘ + M</li>
+<li>Enable Live Reload：开启自动刷新</li>
+<li>Enable Hot Reload：开启热加载</li>
+<li>访问控制台日志:在终端中运行：react-native log-ios或者log-android</li>
+<li>在开发者菜单中选择”Debug JS Remotely”选项，即可以开始在Chrome中调试JavaScript代码。点击这个选项的同时会自动打开调试页面 <a href="http://localhost:8081/debugger-ui" target="_blank" rel="external">http://localhost:8081/debugger-ui</a>.</li>
+<li>注:Chrome中并不能直接看到App的用户界面，而只能提供console的输出，以及在sources项中断点调试js脚本。</li>
+</ul>
+<h4 id="RN中的网络通信"><a href="#RN中的网络通信" class="headerlink" title="RN中的网络通信"></a>RN中的网络通信</h4><ul>
+<li>文档上介绍的是使用fetch，我也专门去了解了一下下，算是ajax的进化版，结合了一些html5的新特性。RN中也支持websocket。</li>
 <li>默认情况下，iOS会阻止所有非https的请求。如果你请求的接口是http协议，那么首先需要添加一个App Transport Security的例外，详细可参考<a href="https://segmentfault.com/a/1190000002933776" target="_blank" rel="external">这篇帖子</a>。</li>
+</ul>
+<h4 id="RN中的数据存储"><a href="#RN中的数据存储" class="headerlink" title="RN中的数据存储"></a>RN中的数据存储</h4><ul>
+<li>在浏览器环境，我们可以使用cookie、localstorage或者sessionstorage来实现数据缓存，在RN中则不能使用以上的三种方式。</li>
+<li><a href="http://reactnative.cn/docs/0.50/asyncstorage.html#content" target="_blank" rel="external">AsyncStorage</a>是一个简单的、异步的、持久化的Key-Value存储系统，它对于App来说是全局性的。它用来代替LocalStorage。</li>
 </ul>
 <h4 id="react相关"><a href="#react相关" class="headerlink" title="react相关"></a>react相关</h4><ul>
 <li><p>react事件需要手动绑定this，或者使用箭头函数来声明</p>
