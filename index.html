@@ -261,6 +261,163 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/14/python入门-一/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/12/14/python入门-一/" itemprop="url">
+                  python入门(一)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-14T20:53:10+08:00">
+                2017-12-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Python简介"><a href="#Python简介" class="headerlink" title="Python简介"></a>Python简介</h3><ul>
+<li>Python是用来编写应用程序的<strong>高级</strong>编程语言</li>
+<li>Python为我们提供了非常完善的基础代码库，覆盖了网络、文件、GUI、数据库、文本等大量内容，被形象地称作“内置电池（batteries included）”</li>
+</ul>
+<h3 id="Python特-缺-点"><a href="#Python特-缺-点" class="headerlink" title="Python特(缺)点"></a>Python特(缺)点</h3><ul>
+<li>第一个缺点就是运行速度慢，和C程序相比非常慢，因为Python是<strong>解释型语言</strong>，你的代码在执行时会一行一行地翻译成CPU能理解的机器码，这个翻译过程非常耗时，所以很慢。而C程序是运行前直接编译成CPU能执行的机器码，所以非常快。</li>
+<li>第二个缺点就是代码不能加密。如果要发布你的Python程序，实际上就是发布源代码，这一点跟C语言不同，C语言不用发布源代码，只需要把编译后的机器码（也就是你在Windows上常见的xxx.exe文件）发布出去。要从机器码反推出C代码是不可能的，所以，<strong>凡是编译型的语言，都没有这个问题，而解释型的语言，则必须把源码发布出去。</strong></li>
+</ul>
+<h3 id="Python-安装"><a href="#Python-安装" class="headerlink" title="Python 安装"></a>Python 安装</h3><ul>
+<li>mac上面:安装Homebrew后，直接通过命令brew install python3安装即可。</li>
+</ul>
+<h3 id="编辑器和解释器"><a href="#编辑器和解释器" class="headerlink" title="编辑器和解释器"></a>编辑器和解释器</h3><ul>
+<li>python是解释型语言，使用上面的命令安装后就有自带的解释器。在命令行输入python可以进入python交互模式，类似于node。输入python3 文件名.py即可执行python文件</li>
+<li>文本编辑器使用sublime Text即可</li>
+</ul>
+<h3 id="python基础语法"><a href="#python基础语法" class="headerlink" title="python基础语法"></a>python基础语法</h3><ul>
+<li>Python的语法比较简单，采用缩进方式，循环条件语句都不需要括号</li>
+<li>Python区分大小写</li>
+<li>python中能直接处理的数据类型：整数、浮点数、字符串、布尔值、空值(None)。也有变量，变量不需要声明类型。</li>
+<li>这种变量本身类型不固定的语言称之为动态语言，与之对应的是静态语言。静态语言在定义变量时必须指定变量类型，如果赋值的时候类型不匹配，就会报错(比如java)。</li>
+<li>一些操作符：and == &amp;&amp; . . . or == || . . . 10 // 3 = 1 (Math.floor(10/3))</li>
+<li>str通过encode()方法可以编码为指定的bytes，相反的有decode方法</li>
+<li>使用 % 来格式化字符串<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos;Hi, %s, you have $%d.&apos; % (&apos;Michael&apos;, 1000000)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="list和tuple"><a href="#list和tuple" class="headerlink" title="list和tuple"></a>list和tuple</h4><ul>
+<li>python内置list类型(相当于数组)；有序列表：tuple(元组)，tuple一旦初始化就不能修改；只有1个元素的tuple定义时必须加一个逗号，来消除歧义</li>
+</ul>
+<h4 id="dict和set"><a href="#dict和set" class="headerlink" title="dict和set"></a>dict和set</h4><ul>
+<li><p>Python内置了字典：dict的支持，dict全称dictionary，在其他语言中也称为map，使用键-值（key-value）存储，具有极快的查找速度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">d = &#123;&apos;Michael&apos;: 95, &apos;Bob&apos;: 75, &apos;Tracy&apos;: 85&#125;</div><div class="line">d[&apos;Michael&apos;]</div></pre></td></tr></table></figure>
+</li>
+<li><p>dict获取值的方法：get()获取，第二个参数是取不到的时候返回值避免报错，key in d也可以判断dict中是否有对应的键值。不能用点.操作符！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">d.get(&apos;Thomas&apos;, -1)</div></pre></td></tr></table></figure>
+</li>
+<li><p>dict与list区别：dict查找和插入速度快，但是占用空间和资源更多。</p>
+</li>
+<li>dict可以用在需要高速查找的很多地方，在Python代码中几乎无处不在，正确使用dict非常重要，需要牢记的第一条就是dict的key必须是不可变对象。</li>
+<li>set和dict类似，也是一组key的集合，但不存储value。由于key不能重复，所以，在set中，没有重复的key。(只是一组无重复的不可变对象的key？)</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/13/用react-native实现一个数独游戏-总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1717,160 +1874,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/27/从几个关键词来理解http缓存/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/27/从几个关键词来理解http缓存/" itemprop="url">
-                  从几个关键词来理解http缓存
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-27T15:19:00+08:00">
-                2017-09-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/http/" itemprop="url" rel="index">
-                    <span itemprop="name">http</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
-<li>我对于http缓存的认知总是停留在略知一二的状态，毕竟实际工作中用的比较少-_-||<br>但作为一个严谨的程序员，这仍是必备的一个知识技能。想了想还是写篇博客来总结下相关的一些知识，从一些关键词来理解http的缓存<h5 id="强缓存与协商缓存"><a href="#强缓存与协商缓存" class="headerlink" title="强缓存与协商缓存"></a>强缓存与协商缓存</h5></li>
-<li>首先需要知道的是读取http缓存的方式是有两种的：<strong>强缓存(本地缓存)</strong>和<strong>协商缓存(对比缓存)</strong>，下面讲一下这两种工作方式的区别和特点。</li>
-<li><p><strong>强缓存</strong>： 客户端发送请求时，首先访问浏览器的缓存数据库，若得知缓存存在且有效，则直接读取缓存内容返回给客户端，此时返回状态码为<strong>200（from cache）</strong>;而如果发现缓存失效了或不存在，则会去请求<strong>服务器</strong>得到相关内容信息，此时返回状态码为200，操作示意图如下<br><img src="http://upload-images.jianshu.io/upload_images/6383319-5018186b2e518efc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="强缓存.png"></p>
-</li>
-<li><p><strong>协商缓存</strong>： 客户端发送请求时，如果是第一次请求资源，则直接访问服务器，服务器将相关内容和缓存标示返回给客户端；如果是再次请求资源，<strong>客户端将第一次访问时服务器返回的缓存标示发送给服务器，服务器来判断缓存是否可用，</strong>如果缓存可用则告诉客户端可以继续使用缓存的内容，此时<strong>返回码为304</strong>，操作示意图如下<br><img src="http://upload-images.jianshu.io/upload_images/6383319-e872781570ae4356.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="协商缓存.png"></p>
-</li>
-<li>综上可以直观的看出两种方式的区别，最明显的是<strong>缓存命中时返回码不同</strong>，还有对比缓存的方式：<strong>每一次都会去访问服务器，无论缓存命中与否</strong>。那么对于浏览器和服务器是如何区分强缓存还是对比缓存，以及如何判断缓存是否有效呢，这就需要那些放在<strong>http报文header中</strong>的相关字段了，接下来依次讲解他们。ps：两种缓存方式是可以同时存在的，同时存在时，强缓存的优先级更高。<h4 id="expires"><a href="#expires" class="headerlink" title="expires"></a>expires</h4></li>
-<li>用于定义强缓存的header字段，这是http1.0时的规范，它的值为一个GMT格式时间字符串，如果发送请求的时间在expires之前，那么本地缓存始终有效，否则就会发送请求到服务器来获取资源。但是已经过时了，基本可以忽略。<h4 id="cache-control"><a href="#cache-control" class="headerlink" title="cache-control"></a>cache-control</h4></li>
-<li>http1.1版本出现的header信息，用来定义缓存信息。包括了好几个字段，其中最重要的就是<strong>max-age</strong>：用于表示缓存多少秒后失效。比如max-age = 31536000，表示缓存时间为365天，从第一次请求后的365天内再次请求都会去读取缓存。这个也是用来控制强制缓存的header字段。<h5 id="协商缓存相关的header字段"><a href="#协商缓存相关的header字段" class="headerlink" title="协商缓存相关的header字段"></a>协商缓存相关的header字段</h5></li>
-<li>协商缓存的方式总是会去访问服务器来确定缓存是否可用的，所以需要通过某种标识来进行通信，主要包括下面两组header字段(他们都是要成对出现)，即第一次请求的响应头带上某个字段（<strong>Last-Modified/Etag</strong>），则后续请求头则会带上对应的请求字段（<strong>If-Modified-Since/If-None-Match</strong>），若响应头没有Last-Modified或者Etag字段，则请求头也不会有对应的字段。<h5 id="Last-Modified-If-Modified-Since"><a href="#Last-Modified-If-Modified-Since" class="headerlink" title="Last-Modified  /  If-Modified-Since"></a>Last-Modified  /  If-Modified-Since</h5></li>
-<li>这组值都是时间字符串。具体行为如下：第一次请求时服务器返回的response headers带上<strong>Last-Modified字段表示资源最后一次修改的时间</strong>，再次请求时浏览器的request headers带上<strong>If-Modified-Since</strong>这个值和第一次访问返回的Last-Modified值是一样的，然后给到服务器再进行判断缓存是否过期<h5 id="Etag-If-None-Match"><a href="#Etag-If-None-Match" class="headerlink" title="Etag / If-None-Match"></a>Etag / If-None-Match</h5></li>
-<li>这组字段的值是服务器生成的唯一标示字符串，用法和上面的Last-Modified/If-Modified-Since类似，第一次访问时服务器会返回一个Etag，再次访问浏览器就会带上If-None-Match其值为第一次返回的Etag，给到服务器，服务器进行判断缓存是否可用。ps: Etag和Last-Modified同时使用时，服务器会<strong>优先判断Etag</strong>，好像是etag的精准级别更高。<h4 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h4></li>
-<li>大概就这么多了，都是以最基本的概念为主，参考了一些网上的资料，如果有机会的话再深入地研究下~~~<br>参考：<a href="http://www.cnblogs.com/chenqf/p/6386163.html" target="_blank" rel="external">彻底弄懂HTTP缓存机制及原理</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1920,7 +1923,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1929,7 +1932,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
