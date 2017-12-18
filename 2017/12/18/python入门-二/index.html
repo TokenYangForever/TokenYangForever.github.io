@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="JavaScript," />
+  <meta name="keywords" content="python," />
 
 
 
@@ -87,18 +87,18 @@
 
 
 
-<meta name="description" content="前言 JSONP以前研究过，最近又有点忘了，写篇本文mark一下，旨在理解记住JSONP的原理及其实现。代码实现用到es6语法，使用promise来封装JSONP方法，本地测试用的自己node搭的服务器,具体代码就不贴了。 一句话阐述下JSONP原理：动态生成一个JavaScript标签，其src由接口url、请求参数、callback函数名拼接而成，利用js标签没有跨域限制的特性实现跨域请求。">
-<meta name="keywords" content="JavaScript">
+<meta name="description" content="函数 python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到https://docs.python.org/3/library/functions.html定义函数 def 用来定义函数。 isinstance()方法可以用来判断参数类型，第一个参数是需要判断的对象">
+<meta name="keywords" content="python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="手写JSONP(promise封装)">
-<meta property="og:url" content="http://yoursite.com/2017/10/14/手写JSONP-promise封装/index.html">
+<meta property="og:title" content="python入门(二)">
+<meta property="og:url" content="http://yoursite.com/2017/12/18/python入门-二/index.html">
 <meta property="og:site_name" content="唐洋洋的个人博客">
-<meta property="og:description" content="前言 JSONP以前研究过，最近又有点忘了，写篇本文mark一下，旨在理解记住JSONP的原理及其实现。代码实现用到es6语法，使用promise来封装JSONP方法，本地测试用的自己node搭的服务器,具体代码就不贴了。 一句话阐述下JSONP原理：动态生成一个JavaScript标签，其src由接口url、请求参数、callback函数名拼接而成，利用js标签没有跨域限制的特性实现跨域请求。">
+<meta property="og:description" content="函数 python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到https://docs.python.org/3/library/functions.html定义函数 def 用来定义函数。 isinstance()方法可以用来判断参数类型，第一个参数是需要判断的对象">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-14T07:42:41.000Z">
+<meta property="og:updated_time" content="2017-12-18T09:08:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="手写JSONP(promise封装)">
-<meta name="twitter:description" content="前言 JSONP以前研究过，最近又有点忘了，写篇本文mark一下，旨在理解记住JSONP的原理及其实现。代码实现用到es6语法，使用promise来封装JSONP方法，本地测试用的自己node搭的服务器,具体代码就不贴了。 一句话阐述下JSONP原理：动态生成一个JavaScript标签，其src由接口url、请求参数、callback函数名拼接而成，利用js标签没有跨域限制的特性实现跨域请求。">
+<meta name="twitter:title" content="python入门(二)">
+<meta name="twitter:description" content="函数 python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到https://docs.python.org/3/library/functions.html定义函数 def 用来定义函数。 isinstance()方法可以用来判断参数类型，第一个参数是需要判断的对象">
 
 
 
@@ -126,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/10/14/手写JSONP-promise封装/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/18/python入门-二/"/>
 
 
 
 
 
-  <title> 手写JSONP(promise封装) | 唐洋洋的个人博客 </title>
+  <title> python入门(二) | 唐洋洋的个人博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -261,7 +261,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/14/手写JSONP-promise封装/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/18/python入门-二/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TokenYangForever">
@@ -282,7 +282,7 @@
             
             
               
-                手写JSONP(promise封装)
+                python入门(二)
               
             
           </h1>
@@ -297,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-14T15:41:00+08:00">
-                2017-10-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-18T17:08:00+08:00">
+                2017-12-18
               </time>
             
 
@@ -320,8 +320,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
+                  <a href="/categories/后端/" itemprop="url" rel="index">
+                    <span itemprop="name">后端</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后端/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -355,15 +366,43 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><ul>
-<li>JSONP以前研究过，最近又有点忘了，写篇本文mark一下，旨在理解记住JSONP的原理及其实现。代码实现用到es6语法，使用promise来封装JSONP方法，本地测试用的自己node搭的服务器,具体代码就不贴了。</li>
-<li>一句话阐述下JSONP原理：<strong><em>动态生成一个JavaScript标签，其src由接口url、请求参数、callback函数名拼接而成，利用js标签没有跨域限制的特性实现跨域请求。</em></strong></li>
-<li>有几点需要注意：1.callback函数要绑定在window对象上<br>2.服务端返回数据有特定格式要求：callback函数名+’(‘+JSON.stringify(返回数据) +’)’<br>3.不支持post，因为js标签本身就是一个get请求</li>
-<li>具体代码如下，最后一段是调用函数的示例，这个函数将返回一个promise对象，获取到数据时状态为resolve<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">const jsonp = function (url, data) &#123;</div><div class="line">  return new Promise((resolve, reject) =&gt; &#123;</div><div class="line">    // 初始化url</div><div class="line">    let dataString = url.indexOf(&apos;?&apos;) === -1 ? &apos;?&apos; : &apos;&amp;&apos;</div><div class="line">    let callbackName = `jsonpCB_$&#123;Date.now()&#125;`</div><div class="line">    url += `$&#123;dataString&#125;callback=$&#123;callbackName&#125;`</div><div class="line">    if (data) &#123;</div><div class="line">     // 有请求参数，依次添加到url</div><div class="line">      for (let k in data) &#123;</div><div class="line">        url += `&amp;$&#123;k&#125;=$&#123;data[k]&#125;`</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    let jsNode = document.createElement(&apos;script&apos;)</div><div class="line">    jsNode.src = url</div><div class="line">    // 触发callback，触发后删除js标签和绑定在window上的callback</div><div class="line">    window[callbackName] = result =&gt; &#123;</div><div class="line">      delete window[callbackName]</div><div class="line">      document.body.removeChild(jsNode)</div><div class="line">      if (result) &#123;</div><div class="line">        resolve(result)</div><div class="line">      &#125; else &#123;</div><div class="line">        reject(&apos;没有返回数据&apos;)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    // js加载异常的情况</div><div class="line">    jsNode.addEventListener(&apos;error&apos;, () =&gt; &#123;</div><div class="line">      delete window[callbackName]</div><div class="line">      document.body.removeChild(jsNode)</div><div class="line">      reject(&apos;JavaScript资源加载失败&apos;)</div><div class="line">    &#125;, false)</div><div class="line">    // 添加js节点到document上时，开始请求</div><div class="line">    document.body.appendChild(jsNode)</div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line">jsonp(&apos;http://192.168.0.103:8081/jsonp&apos;, &#123;a: 1, b: &apos;heiheihei&apos;&#125;)</div><div class="line">  .then(result =&gt; &#123; console.log(result) &#125;)</div><div class="line">  .catch(err =&gt; &#123; console.error(err) &#125;)</div></pre></td></tr></table></figure>
+        <h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><ul>
+<li>python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到<a href="https://docs.python.org/3/library/functions.html" target="_blank" rel="external">https://docs.python.org/3/library/functions.html</a><h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4></li>
+<li>def 用来定义函数。</li>
+<li>isinstance()方法可以用来判断参数类型，第一个参数是需要判断的对象，第二参数是候选的变量类型，多个类型之一的话要用tuple类型表示<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">isinstance(x, (int, float))</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li>个人感觉JSONP用的情况还是比较少吧，如果已经是需要服务端配合来进行跨域的情况，为什么不直接用CORS呢</li>
+<h4 id="定义空函数"><a href="#定义空函数" class="headerlink" title="定义空函数"></a>定义空函数</h4><ul>
+<li>pass相当于一个占位符，表示什么也不做<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">def nop():</div><div class="line">    pass</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="设置函数的默认参数"><a href="#设置函数的默认参数" class="headerlink" title="设置函数的默认参数"></a>设置函数的默认参数</h4><ul>
+<li>使用等号设置参数的默认值，和es6语法一致。需要注意的是：必选参数在前，默认参数在后</li>
+<li>定义默认参数要牢记一点：默认参数必须指向不变对象！<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">def power(x, n=2):</div><div class="line">    s = 1</div><div class="line">    while n &gt; 0:</div><div class="line">        n = n - 1</div><div class="line">        s = s * x</div><div class="line">    return s</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="定义可变参数"><a href="#定义可变参数" class="headerlink" title="定义可变参数"></a>定义可变参数</h4><ul>
+<li><p>类似于es6中的…(function (…args) {})，这里的numbers是一个tuple类型的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">def calc(*numbers):</div><div class="line">    sum = 0</div><div class="line">    for n in numbers:</div><div class="line">        sum = sum + n * n</div><div class="line">    return sum</div></pre></td></tr></table></figure>
+</li>
+<li><p>传入参数时也可以使用*把数组[]和元组()类型的参数 =&gt; 变成可变参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">calc(*[1,2,3], *(4,5,6))</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="关键字参数"><a href="#关键字参数" class="headerlink" title="关键字参数"></a>关键字参数</h4><ul>
+<li>python中传入参数时，可以用关键字来修饰参数，这样甚至就可以不用考虑传参的顺序。</li>
+<li>未出现在参数中的关键字参数会进入other(一个dict类型的数据)里面，同样的也可以使用**来讲dict类型的数据转换成可变参数传入。</li>
+<li><p>注意：多余的未知参数会进入到args中，多余的关键字参数则会进入到other中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">def person(name, age, *args, **other):</div><div class="line">    print(&apos;name:&apos;, name, &apos;age:&apos;, age, &apos;other:&apos;, other, &apos;args:&apos;, args)</div><div class="line"></div><div class="line"># person(age=45, name=&apos;Adam&apos;)</div><div class="line">person(&apos;Adam&apos;, 45, 123, 456, yaho=&apos;lalala&apos;, **&#123;&apos;city&apos;:&apos;Beijing&apos;, &apos;job&apos;:&apos;Engineer&apos;&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>但是使用关键字参数时有很多限定条件：关键字参数必须放在一般参数的后面</p>
+<h4 id="命名关键字参数"><a href="#命名关键字参数" class="headerlink" title="命名关键字参数"></a>命名关键字参数</h4></li>
+<li>定义参数时，跟在<em>或者可变参数(</em>args)后面的参数，被视为命名关键字参数，这些参数在调用函数传参时，<strong>必须传入参数名。</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def person(name, age, *或者*args, city, job):</div><div class="line">    print(name, age, city, job)</div><div class="line">person(&apos;Adam&apos;, 45, city=&apos;Beijing&apos;, job=&apos;Engineer&apos;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="参数组合"><a href="#参数组合" class="headerlink" title="参数组合"></a>参数组合</h4><ul>
+<li>在Python中定义函数，可以用必选参数、默认参数、可变参数、关键字参数和命名关键字参数，这5种参数都可以组合使用。但是请注意，参数定义的顺序必须是：必选参数、默认参数、可变参数、命名关键字参数和关键字参数。<h4 id="说一句递归"><a href="#说一句递归" class="headerlink" title="说一句递归"></a>说一句递归</h4></li>
+<li>python并不能实现尾调用优化，递归调用函数时，每一次调用都会增加一次栈帧，超过上线后就会报错。</li>
 </ul>
 
       
@@ -388,7 +427,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+            <a href="/tags/python/" rel="tag"># python</a>
           
         </div>
       
@@ -401,8 +440,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/11/使用eslint检查JS代码/" rel="next" title="使用eslint检查JS代码">
-                <i class="fa fa-chevron-left"></i> 使用eslint检查JS代码
+              <a href="/2017/12/14/python入门-一/" rel="next" title="python入门(一)">
+                <i class="fa fa-chevron-left"></i> python入门(一)
               </a>
             
           </div>
@@ -410,10 +449,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/10/31/javascript事件流、事件代理、target和currentTarget/" rel="prev" title="javascript事件流、事件代理、target和currentTarget">
-                javascript事件流、事件代理、target和currentTarget <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -538,7 +573,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数"><span class="nav-number">1.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义函数"><span class="nav-number">1.1.</span> <span class="nav-text">定义函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义空函数"><span class="nav-number">1.2.</span> <span class="nav-text">定义空函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置函数的默认参数"><span class="nav-number">1.3.</span> <span class="nav-text">设置函数的默认参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义可变参数"><span class="nav-number">1.4.</span> <span class="nav-text">定义可变参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关键字参数"><span class="nav-number">1.5.</span> <span class="nav-text">关键字参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命名关键字参数"><span class="nav-number">1.6.</span> <span class="nav-text">命名关键字参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数组合"><span class="nav-number">1.7.</span> <span class="nav-text">参数组合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#说一句递归"><span class="nav-number">1.8.</span> <span class="nav-text">说一句递归</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -261,6 +261,194 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/18/python入门-二/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/12/18/python入门-二/" itemprop="url">
+                  python入门(二)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-18T17:08:00+08:00">
+                2017-12-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后端/" itemprop="url" rel="index">
+                    <span itemprop="name">后端</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后端/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><ul>
+<li>python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到<a href="https://docs.python.org/3/library/functions.html" target="_blank" rel="external">https://docs.python.org/3/library/functions.html</a><h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4></li>
+<li>def 用来定义函数。</li>
+<li>isinstance()方法可以用来判断参数类型，第一个参数是需要判断的对象，第二参数是候选的变量类型，多个类型之一的话要用tuple类型表示<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">isinstance(x, (int, float))</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="定义空函数"><a href="#定义空函数" class="headerlink" title="定义空函数"></a>定义空函数</h4><ul>
+<li>pass相当于一个占位符，表示什么也不做<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">def nop():</div><div class="line">    pass</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="设置函数的默认参数"><a href="#设置函数的默认参数" class="headerlink" title="设置函数的默认参数"></a>设置函数的默认参数</h4><ul>
+<li>使用等号设置参数的默认值，和es6语法一致。需要注意的是：必选参数在前，默认参数在后</li>
+<li>定义默认参数要牢记一点：默认参数必须指向不变对象！<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">def power(x, n=2):</div><div class="line">    s = 1</div><div class="line">    while n &gt; 0:</div><div class="line">        n = n - 1</div><div class="line">        s = s * x</div><div class="line">    return s</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="定义可变参数"><a href="#定义可变参数" class="headerlink" title="定义可变参数"></a>定义可变参数</h4><ul>
+<li><p>类似于es6中的…(function (…args) {})，这里的numbers是一个tuple类型的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">def calc(*numbers):</div><div class="line">    sum = 0</div><div class="line">    for n in numbers:</div><div class="line">        sum = sum + n * n</div><div class="line">    return sum</div></pre></td></tr></table></figure>
+</li>
+<li><p>传入参数时也可以使用*把数组[]和元组()类型的参数 =&gt; 变成可变参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">calc(*[1,2,3], *(4,5,6))</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="关键字参数"><a href="#关键字参数" class="headerlink" title="关键字参数"></a>关键字参数</h4><ul>
+<li>python中传入参数时，可以用关键字来修饰参数，这样甚至就可以不用考虑传参的顺序。</li>
+<li>未出现在参数中的关键字参数会进入other(一个dict类型的数据)里面，同样的也可以使用**来讲dict类型的数据转换成可变参数传入。</li>
+<li><p>注意：多余的未知参数会进入到args中，多余的关键字参数则会进入到other中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">def person(name, age, *args, **other):</div><div class="line">    print(&apos;name:&apos;, name, &apos;age:&apos;, age, &apos;other:&apos;, other, &apos;args:&apos;, args)</div><div class="line"></div><div class="line"># person(age=45, name=&apos;Adam&apos;)</div><div class="line">person(&apos;Adam&apos;, 45, 123, 456, yaho=&apos;lalala&apos;, **&#123;&apos;city&apos;:&apos;Beijing&apos;, &apos;job&apos;:&apos;Engineer&apos;&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>但是使用关键字参数时有很多限定条件：关键字参数必须放在一般参数的后面</p>
+<h4 id="命名关键字参数"><a href="#命名关键字参数" class="headerlink" title="命名关键字参数"></a>命名关键字参数</h4></li>
+<li>定义参数时，跟在<em>或者可变参数(</em>args)后面的参数，被视为命名关键字参数，这些参数在调用函数传参时，<strong>必须传入参数名。</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def person(name, age, *或者*args, city, job):</div><div class="line">    print(name, age, city, job)</div><div class="line">person(&apos;Adam&apos;, 45, city=&apos;Beijing&apos;, job=&apos;Engineer&apos;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="参数组合"><a href="#参数组合" class="headerlink" title="参数组合"></a>参数组合</h4><ul>
+<li>在Python中定义函数，可以用必选参数、默认参数、可变参数、关键字参数和命名关键字参数，这5种参数都可以组合使用。但是请注意，参数定义的顺序必须是：必选参数、默认参数、可变参数、命名关键字参数和关键字参数。<h4 id="说一句递归"><a href="#说一句递归" class="headerlink" title="说一句递归"></a>说一句递归</h4></li>
+<li>python并不能实现尾调用优化，递归调用函数时，每一次调用都会增加一次栈帧，超过上线后就会报错。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/14/python入门-一/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -373,20 +561,12 @@
           
             <h3 id="Python简介"><a href="#Python简介" class="headerlink" title="Python简介"></a>Python简介</h3><ul>
 <li>Python是用来编写应用程序的<strong>高级</strong>编程语言</li>
-<li>Python为我们提供了非常完善的基础代码库，覆盖了网络、文件、GUI、数据库、文本等大量内容，被形象地称作“内置电池（batteries included）”</li>
-</ul>
-<h3 id="Python特-缺-点"><a href="#Python特-缺-点" class="headerlink" title="Python特(缺)点"></a>Python特(缺)点</h3><ul>
+<li>Python为我们提供了非常完善的基础代码库，覆盖了网络、文件、GUI、数据库、文本等大量内容，被形象地称作“内置电池（batteries included）”<h3 id="Python特-缺-点"><a href="#Python特-缺-点" class="headerlink" title="Python特(缺)点"></a>Python特(缺)点</h3></li>
 <li>第一个缺点就是运行速度慢，和C程序相比非常慢，因为Python是<strong>解释型语言</strong>，你的代码在执行时会一行一行地翻译成CPU能理解的机器码，这个翻译过程非常耗时，所以很慢。而C程序是运行前直接编译成CPU能执行的机器码，所以非常快。</li>
-<li>第二个缺点就是代码不能加密。如果要发布你的Python程序，实际上就是发布源代码，这一点跟C语言不同，C语言不用发布源代码，只需要把编译后的机器码（也就是你在Windows上常见的xxx.exe文件）发布出去。要从机器码反推出C代码是不可能的，所以，<strong>凡是编译型的语言，都没有这个问题，而解释型的语言，则必须把源码发布出去。</strong></li>
-</ul>
-<h3 id="Python-安装"><a href="#Python-安装" class="headerlink" title="Python 安装"></a>Python 安装</h3><ul>
-<li>mac上面:安装Homebrew后，直接通过命令brew install python3安装即可。</li>
-</ul>
-<h3 id="编辑器和解释器"><a href="#编辑器和解释器" class="headerlink" title="编辑器和解释器"></a>编辑器和解释器</h3><ul>
+<li>第二个缺点就是代码不能加密。如果要发布你的Python程序，实际上就是发布源代码，这一点跟C语言不同，C语言不用发布源代码，只需要把编译后的机器码（也就是你在Windows上常见的xxx.exe文件）发布出去。要从机器码反推出C代码是不可能的，所以，<strong>凡是编译型的语言，都没有这个问题，而解释型的语言，则必须把源码发布出去。</strong><h3 id="Python-安装"><a href="#Python-安装" class="headerlink" title="Python 安装"></a>Python 安装</h3></li>
+<li>mac上面:安装Homebrew后，直接通过命令brew install python3安装即可。<h3 id="编辑器和解释器"><a href="#编辑器和解释器" class="headerlink" title="编辑器和解释器"></a>编辑器和解释器</h3></li>
 <li>python是解释型语言，使用上面的命令安装后就有自带的解释器。在命令行输入python可以进入python交互模式，类似于node。输入python3 文件名.py即可执行python文件</li>
-<li>文本编辑器使用sublime Text即可</li>
-</ul>
-<h3 id="python基础语法"><a href="#python基础语法" class="headerlink" title="python基础语法"></a>python基础语法</h3><ul>
+<li>文本编辑器使用sublime Text即可<h3 id="python基础语法"><a href="#python基础语法" class="headerlink" title="python基础语法"></a>python基础语法</h3></li>
 <li>Python的语法比较简单，采用缩进方式，循环条件语句都不需要括号</li>
 <li>Python区分大小写</li>
 <li>python中能直接处理的数据类型：整数、浮点数、字符串、布尔值、空值(None)。也有变量，变量不需要声明类型。</li>
@@ -396,9 +576,7 @@
 <li>使用 % 来格式化字符串<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos;Hi, %s, you have $%d.&apos; % (&apos;Michael&apos;, 1000000)</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="list和tuple"><a href="#list和tuple" class="headerlink" title="list和tuple"></a>list和tuple</h4><ul>
-<li>python内置list类型(相当于数组)；有序列表：tuple(元组)，tuple一旦初始化就不能修改；只有1个元素的tuple定义时必须加一个逗号，来消除歧义</li>
-</ul>
+<h4 id="list和tuple"><a href="#list和tuple" class="headerlink" title="list和tuple"></a>list和tuple</h4><p>python内置list类型(相当于数组)；有序列表：tuple(元组)，tuple一旦初始化就不能修改；只有1个元素的tuple定义时必须加一个逗号，来消除歧义</p>
 <h4 id="dict和set"><a href="#dict和set" class="headerlink" title="dict和set"></a>dict和set</h4><ul>
 <li><p>Python内置了字典：dict的支持，dict全称dictionary，在其他语言中也称为map，使用键-值（key-value）存储，具有极快的查找速度。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">d = &#123;&apos;Michael&apos;: 95, &apos;Bob&apos;: 75, &apos;Tracy&apos;: 85&#125;</div><div class="line">d[&apos;Michael&apos;]</div></pre></td></tr></table></figure>
@@ -409,8 +587,14 @@
 <li><p>dict与list区别：dict查找和插入速度快，但是占用空间和资源更多。</p>
 </li>
 <li>dict可以用在需要高速查找的很多地方，在Python代码中几乎无处不在，正确使用dict非常重要，需要牢记的第一条就是dict的key必须是不可变对象。</li>
-<li>set和dict类似，也是一组key的集合，但不存储value。由于key不能重复，所以，在set中，没有重复的key。(只是一组无重复的不可变对象的key？)</li>
+<li>set和dict类似，也是一组key的集合，但不存储value。由于key不能重复，所以，在set中，没有重复的key。(只是一组无重复的不可变对象的key？)<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3></li>
+<li>这里我就对python和JavaScript在语法上进行一个初步的比较：</li>
 </ul>
+<ol>
+<li>两者都是解释形的弱类型语言，变量的类型可随时改变。</li>
+<li>在python中的数据类型更多：比如类似于js数组的就有list/tuple。他们之间的比较后面有时间我再深入了解下。</li>
+<li>条件语句以及循环语句都是类似的，但是在python中没有用大括号{}来表示层级结构，而是通过冒号:以及缩进来控制的。</li>
+</ol>
 
           
         
@@ -1744,169 +1928,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/11/使用eslint检查JS代码/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/10/11/使用eslint检查JS代码/" itemprop="url">
-                  使用eslint检查JS代码
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-11T16:13:00+08:00">
-                2017-10-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
-<li>代码规范一直是开发过程中比较重要的一环，包括命名规范、统一缩进等等，规范整洁的代码可读性高，也便于后期代码维护以及其他开发人员快速熟悉；本篇就讲一下eslint的具体用法。</li>
-</ul>
-<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><ul>
-<li>eslint早在2013年就有了，而我个人第一次接触还是在使用vue-cli搭建项目的时候，默认配置的eslint会根据规则直接报错，刚开始用的时候满屏报错、特别酸爽~~ 但只要习惯就好，使用eslint检查代码会使你的js文件更加健壮好看。</li>
-</ul>
-<h4 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h4><ul>
-<li>首先安装eslint，直接 <strong>npm install eslint</strong>即可，注意如果你是全局安装的eslint，后面一些eslint相关依赖包也要全局安装。</li>
-<li><p>然后输入 <strong>eslint init</strong> 开始初始化一个配置文件，过程中会给你很多选项，比如是否使用es6、是否使用jsx语法、配置文件的文件格式等等。我选择的生成js配置文件，所有选项都选好后，生成一个<strong>.eslintrc.js</strong>配置文件内容大概长这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">    &quot;env&quot;: &#123;</div><div class="line">        &quot;browser&quot;: true,</div><div class="line">        &quot;es6&quot;: true</div><div class="line">    &#125;,</div><div class="line">    &quot;extends&quot;: &quot;eslint:recommended&quot;,</div><div class="line">    &quot;parserOptions&quot;: &#123;</div><div class="line">        &quot;sourceType&quot;: &quot;module&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;rules&quot;: &#123;</div><div class="line">        &quot;indent&quot;: [</div><div class="line">            &quot;error&quot;,</div><div class="line">            &quot;tab&quot;</div><div class="line">        ],</div><div class="line">        &quot;linebreak-style&quot;: [</div><div class="line">            &quot;error&quot;,</div><div class="line">            &quot;windows&quot;</div><div class="line">        ],</div><div class="line">        &quot;quotes&quot;: [</div><div class="line">            &quot;error&quot;,</div><div class="line">            &quot;double&quot;</div><div class="line">        ],</div><div class="line">        &quot;semi&quot;: [</div><div class="line">            &quot;error&quot;,</div><div class="line">            &quot;never&quot;</div><div class="line">        ],</div><div class="line">        &quot;no-console&quot;: 0 </div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-<li><p>其中最重要的就是<strong>rules</strong>里面配置的规则，eslint会根据这里是配置的rule规则对代码进行检验，键值分别对应规则名和状态，比如”no-console“是规则名，后面对应的0表示不执行这条规则。extends表示继承自哪个共享的配置文件，env表示检查代码时所属的环境。</p>
-</li>
-<li>具体状态码规则是这样：  <strong>0</strong>或者“<strong>off</strong>”表示关闭规则； <strong>1</strong>或者<strong>warn</strong>表示开启规则，使用警告级别的错误； <strong>2</strong>或者<strong>error</strong>表示开启规则，使用错误级别的错误：error (当被触发的时候，程序会报错)</li>
-<li>配置完成后，在当前目录新建一个index.js文件，随便输入几行代码，<strong>然后在命令行输入eslint index.js</strong>。就会对js文件进行代码检查，如果代码报错，命令行会提示你多少行触发了哪条规则的错误，你就可以对代码进行改正，或者修改配置文件中的rule规则。</li>
-<li>配置eslint的方法还有其他的，比如写在package.json中：新增一个eslintConfig，将上述配置文件的内容放在下面。但我个人还是喜欢用单独的配置文件，来控制eslint。<h4 id="集成到webpack"><a href="#集成到webpack" class="headerlink" title="集成到webpack"></a>集成到webpack</h4></li>
-<li>接下来介绍一下如何把eslint集成到webpack中。首先确保webpack已经安装好，然后依次安装eslint-loader、eslint-config-standard、eslint-plugin-html、eslint-plugin-promise、eslint-plugin-standard、eslint-friendly-formatter。注意如果eslint是全局安装的，这些依赖包也需要全局安装，否则报错找不到对应的包。</li>
-<li><p><strong>然后新建一个webpack的配置文件webpack.config.js</strong>，我这里只是做尽量最少的配置，具体如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">module.exports = &#123;</div><div class="line">    entry: &#123;</div><div class="line">        index: &quot;./src/index.js&quot;,</div><div class="line">    &#125;,</div><div class="line">    output: &#123;</div><div class="line">        path: __dirname + &quot;/dist/&quot;,</div><div class="line">        filename: &quot;[name].js&quot;</div><div class="line">    &#125;,</div><div class="line">    resolve: &#123;</div><div class="line">        extensions: [&apos;.js&apos;, &apos;.vue&apos;, &apos;.json&apos;]</div><div class="line">    &#125;,</div><div class="line">    module: &#123;</div><div class="line">         rules: [</div><div class="line">                &#123;</div><div class="line">                    test: /\.js$/,</div><div class="line">                    exclude: /node_modules/,</div><div class="line">                    loaders: [</div><div class="line">                        &apos;eslint-loader&apos;</div><div class="line">                    ]</div><div class="line">                &#125;,</div><div class="line">                &#123;</div><div class="line">                    test: /\.vue|\.js$/,</div><div class="line">                    enforce: &apos;pre&apos;,  // 在babel-loader对源码进行编译前进行lint的检查</div><div class="line">                    include: /src/,  // src文件夹下的文件需要被lint</div><div class="line">                    use: [&#123;</div><div class="line">                        loader: &apos;eslint-loader&apos;,</div><div class="line">                        options: &#123;</div><div class="line">                            formatter: require(&apos;eslint-friendly-formatter&apos;)   // 编译后错误报告格式</div><div class="line">                        &#125;</div><div class="line">                    &#125;]</div><div class="line">                &#125;</div><div class="line">            ]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>这时候文件目录结构如下图<br><img src="http://upload-images.jianshu.io/upload_images/6383319-f6ea3f19ed2c3380.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="文件结构"></p>
-</li>
-<li>这时在src文件夹下新建index.js文件，命令行输入webpack进行代码打包的过程会使用eslint进行检查，如果无误就在dist/js文件夹下生产打包后的代码，如果检查报错则在命令行中打印出错误位置和触犯的规则。</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1956,7 +1977,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
