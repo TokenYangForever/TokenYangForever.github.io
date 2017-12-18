@@ -261,6 +261,159 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/18/使用Javascript做算法题（四）Longest-Increasing-Path-in-a-Matrix/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TokenYangForever">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="唐洋洋的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/12/18/使用Javascript做算法题（四）Longest-Increasing-Path-in-a-Matrix/" itemprop="url">
+                  使用Javascript做算法题（四）Longest Increasing Path in a Matrix
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-18T22:21:00+08:00">
+                2017-12-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/leetcode算法题/" itemprop="url" rel="index">
+                    <span itemprop="name"> leetcode算法题</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
+<li>最近在LeetCode上做出了第一道难度为hard的题：) 觉得这题中规中矩挺不错的，mark一下：<a href="https://leetcode.com/problems/longest-increasing-path-in-a-matrix/description/" target="_blank" rel="external">题目地址</a></li>
+</ul>
+<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><ul>
+<li>给出一个正整数矩阵，找出其中<strong>最长的递增路径的长度</strong>。只能上下左右移动，不能走对角线，不能环绕重复路线，不能超越边距。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">举例：</div><div class="line">输入:</div><div class="line">nums = [</div><div class="line">  [9,9,4],</div><div class="line">  [6,6,8],</div><div class="line">  [2,1,1]</div><div class="line">]</div><div class="line">返回 最长路径为4 路径为：1-&gt;2-&gt;6-&gt;9</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><ul>
+<li>基本思路分以下几个点：</li>
+<li>0.依次遍历输入的矩阵(二维数组)，找出每个点作为起点时的最长递归路径长度，然后返回其中的最大值</li>
+<li>1.使用dfs递归方法去遍历查找各个方向，建立一个表示移动方向的数组，每次dfs查找一个新的节点是遍历这个数组，得出最大值作为这个点为起点的最长路径，保存到dp中</li>
+<li>2.新建一个二维数组作为dp数组，每次得到一个坐标点为起点的最大长度时存入dp数组相应位置，以后再查找到这个坐标点时直接返回之前保存的值避免重复运算</li>
+<li>上面可能说的有点乱，大概就是dfs遍历和dp数组结合，难度其实并不算大，但是可以优化的细节还是挺多的，下面代码附有具体注释</li>
+</ul>
+<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number[][]&#125; matrix</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> */</div><div class="line">var longestIncreasingPath = function(matrix) &#123;</div><div class="line">    if (!matrix || matrix.length === 0) &#123;</div><div class="line">        return 0</div><div class="line">    &#125;</div><div class="line">          </div><div class="line">    var direct = [[0, -1], [0, 1], [-1, 0], [1, 0]] // 方向数组</div><div class="line">    var max = 1 // 全局最大值</div><div class="line">    var dp = new Array() // dp二维数组，保存每个点作为起点的最大路径长度</div><div class="line">    var width = matrix[0].length</div><div class="line">    var deep = matrix.length</div><div class="line">    while (deep) &#123; </div><div class="line">        dp.push(new Array(width).fill(0)) // 每个点初始长度为0，dfs遍历到不为0的情况直接返回她的值(因为是之前已经得到了)</div><div class="line">        deep--</div><div class="line">    &#125;</div><div class="line">    deep = matrix.length</div><div class="line">    </div><div class="line">    var dfs = function (i, j) &#123;</div><div class="line">        if (dp[i][j] &gt; 0) return dp[i][j];</div><div class="line">        var mx = 1</div><div class="line">        for (var k = 0; k &lt; direct.length; k++) &#123;</div><div class="line">            var x = i + direct[k][0]</div><div class="line">            var y = j + direct[k][1]</div><div class="line">            if (x &lt; 0 || x &gt;= deep || y &lt; 0 || y &gt;=width) &#123; // 超过范围跳过</div><div class="line">                continue</div><div class="line">            &#125;</div><div class="line">            if (matrix[x][y] &lt;= matrix[i][j]) &#123;// 不是递增跳过</div><div class="line">                continue</div><div class="line">            &#125;</div><div class="line">            var len = dfs(x, y) + 1</div><div class="line">            mx = Math.max(mx, len)</div><div class="line">        &#125;</div><div class="line">        dp[i][j] = mx</div><div class="line">        return mx</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    for (var i = 0; i &lt; deep; i++) &#123;</div><div class="line">        for (var j = 0; j &lt; width; j++) &#123;</div><div class="line">            max = Math.max(max, dfs(i, j))</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return max</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/18/python入门-二/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1822,155 +1975,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/14/手写JSONP-promise封装/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TokenYangForever">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐洋洋的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/10/14/手写JSONP-promise封装/" itemprop="url">
-                  手写JSONP(promise封装)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-14T15:41:00+08:00">
-                2017-10-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><ul>
-<li>JSONP以前研究过，最近又有点忘了，写篇本文mark一下，旨在理解记住JSONP的原理及其实现。代码实现用到es6语法，使用promise来封装JSONP方法，本地测试用的自己node搭的服务器,具体代码就不贴了。</li>
-<li>一句话阐述下JSONP原理：<strong><em>动态生成一个JavaScript标签，其src由接口url、请求参数、callback函数名拼接而成，利用js标签没有跨域限制的特性实现跨域请求。</em></strong></li>
-<li>有几点需要注意：1.callback函数要绑定在window对象上<br>2.服务端返回数据有特定格式要求：callback函数名+’(‘+JSON.stringify(返回数据) +’)’<br>3.不支持post，因为js标签本身就是一个get请求</li>
-<li>具体代码如下，最后一段是调用函数的示例，这个函数将返回一个promise对象，获取到数据时状态为resolve<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">const jsonp = function (url, data) &#123;</div><div class="line">  return new Promise((resolve, reject) =&gt; &#123;</div><div class="line">    // 初始化url</div><div class="line">    let dataString = url.indexOf(&apos;?&apos;) === -1 ? &apos;?&apos; : &apos;&amp;&apos;</div><div class="line">    let callbackName = `jsonpCB_$&#123;Date.now()&#125;`</div><div class="line">    url += `$&#123;dataString&#125;callback=$&#123;callbackName&#125;`</div><div class="line">    if (data) &#123;</div><div class="line">     // 有请求参数，依次添加到url</div><div class="line">      for (let k in data) &#123;</div><div class="line">        url += `&amp;$&#123;k&#125;=$&#123;data[k]&#125;`</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    let jsNode = document.createElement(&apos;script&apos;)</div><div class="line">    jsNode.src = url</div><div class="line">    // 触发callback，触发后删除js标签和绑定在window上的callback</div><div class="line">    window[callbackName] = result =&gt; &#123;</div><div class="line">      delete window[callbackName]</div><div class="line">      document.body.removeChild(jsNode)</div><div class="line">      if (result) &#123;</div><div class="line">        resolve(result)</div><div class="line">      &#125; else &#123;</div><div class="line">        reject(&apos;没有返回数据&apos;)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    // js加载异常的情况</div><div class="line">    jsNode.addEventListener(&apos;error&apos;, () =&gt; &#123;</div><div class="line">      delete window[callbackName]</div><div class="line">      document.body.removeChild(jsNode)</div><div class="line">      reject(&apos;JavaScript资源加载失败&apos;)</div><div class="line">    &#125;, false)</div><div class="line">    // 添加js节点到document上时，开始请求</div><div class="line">    document.body.appendChild(jsNode)</div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line">jsonp(&apos;http://192.168.0.103:8081/jsonp&apos;, &#123;a: 1, b: &apos;heiheihei&apos;&#125;)</div><div class="line">  .then(result =&gt; &#123; console.log(result) &#125;)</div><div class="line">  .catch(err =&gt; &#123; console.error(err) &#125;)</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li>个人感觉JSONP用的情况还是比较少吧，如果已经是需要服务端配合来进行跨域的情况，为什么不直接用CORS呢</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2020,7 +2024,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2029,7 +2033,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>

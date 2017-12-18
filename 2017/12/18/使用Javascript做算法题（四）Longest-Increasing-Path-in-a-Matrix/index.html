@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="JavaScript," />
+  <meta name="keywords" content="算法," />
 
 
 
@@ -87,21 +87,18 @@
 
 
 
-<meta name="description" content="apply call 基本概念 稍有一些javascript基础的人应该对这两个函数都不会陌生，这里简单过一下基本概念。这两个方法一般都是用来调用一个函数时改变其内部this指向，换句话说：劫持一个对象的方法，继承另外一个对象的属性并调用。语法上两者唯一的不同就是传参形式： Function.apply(obj,args)方法能接收两个参数：obj：这个对象将代替Function类里this对象">
-<meta name="keywords" content="JavaScript">
+<meta name="description" content="前言 最近在LeetCode上做出了第一道难度为hard的题：) 觉得这题中规中矩挺不错的，mark一下：题目地址  题目描述 给出一个正整数矩阵，找出其中最长的递增路径的长度。只能上下左右移动，不能走对角线，不能环绕重复路线，不能超越边距。12345678举例：输入:nums = [  [9,9,4],  [6,6,8],  [2,1,1]]返回 最长路径为4 路径为：1-&amp;gt;2-&amp;gt;6">
+<meta name="keywords" content="算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="apply与call性能分析">
-<meta property="og:url" content="http://yoursite.com/2017/09/15/apply与call性能分析/index.html">
+<meta property="og:title" content="使用Javascript做算法题（四）Longest Increasing Path in a Matrix">
+<meta property="og:url" content="http://yoursite.com/2017/12/18/使用Javascript做算法题（四）Longest-Increasing-Path-in-a-Matrix/index.html">
 <meta property="og:site_name" content="唐洋洋的个人博客">
-<meta property="og:description" content="apply call 基本概念 稍有一些javascript基础的人应该对这两个函数都不会陌生，这里简单过一下基本概念。这两个方法一般都是用来调用一个函数时改变其内部this指向，换句话说：劫持一个对象的方法，继承另外一个对象的属性并调用。语法上两者唯一的不同就是传参形式： Function.apply(obj,args)方法能接收两个参数：obj：这个对象将代替Function类里this对象">
+<meta property="og:description" content="前言 最近在LeetCode上做出了第一道难度为hard的题：) 觉得这题中规中矩挺不错的，mark一下：题目地址  题目描述 给出一个正整数矩阵，找出其中最长的递增路径的长度。只能上下左右移动，不能走对角线，不能环绕重复路线，不能超越边距。12345678举例：输入:nums = [  [9,9,4],  [6,6,8],  [2,1,1]]返回 最长路径为4 路径为：1-&amp;gt;2-&amp;gt;6">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6383319-cf3c9edc35aafe40.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6383319-94db063de6db0239.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-10-16T02:18:01.000Z">
+<meta property="og:updated_time" content="2017-12-18T14:22:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="apply与call性能分析">
-<meta name="twitter:description" content="apply call 基本概念 稍有一些javascript基础的人应该对这两个函数都不会陌生，这里简单过一下基本概念。这两个方法一般都是用来调用一个函数时改变其内部this指向，换句话说：劫持一个对象的方法，继承另外一个对象的属性并调用。语法上两者唯一的不同就是传参形式： Function.apply(obj,args)方法能接收两个参数：obj：这个对象将代替Function类里this对象">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/6383319-cf3c9edc35aafe40.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="使用Javascript做算法题（四）Longest Increasing Path in a Matrix">
+<meta name="twitter:description" content="前言 最近在LeetCode上做出了第一道难度为hard的题：) 觉得这题中规中矩挺不错的，mark一下：题目地址  题目描述 给出一个正整数矩阵，找出其中最长的递增路径的长度。只能上下左右移动，不能走对角线，不能环绕重复路线，不能超越边距。12345678举例：输入:nums = [  [9,9,4],  [6,6,8],  [2,1,1]]返回 最长路径为4 路径为：1-&amp;gt;2-&amp;gt;6">
 
 
 
@@ -129,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/09/15/apply与call性能分析/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/18/使用Javascript做算法题（四）Longest-Increasing-Path-in-a-Matrix/"/>
 
 
 
 
 
-  <title> apply与call性能分析 | 唐洋洋的个人博客 </title>
+  <title> 使用Javascript做算法题（四）Longest Increasing Path in a Matrix | 唐洋洋的个人博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -264,7 +261,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/15/apply与call性能分析/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/18/使用Javascript做算法题（四）Longest-Increasing-Path-in-a-Matrix/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TokenYangForever">
@@ -285,7 +282,7 @@
             
             
               
-                apply与call性能分析
+                使用Javascript做算法题（四）Longest Increasing Path in a Matrix
               
             
           </h1>
@@ -300,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T13:53:21+08:00">
-                2017-09-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-18T22:21:00+08:00">
+                2017-12-18
               </time>
             
 
@@ -323,8 +320,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
+                  <a href="/categories/leetcode算法题/" itemprop="url" rel="index">
+                    <span itemprop="name"> leetcode算法题</span>
                   </a>
                 </span>
 
@@ -358,30 +355,21 @@
       
 
       
-        <hr>
-<h4 id="apply-call-基本概念"><a href="#apply-call-基本概念" class="headerlink" title="apply call 基本概念"></a>apply call 基本概念</h4><ul>
-<li>稍有一些javascript基础的人应该对这两个函数都不会陌生，这里简单过一下基本概念。这两个方法一般都是用来调用一个函数时改变其内部this指向，换句话说：<strong>劫持一个对象的方法，继承另外一个对象的属性并调用</strong>。语法上两者唯一的不同就是传参形式：</li>
-<li>Function.apply(obj,args)方法能接收两个参数：<br>obj：这个对象将代替Function类里this对象<br>args：这个是数组，它将作为参数传给Function（args–&gt;arguments）</li>
-<li>Function.call(obj,[param1[,param2[,…[,paramN]]]]) call方法接收多个参数，比如你调用函数时传入三个参数就得这样写： fun.call(obj,arg1,arg2,arg3)，在不确定传入参数有多少个时用call来执行就很麻烦。</li>
-<li>以前我的理解就是这两个函数区别就是上面这些了，最近我才知道，他们执行起来的速度差异还挺大的。<h4 id="apply与call性能对比"><a href="#apply与call性能对比" class="headerlink" title="apply与call性能对比"></a>apply与call性能对比</h4></li>
-<li>这里有个网站：<a href="">https://jsperf.com/call-apply-segu</a>，执行测试用例，得出的结果是以Ops/sec（每秒操作数）为单位。根据操作系统和浏览器内核版本等不同，最后的结果也不一样，但总体来说可以得到的结论是：<strong>call方法永远比apply方法执行速度要快</strong>。下面贴两张运算结果的截图：<br><img src="http://upload-images.jianshu.io/upload_images/6383319-cf3c9edc35aafe40.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Safari浏览器MacOs系统"></li>
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
+<li>最近在LeetCode上做出了第一道难度为hard的题：) 觉得这题中规中矩挺不错的，mark一下：<a href="https://leetcode.com/problems/longest-increasing-path-in-a-matrix/description/" target="_blank" rel="external">题目地址</a></li>
 </ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/6383319-94db063de6db0239.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Chrome浏览器window系统"></p>
-<ul>
-<li>初步结论是速度和<strong>浏览器内核</strong>有关，但apply肯定是要比call运行速度更慢的，在chrome上甚至可以看见，结果居然差了一个位数。</li>
-<li><p>所以在一些框架中，<strong>为了追求更快的执行速度就是舍弃掉apply方法或者用call来模拟apply方法。</strong>比如我们现在框架上就是这样做的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">switch (args.length) &#123;</div><div class="line">        case 0:</div><div class="line">          g = gen.call(ctx);</div><div class="line">          break;</div><div class="line">        case 1:</div><div class="line">          g = gen.call(ctx, args[0]);</div><div class="line">          break;</div><div class="line">        case 2:</div><div class="line">          g = gen.call(ctx, args[0], args[1]);</div><div class="line">          break;</div><div class="line">        default:</div><div class="line">          g = gen.apply(ctx, args);</div><div class="line">      &#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>这样根据参数的长度，switch/case判断来执行不同的call语句，实在没有case的时候再执行apply方法。虽然这样写看起来代码很累赘，直接用apply就只需要一句话的事，但是如果要追求极致性能还是需要这样做（在angular2的源码中也有类似的部分，其中写了20个case判断参数长度）。</p>
-<h4 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h4></li>
-<li>那是不是说以后都不要用apply方法了呢？当然不是啦~在项目中某些文件，比如启动程序时执行的，用到了apply方法，但理论上这里只执行一次，那这个时候换成call 方法带来的性能提升基本也可以忽略不计了。</li>
-<li><p>ES7中有一个关于绑定this的提案：并排的两个冒号（::）组成的函数绑定运算符，它的左边是一个对象，右边是一个函数，通过这个运算符将左边对象作为this绑定到右边函数上面去。这种写法就不用纠结是用call还是apply了，但现在浏览器都不支持，需要用babel转义。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">foo::bar(...arguments);</div><div class="line">// 等同于：</div><div class="line">bar.apply(foo, arguments);</div></pre></td></tr></table></figure>
-</li>
-<li><p>在不确定参数的情况下，如果不考虑性能，代码层面用apply来写会简洁很多。不过你能确认参数长度的时候，最好都用call方法而不用apply。</p>
+<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><ul>
+<li>给出一个正整数矩阵，找出其中<strong>最长的递增路径的长度</strong>。只能上下左右移动，不能走对角线，不能环绕重复路线，不能超越边距。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">举例：</div><div class="line">输入:</div><div class="line">nums = [</div><div class="line">  [9,9,4],</div><div class="line">  [6,6,8],</div><div class="line">  [2,1,1]</div><div class="line">]</div><div class="line">返回 最长路径为4 路径为：1-&gt;2-&gt;6-&gt;9</div></pre></td></tr></table></figure>
 </li>
 </ul>
-
+<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><ul>
+<li>基本思路分以下几个点：</li>
+<li>0.依次遍历输入的矩阵(二维数组)，找出每个点作为起点时的最长递归路径长度，然后返回其中的最大值</li>
+<li>1.使用dfs递归方法去遍历查找各个方向，建立一个表示移动方向的数组，每次dfs查找一个新的节点是遍历这个数组，得出最大值作为这个点为起点的最长路径，保存到dp中</li>
+<li>2.新建一个二维数组作为dp数组，每次得到一个坐标点为起点的最大长度时存入dp数组相应位置，以后再查找到这个坐标点时直接返回之前保存的值避免重复运算</li>
+<li>上面可能说的有点乱，大概就是dfs遍历和dp数组结合，难度其实并不算大，但是可以优化的细节还是挺多的，下面代码附有具体注释</li>
+</ul>
+<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @param &#123;number[][]&#125; matrix</div><div class="line"> * @return &#123;number&#125;</div><div class="line"> */</div><div class="line">var longestIncreasingPath = function(matrix) &#123;</div><div class="line">    if (!matrix || matrix.length === 0) &#123;</div><div class="line">        return 0</div><div class="line">    &#125;</div><div class="line">          </div><div class="line">    var direct = [[0, -1], [0, 1], [-1, 0], [1, 0]] // 方向数组</div><div class="line">    var max = 1 // 全局最大值</div><div class="line">    var dp = new Array() // dp二维数组，保存每个点作为起点的最大路径长度</div><div class="line">    var width = matrix[0].length</div><div class="line">    var deep = matrix.length</div><div class="line">    while (deep) &#123; </div><div class="line">        dp.push(new Array(width).fill(0)) // 每个点初始长度为0，dfs遍历到不为0的情况直接返回她的值(因为是之前已经得到了)</div><div class="line">        deep--</div><div class="line">    &#125;</div><div class="line">    deep = matrix.length</div><div class="line">    </div><div class="line">    var dfs = function (i, j) &#123;</div><div class="line">        if (dp[i][j] &gt; 0) return dp[i][j];</div><div class="line">        var mx = 1</div><div class="line">        for (var k = 0; k &lt; direct.length; k++) &#123;</div><div class="line">            var x = i + direct[k][0]</div><div class="line">            var y = j + direct[k][1]</div><div class="line">            if (x &lt; 0 || x &gt;= deep || y &lt; 0 || y &gt;=width) &#123; // 超过范围跳过</div><div class="line">                continue</div><div class="line">            &#125;</div><div class="line">            if (matrix[x][y] &lt;= matrix[i][j]) &#123;// 不是递增跳过</div><div class="line">                continue</div><div class="line">            &#125;</div><div class="line">            var len = dfs(x, y) + 1</div><div class="line">            mx = Math.max(mx, len)</div><div class="line">        &#125;</div><div class="line">        dp[i][j] = mx</div><div class="line">        return mx</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    for (var i = 0; i &lt; deep; i++) &#123;</div><div class="line">        for (var j = 0; j &lt; width; j++) &#123;</div><div class="line">            max = Math.max(max, dfs(i, j))</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return max</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
       
     </div>
 
@@ -404,7 +392,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+            <a href="/tags/算法/" rel="tag"># 算法</a>
           
         </div>
       
@@ -417,8 +405,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/15/使用Javascript做算法题（三）Largest-Number/" rel="next" title="使用Javascript做算法题（三）Largest-Number">
-                <i class="fa fa-chevron-left"></i> 使用Javascript做算法题（三）Largest-Number
+              <a href="/2017/12/18/python入门-二/" rel="next" title="python入门(二)">
+                <i class="fa fa-chevron-left"></i> python入门(二)
               </a>
             
           </div>
@@ -426,10 +414,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/27/从几个关键词来理解http缓存/" rel="prev" title="从几个关键词来理解http缓存">
-                从几个关键词来理解http缓存 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -554,7 +538,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#apply-call-基本概念"><span class="nav-number">1.</span> <span class="nav-text">apply call 基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#apply与call性能对比"><span class="nav-number">2.</span> <span class="nav-text">apply与call性能对比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结语"><span class="nav-number">3.</span> <span class="nav-text">结语</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#题目描述"><span class="nav-number">2.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解题思路"><span class="nav-number">3.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体代码"><span class="nav-number">4.</span> <span class="nav-text">具体代码</span></a></li></ol></div>
             
 
           </div>
