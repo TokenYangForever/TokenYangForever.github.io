@@ -87,19 +87,19 @@
 
 
 
-<meta name="description" content="前言 最近用react-native做了一个数独游戏的app，到今天基本功能已经全都完成并打包在真机上测试了，这里总结一下开发过程中的一些问题和实现的思路。  环境和平台选择 项目上读取的接口是我自己服务器上部署的，用node实现的接口，链接mysql数据库，数独题目就是从这里读取得到。因为服务器上只有http接口，所以app开发时也就选择的android版本。功能及实现 因为只是一个简单的dem">
+<meta name="description" content="前言 最近用react-native做了一个数独游戏的app，到今天基本功能已经全都完成并打包在真机上测试了，这里总结一下开发过程中的一些问题和实现的思路。  环境和平台选择 项目上读取的接口是我自己服务器上部署的，用node实现的接口，链接mysql数据库，数独题目就是从这里读取得到。因为服务器上只有http接口，所以app开发时也就选择的android版本。  功能及实现 因为只是一个简单的d">
 <meta name="keywords" content="react-native,react">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用react-native实现一个数独游戏(总结)">
 <meta property="og:url" content="http://yoursite.com/2017/12/13/用react-native实现一个数独游戏-总结/index.html">
 <meta property="og:site_name" content="唐洋洋的个人博客">
-<meta property="og:description" content="前言 最近用react-native做了一个数独游戏的app，到今天基本功能已经全都完成并打包在真机上测试了，这里总结一下开发过程中的一些问题和实现的思路。  环境和平台选择 项目上读取的接口是我自己服务器上部署的，用node实现的接口，链接mysql数据库，数独题目就是从这里读取得到。因为服务器上只有http接口，所以app开发时也就选择的android版本。功能及实现 因为只是一个简单的dem">
+<meta property="og:description" content="前言 最近用react-native做了一个数独游戏的app，到今天基本功能已经全都完成并打包在真机上测试了，这里总结一下开发过程中的一些问题和实现的思路。  环境和平台选择 项目上读取的接口是我自己服务器上部署的，用node实现的接口，链接mysql数据库，数独题目就是从这里读取得到。因为服务器上只有http接口，所以app开发时也就选择的android版本。  功能及实现 因为只是一个简单的d">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6383319-c4e4dbb2eaf0a4ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-12-13T07:41:57.000Z">
+<meta property="og:updated_time" content="2017-12-18T14:14:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用react-native实现一个数独游戏(总结)">
-<meta name="twitter:description" content="前言 最近用react-native做了一个数独游戏的app，到今天基本功能已经全都完成并打包在真机上测试了，这里总结一下开发过程中的一些问题和实现的思路。  环境和平台选择 项目上读取的接口是我自己服务器上部署的，用node实现的接口，链接mysql数据库，数独题目就是从这里读取得到。因为服务器上只有http接口，所以app开发时也就选择的android版本。功能及实现 因为只是一个简单的dem">
+<meta name="twitter:description" content="前言 最近用react-native做了一个数独游戏的app，到今天基本功能已经全都完成并打包在真机上测试了，这里总结一下开发过程中的一些问题和实现的思路。  环境和平台选择 项目上读取的接口是我自己服务器上部署的，用node实现的接口，链接mysql数据库，数独题目就是从这里读取得到。因为服务器上只有http接口，所以app开发时也就选择的android版本。  功能及实现 因为只是一个简单的d">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/6383319-c4e4dbb2eaf0a4ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -372,7 +372,9 @@
 <li>最近用react-native做了一个数独游戏的app，到今天基本功能已经全都完成并打包在真机上测试了，这里总结一下开发过程中的一些问题和实现的思路。<br><img src="http://upload-images.jianshu.io/upload_images/6383319-c4e4dbb2eaf0a4ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></li>
 </ul>
 <h4 id="环境和平台选择"><a href="#环境和平台选择" class="headerlink" title="环境和平台选择"></a>环境和平台选择</h4><ul>
-<li>项目上读取的接口是我自己服务器上部署的，用node实现的接口，链接mysql数据库，数独题目就是从这里读取得到。因为服务器上只有http接口，所以app开发时也就选择的android版本。<h4 id="功能及实现"><a href="#功能及实现" class="headerlink" title="功能及实现"></a>功能及实现</h4></li>
+<li>项目上读取的接口是我自己服务器上部署的，用node实现的接口，链接mysql数据库，数独题目就是从这里读取得到。因为服务器上只有http接口，所以app开发时也就选择的android版本。</li>
+</ul>
+<h4 id="功能及实现"><a href="#功能及实现" class="headerlink" title="功能及实现"></a>功能及实现</h4><ul>
 <li>因为只是一个简单的demo，做的功能也比较简单：新游戏/继续游戏/选择难度。页面有三个：首页/棋盘页面/关于。</li>
 <li><p>页面导航使用的react-navigation，从首页进入棋盘页面时，会传参数过去表示是否是新游戏和游戏难度。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">this.props.navigation.navigate(&apos;Main&apos;, &#123;difficulty: text, newgame: true&#125;)</div></pre></td></tr></table></figure>

@@ -87,18 +87,18 @@
 
 
 
-<meta name="description" content="前言 最近对react-native产生些兴趣，准备学一学，写写demo练练手，然而之前对react页不是很熟悉，所以一边学一边写code，一边看react-native的文档一边撘环境。中途还是遇到很多问题，写篇文章mark下。react-native搭建开发环境时遇到的问题 搭建Android开发环境：   java版本不能装9.0+的，路径格式不同，Android-studio无法识别路径。">
+<meta name="description" content="前言 最近对react-native产生些兴趣，准备学一学，写写demo练练手，然而之前对react页不是很熟悉，所以一边学一边写code，一边看react-native的文档一边撘环境。中途还是遇到很多问题，写篇文章mark下。  react-native搭建开发环境时遇到的问题 搭建Android开发环境：   java版本不能装9.0+的，路径格式不同，Android-studio无法识别路">
 <meta name="keywords" content="react-native,react">
 <meta property="og:type" content="article">
 <meta property="og:title" content="react-native&#x2F;react 开发中遇到的问题">
 <meta property="og:url" content="http://yoursite.com/2017/12/06/react-native-react-开发中遇到的问题/index.html">
 <meta property="og:site_name" content="唐洋洋的个人博客">
-<meta property="og:description" content="前言 最近对react-native产生些兴趣，准备学一学，写写demo练练手，然而之前对react页不是很熟悉，所以一边学一边写code，一边看react-native的文档一边撘环境。中途还是遇到很多问题，写篇文章mark下。react-native搭建开发环境时遇到的问题 搭建Android开发环境：   java版本不能装9.0+的，路径格式不同，Android-studio无法识别路径。">
+<meta property="og:description" content="前言 最近对react-native产生些兴趣，准备学一学，写写demo练练手，然而之前对react页不是很熟悉，所以一边学一边写code，一边看react-native的文档一边撘环境。中途还是遇到很多问题，写篇文章mark下。  react-native搭建开发环境时遇到的问题 搭建Android开发环境：   java版本不能装9.0+的，路径格式不同，Android-studio无法识别路">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-13T07:40:31.000Z">
+<meta property="og:updated_time" content="2017-12-18T14:15:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="react-native&#x2F;react 开发中遇到的问题">
-<meta name="twitter:description" content="前言 最近对react-native产生些兴趣，准备学一学，写写demo练练手，然而之前对react页不是很熟悉，所以一边学一边写code，一边看react-native的文档一边撘环境。中途还是遇到很多问题，写篇文章mark下。react-native搭建开发环境时遇到的问题 搭建Android开发环境：   java版本不能装9.0+的，路径格式不同，Android-studio无法识别路径。">
+<meta name="twitter:description" content="前言 最近对react-native产生些兴趣，准备学一学，写写demo练练手，然而之前对react页不是很熟悉，所以一边学一边写code，一边看react-native的文档一边撘环境。中途还是遇到很多问题，写篇文章mark下。  react-native搭建开发环境时遇到的问题 搭建Android开发环境：   java版本不能装9.0+的，路径格式不同，Android-studio无法识别路">
 
 
 
@@ -367,21 +367,25 @@
 
       
         <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ul>
-<li>最近对react-native产生些兴趣，准备学一学，写写demo练练手，然而之前对react页不是很熟悉，所以一边学一边写code，一边看react-native的文档一边撘环境。中途还是遇到很多问题，写篇文章mark下。<h4 id="react-native搭建开发环境时遇到的问题"><a href="#react-native搭建开发环境时遇到的问题" class="headerlink" title="react-native搭建开发环境时遇到的问题"></a>react-native搭建开发环境时遇到的问题</h4></li>
+<li>最近对react-native产生些兴趣，准备学一学，写写demo练练手，然而之前对react页不是很熟悉，所以一边学一边写code，一边看react-native的文档一边撘环境。中途还是遇到很多问题，写篇文章mark下。</li>
+</ul>
+<h4 id="react-native搭建开发环境时遇到的问题"><a href="#react-native搭建开发环境时遇到的问题" class="headerlink" title="react-native搭建开发环境时遇到的问题"></a>react-native搭建开发环境时遇到的问题</h4><ul>
 <li>搭建Android开发环境：</li>
 </ul>
 <ol>
 <li>java版本不能装9.0+的，路径格式不同，Android-studio无法识别路径。</li>
 <li>Android SDK 要装25.0+的，不然会提示版本过低无法继续，然而教程(甚至是fb官网上)还是写的装23.0</li>
 <li>模拟器，先在Android-studio打开Android模拟器之后，再在命令行执行react-native run-android命令</li>
-<li>执行react-native run-*命令时，启动的packager server需要使用8081端口，确保这个端口没有占用！<h4 id="RN中写样式"><a href="#RN中写样式" class="headerlink" title="RN中写样式"></a>RN中写样式</h4></li>
+<li>执行react-native run-*命令时，启动的packager server需要使用8081端口，确保这个端口没有占用！</li>
 </ol>
-<ul>
+<h4 id="RN中写样式"><a href="#RN中写样式" class="headerlink" title="RN中写样式"></a>RN中写样式</h4><ul>
 <li>本来平时我css就写得少，RN中这种变种的css写起来更蛋疼。。。。<a href="https://github.com/doyoe/react-native-stylesheet-guide" target="_blank" rel="external">React-Native 样式指南</a></li>
 <li>RN中的样式相当于css的缩减版，命名方式要用驼峰法，然后大部分属性都能和css中对应。布局：也有相对定位和绝对定位，也支持flex。<strong>官方推荐flex</strong>，可以解决大多数的布局情况。</li>
 <li>建议使用StyleSheet.create()生成样式的类名，也可以直接在组件上写”内联”样式。</li>
 <li>RN中元素的<strong>宽高是没有单位的</strong>，直接用数字表示即可，也可以用flex来实现弹性宽高。</li>
-<li>另外就是要注意，不同的组件可以设置的样式是不同的，比如遇到无法设置宽高的组件就只能在它外层包个view，然后设置这个view的宽高。<h4 id="RN中调试"><a href="#RN中调试" class="headerlink" title="RN中调试"></a>RN中调试</h4></li>
+<li>另外就是要注意，不同的组件可以设置的样式是不同的，比如遇到无法设置宽高的组件就只能在它外层包个view，然后设置这个view的宽高。</li>
+</ul>
+<h4 id="RN中调试"><a href="#RN中调试" class="headerlink" title="RN中调试"></a>RN中调试</h4><ul>
 <li>打开调试菜单：iOS模拟器中：Command⌘ + D 快捷键；Android模拟器对应的则是Command⌘ + M</li>
 <li>Enable Live Reload：开启自动刷新</li>
 <li>Enable Hot Reload：开启热加载</li>

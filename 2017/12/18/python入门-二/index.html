@@ -87,18 +87,18 @@
 
 
 
-<meta name="description" content="函数 python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到https://docs.python.org/3/library/functions.html定义函数 def 用来定义函数。 isinstance()方法可以用来判断参数类型，第一个参数是需要判断的对象">
+<meta name="description" content="函数 python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到https://docs.python.org/3/library/functions.html  定义函数 def 用来定义函数。 isinstance()方法可以用来判断参数类型，第一个参数是需要判断的">
 <meta name="keywords" content="python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python入门(二)">
 <meta property="og:url" content="http://yoursite.com/2017/12/18/python入门-二/index.html">
 <meta property="og:site_name" content="唐洋洋的个人博客">
-<meta property="og:description" content="函数 python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到https://docs.python.org/3/library/functions.html定义函数 def 用来定义函数。 isinstance()方法可以用来判断参数类型，第一个参数是需要判断的对象">
+<meta property="og:description" content="函数 python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到https://docs.python.org/3/library/functions.html  定义函数 def 用来定义函数。 isinstance()方法可以用来判断参数类型，第一个参数是需要判断的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-18T09:08:54.000Z">
+<meta property="og:updated_time" content="2017-12-18T14:13:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python入门(二)">
-<meta name="twitter:description" content="函数 python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到https://docs.python.org/3/library/functions.html定义函数 def 用来定义函数。 isinstance()方法可以用来判断参数类型，第一个参数是需要判断的对象">
+<meta name="twitter:description" content="函数 python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到https://docs.python.org/3/library/functions.html  定义函数 def 用来定义函数。 isinstance()方法可以用来判断参数类型，第一个参数是需要判断的">
 
 
 
@@ -367,7 +367,9 @@
 
       
         <h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><ul>
-<li>python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到<a href="https://docs.python.org/3/library/functions.html" target="_blank" rel="external">https://docs.python.org/3/library/functions.html</a><h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4></li>
+<li>python中自带一些全局函数，比如在js中封装在math对象的数学方法：max、min、abs，也有可以用于数据转换的函数：int、str；用于遍历的方法：all、any。官网上可以看到<a href="https://docs.python.org/3/library/functions.html" target="_blank" rel="external">https://docs.python.org/3/library/functions.html</a></li>
+</ul>
+<h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4><ul>
 <li>def 用来定义函数。</li>
 <li>isinstance()方法可以用来判断参数类型，第一个参数是需要判断的对象，第二参数是候选的变量类型，多个类型之一的话要用tuple类型表示<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">isinstance(x, (int, float))</div></pre></td></tr></table></figure>
 </li>
@@ -393,15 +395,19 @@
 <li>python中传入参数时，可以用关键字来修饰参数，这样甚至就可以不用考虑传参的顺序。</li>
 <li>未出现在参数中的关键字参数会进入other(一个dict类型的数据)里面，同样的也可以使用**来讲dict类型的数据转换成可变参数传入。</li>
 <li><p>注意：多余的未知参数会进入到args中，多余的关键字参数则会进入到other中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">def person(name, age, *args, **other):</div><div class="line">    print(&apos;name:&apos;, name, &apos;age:&apos;, age, &apos;other:&apos;, other, &apos;args:&apos;, args)</div><div class="line"></div><div class="line"># person(age=45, name=&apos;Adam&apos;)</div><div class="line">person(&apos;Adam&apos;, 45, 123, 456, yaho=&apos;lalala&apos;, **&#123;&apos;city&apos;:&apos;Beijing&apos;, &apos;job&apos;:&apos;Engineer&apos;&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">def person(name, age, *args, **other):</div><div class="line">    print(&apos;name:&apos;, name, &apos;age:&apos;, age, &apos;other:&apos;, other, &apos;args:&apos;, args)</div><div class="line"># person(age=45, name=&apos;Adam&apos;)</div><div class="line">person(&apos;Adam&apos;, 45, 123, 456, yaho=&apos;lalala&apos;, **&#123;&apos;city&apos;:&apos;Beijing&apos;, &apos;job&apos;:&apos;Engineer&apos;&#125;)</div></pre></td></tr></table></figure>
 </li>
 <li><p>但是使用关键字参数时有很多限定条件：关键字参数必须放在一般参数的后面</p>
-<h4 id="命名关键字参数"><a href="#命名关键字参数" class="headerlink" title="命名关键字参数"></a>命名关键字参数</h4></li>
+</li>
+</ul>
+<h4 id="命名关键字参数"><a href="#命名关键字参数" class="headerlink" title="命名关键字参数"></a>命名关键字参数</h4><ul>
 <li>定义参数时，跟在<em>或者可变参数(</em>args)后面的参数，被视为命名关键字参数，这些参数在调用函数传参时，<strong>必须传入参数名。</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def person(name, age, *或者*args, city, job):</div><div class="line">    print(name, age, city, job)</div><div class="line">person(&apos;Adam&apos;, 45, city=&apos;Beijing&apos;, job=&apos;Engineer&apos;)</div></pre></td></tr></table></figure>
 </li>
 </ul>
 <h4 id="参数组合"><a href="#参数组合" class="headerlink" title="参数组合"></a>参数组合</h4><ul>
-<li>在Python中定义函数，可以用必选参数、默认参数、可变参数、关键字参数和命名关键字参数，这5种参数都可以组合使用。但是请注意，参数定义的顺序必须是：必选参数、默认参数、可变参数、命名关键字参数和关键字参数。<h4 id="说一句递归"><a href="#说一句递归" class="headerlink" title="说一句递归"></a>说一句递归</h4></li>
+<li>在Python中定义函数，可以用必选参数、默认参数、可变参数、关键字参数和命名关键字参数，这5种参数都可以组合使用。但是请注意，参数定义的顺序必须是：必选参数、默认参数、可变参数、命名关键字参数和关键字参数。</li>
+</ul>
+<h4 id="说一句递归"><a href="#说一句递归" class="headerlink" title="说一句递归"></a>说一句递归</h4><ul>
 <li>python并不能实现尾调用优化，递归调用函数时，每一次调用都会增加一次栈帧，超过上线后就会报错。</li>
 </ul>
 
